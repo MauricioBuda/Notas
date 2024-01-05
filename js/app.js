@@ -14,6 +14,9 @@ let botonAgregarTarea = document.getElementById("boton_agregarTarea_id");
 // Asigno eventos click al boton del formulario ↓
 botonAgregarTarea.addEventListener("click", agregarTarea);
 
+// Modal de cargando
+const modalCarga = document.getElementById('modalCarga');
+
 // Array para ir guardando las cards ↓
 let unaCard = [];
 
@@ -118,8 +121,14 @@ async function cardsEnPantalla(loQueQuieroQueMuestre) {
   }
 }
 
+
+
+
+
+
 // Nueva función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
+  mostrarCarga();
 // Limpiar el array de cards antes de obtener las nuevas desde Firestore
 actualizarCards();
 unaCard = [];
@@ -143,8 +152,21 @@ querySnapshot.forEach((doc) => {
     // Agregar la nueva card al contenedor correspondiente
     agregarCardAlContenedor(tarjetaFirestore);
   }
-
+ocultarCarga();
 });
+}
+
+
+
+
+// Mostrar el modal de carga
+function mostrarCarga() {
+  modalCarga.style.display = 'flex';
+}
+
+// Ocultar el modal de carga
+function ocultarCarga() {
+  modalCarga.style.display = 'none';
 }
 
 
@@ -235,6 +257,7 @@ function vaciarCampos() {
 
 async function agregarTarea(event) {
   event.preventDefault();
+  mostrarCarga();
   let fecha = new Date();
   let formatoFechaCreacion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
 
@@ -278,7 +301,9 @@ async function agregarTarea(event) {
             
     } catch (error) {
       console.error("Error al agregar la tarea a Firestore", error);
+      ocultarCarga();
     }
+    ocultarCarga();
 
   }
 }
