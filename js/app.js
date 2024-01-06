@@ -164,6 +164,10 @@ function mostrarCarga() {
   modalCarga.style.display = 'flex';
 }
 
+
+
+
+
 // Ocultar el modal de carga
 function ocultarCarga() {
   modalCarga.style.display = 'none';
@@ -256,6 +260,7 @@ function vaciarCampos() {
 
 
 async function agregarTarea(event) {
+  mostrarCarga();
   event.preventDefault();
   mostrarCarga();
   let fecha = new Date();
@@ -296,6 +301,8 @@ async function agregarTarea(event) {
             ocultarFormulario();
             vaciarCampos();
             menuBorroso();
+            ocultarCarga();
+            cardsEnPantalla("Pendientes");
 
 
             

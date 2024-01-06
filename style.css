@@ -297,7 +297,6 @@ background-color: green;
   width: auto!important;
   color: #000;
   background-color: rgba(0, 0, 255, 0)!important;
-  /* white-space:nowrap; Permitir saltos de línea automáticos */
   overflow: hidden;
   text-overflow: ellipsis; /* Cortar con puntos suspensivos si el texto es demasiado largo */
   min-width: 15%;
@@ -314,9 +313,6 @@ background-color: green;
   color: #000!important;
 }
 
-/* .cards{
-  background-color: red!important;
-} */
 
 .cards p, h3{
   color: #000000;
@@ -358,9 +354,15 @@ background-color: green;
 
 @media screen and (max-width: 524px) {
   .cards p, h3{
+    font-size: 2vw;
     text-align: center;
     margin: 0rem;
+  }
 
+  .cards button {
+    font-size: 2vw;
+    margin: 0;
+    margin: 0px 5px 0 2px;
   }
 
   .section_cards div{
@@ -370,8 +372,9 @@ background-color: green;
 /* FIN SECTION_CARDS*/
 
 
+
+
 /* MODAL CARGANDO */
-/* Estilos del modal de carga */
 .modal {
   display: none;
   position: fixed;
