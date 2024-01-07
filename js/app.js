@@ -71,55 +71,58 @@ class Tarjetas {
 
 // Defino que se va a ver en pantalla
 async function cardsEnPantalla(loQueQuieroQueMuestre) {
-  switch (loQueQuieroQueMuestre) {
-      case "Todas":
-        mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
-        mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
-        mostrarPendientes.classList.remove("opcionElegidaDelMenu");
-        mostrarTodas.classList.add("opcionElegidaDelMenu");
+  mostrarCarga();
+switch (loQueQuieroQueMuestre) {
+    case "Todas":
+      mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
+      mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
+      mostrarPendientes.classList.remove("opcionElegidaDelMenu");
+      mostrarTodas.classList.add("opcionElegidaDelMenu");
 
-        pantallaActual = "Todas"; //Para mantenerme en la misma pantalla
-        await obtenerCardsDesdeFirestore(pantallaActual); // Obtener las cards desde Firestore
-        
-        break;
+      pantallaActual = "Todas"; //Para mantenerme en la misma pantalla
+      await obtenerCardsDesdeFirestore(pantallaActual); // Obtener las cards desde Firestore
+      
+      break;
 
-      case "Pendientes":
-        pantallaActual = "Pendientes";
-        mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
-        mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
-        mostrarTodas.classList.remove("opcionElegidaDelMenu");
-        mostrarPendientes.classList.add("opcionElegidaDelMenu");
+    case "Pendientes":
+      pantallaActual = "Pendientes";
+      mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
+      mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
+      mostrarTodas.classList.remove("opcionElegidaDelMenu");
+      mostrarPendientes.classList.add("opcionElegidaDelMenu");
 
-        await obtenerCardsDesdeFirestore(pantallaActual);
-        
-        break;
+      await obtenerCardsDesdeFirestore(pantallaActual);
+      
+      break;
 
-      case "Finalizadas":
-        mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
-        mostrarTodas.classList.remove("opcionElegidaDelMenu");
-        mostrarPendientes.classList.remove("opcionElegidaDelMenu");
-        mostrarFinalizadas.classList.add("opcionElegidaDelMenu");
+    case "Finalizadas":
+      mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
+      mostrarTodas.classList.remove("opcionElegidaDelMenu");
+      mostrarPendientes.classList.remove("opcionElegidaDelMenu");
+      mostrarFinalizadas.classList.add("opcionElegidaDelMenu");
 
-        pantallaActual = "Finalizadas";
-        await obtenerCardsDesdeFirestore(pantallaActual);
-        
-        break;
+      pantallaActual = "Finalizadas";
+      await obtenerCardsDesdeFirestore(pantallaActual);
+      
+      break;
 
-      case "Canceladas":
-        mostrarTodas.classList.remove("opcionElegidaDelMenu");
-        mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
-        mostrarPendientes.classList.remove("opcionElegidaDelMenu");
-        mostrarCanceladas.classList.add("opcionElegidaDelMenu");
+    case "Canceladas":
+      mostrarTodas.classList.remove("opcionElegidaDelMenu");
+      mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
+      mostrarPendientes.classList.remove("opcionElegidaDelMenu");
+      mostrarCanceladas.classList.add("opcionElegidaDelMenu");
 
-        pantallaActual = "Canceladas";
-        await obtenerCardsDesdeFirestore(pantallaActual);
-        
-        break;
+      pantallaActual = "Canceladas";
+      await obtenerCardsDesdeFirestore(pantallaActual);
+      
+      break;
 
-      default:
-        break;
-  }
+    default:
+      break;
 }
+ocultarCarga();
+}
+
 
 
 
