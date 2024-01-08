@@ -365,8 +365,8 @@ background-color: green;
     margin: 0px 5px 0 2px;
   }
 
-  .section_cards div{
-    height: 10vh;
+  .cards{
+    min-height: 10vh;
   }
 }
 /* FIN SECTION_CARDS*/
@@ -393,3 +393,4 @@ background-color: green;
   border-radius: 5px;
   text-align: center;
 }
+/* FIN MODAL CARGANDO */

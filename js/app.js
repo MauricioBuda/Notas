@@ -388,7 +388,6 @@ function agregarCardAlContenedor(tarea) {
 
 // Función para finalizar tarea de card
 async function finalizarTarea(id) {
-  console.log("entra a finalizar")
   var confirmacion = confirm("¿Seguro que querés finalizarla?")
 
   if(confirmacion){
@@ -409,7 +408,6 @@ async function finalizarTarea(id) {
       estado: tarea.estado,
       fechaCierre: tarea.fechaCierre
     });
-    console.log("Sale del await")
 
     cardsEnPantalla(pantallaActual);
   }
