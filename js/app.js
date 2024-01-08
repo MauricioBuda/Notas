@@ -41,7 +41,9 @@ let pendientesCards = document.getElementById("pendientes-cards");
 let finalizadasCards = document.getElementById("finalizadas-cards");
 let canceladasCards = document.getElementById("canceladas-cards");
 
-
+//Ventana modal de cards grandes ↓
+let modalCard = document.getElementById("cardEnModal")
+let modalFooter = document.getElementById("modal_footerID")
 
 
 
@@ -279,6 +281,7 @@ async function agregarTarea(event) {
 
   if (!titulo || !detalle || !urgencia || !fechaCreacion || !ultimaEdicion) {
     alert("No completaste todo");
+    ocultarCarga();
   } else {
     let nuevaCard = new Tarjetas(titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado);
     unaCard.push(nuevaCard);
@@ -340,7 +343,11 @@ function init() {
       else if (event.target.id.startsWith("cancelar-")) {
           // Extraer el ID de la tarea de la identificación del botón
           cancelarTarea(event.target.id.split("-")[1]);
-      }
+      }// Verificar si el clic ocurrió en un botón de cancelar
+      else if (event.target.id.startsWith("opciones-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        masOpciones(event.target.id.split("-")[1]);
+    }
   });
 }
 
@@ -352,23 +359,20 @@ init();
 function agregarCardAlContenedor(tarea) {
   // Genera un ID único para el div (card) basado en el ID de la tarea
   let cardID = `card-${tarea.id}`;
-  let tituloID = `titulo-${tarea.id}`;
-  let detalleID = `detalle-${tarea.id}`;
-  let botonEditarID = `editar-${tarea.id}`;
+  // let tituloID = `titulo-${tarea.id}`;
+  // let detalleID = `detalle-${tarea.id}`;
   let botonFinalizarID = `finalizar-${tarea.id}`;
-  let botonCancelarID = `cancelar-${tarea.id}`;
+  let botonMasOpcionesID = `opciones-${tarea.id}`;
 
   let nuevaCardHTML = `
     <div id="${cardID}" class="cards">
-      <h3 id="${tituloID}">${tarea.titulo}</h3>
-      <p class="p_detalle" id="${detalleID}">${tarea.detalle}</p>
-
+      <h3>${tarea.titulo}</h3>
+      <p class="p_detalle">${tarea.detalle}</p>
       <p>URGENCIA: <br> ${tarea.urgencia}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
-      <button id="${botonEditarID}" class="btn" >Editar</button>
-      <button id="${botonFinalizarID}" class="btn" >Finalizar</button>
-      <button id="${botonCancelarID}" class="btn">Cancelar</button>
+      <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
+      <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
     </div>
   `;
 
@@ -379,6 +383,48 @@ function agregarCardAlContenedor(tarea) {
   } else if (tarea.estado === "Canceladas") {
     canceladasCards.innerHTML += nuevaCardHTML;
   }
+}
+
+
+
+
+
+
+function masOpciones(id){
+  let tarea = unaCard.find((t) => t.id === id);
+
+
+    // Genera un ID único para el div (card) basado en el ID de la tarea
+    let cardID = `card-${tarea.id}`;
+    let tituloID = `titulo-${tarea.id}`;
+    let detalleID = `detalle-${tarea.id}`;
+    let botonEditarID = `editar-${tarea.id}`;
+    let botonFinalizarID = `finalizar-${tarea.id}`;
+    let botonCancelarID = `cancelar-${tarea.id}`;
+    let botonEliminarID = `eliminar-${tarea.id}`;
+  
+    let nuevaCardHTML = `
+      <div id="${cardID}" class="cards_modal">
+        <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h3>
+        <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
+        <strong>URGENCIA:</strong><p> ${tarea.urgencia}</p>
+        <strong>CREACIÓN:</strong><p> ${tarea.fechaCreacion}</p>
+        <strong>ÚLTIMA EDICIÓN:</strong><p> ${tarea.ultimaEdicion}</p>
+        <strong>FIN:</strong><p> ${tarea.fechaCierre}</p>
+
+      </div>
+    `;
+
+    let botonesCard = `
+    <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
+    <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
+    <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
+    <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
+    `
+
+modalCard.innerHTML = nuevaCardHTML;
+modalFooter.innerHTML = botonesCard;
+
 }
 
 
@@ -454,12 +500,20 @@ async function cancelarTarea(id) {
 async function botonParaEditar(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
+
+  //Me fijo fecha para después guardarla
+  let fecha = new Date();
+  let formatoFechaEdicion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
+  
   // Obtener la referencia al documento en Firestore
   const tareaRef = doc(db, "tareas", id);
 
   // Obtener los nuevos valores de los campos editados
+  const fechaDeEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaEdicion);
   const nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
   const nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
+
+  console.log(fechaDeEdicion)
 
   // Obtener los elementos HTML correspondientes a los campos de título y detalle
   let detalleParaEditar = document.getElementById(`detalle-${tarea.id}`);
@@ -488,16 +542,16 @@ async function botonParaEditar(id) {
       await updateDoc(tareaRef, {
         titulo: nuevoTitulo,
         detalle: nuevoDetalle,
-        ultimaEdicion: new Date(), // Actualizar la fecha de última edición
+        ultimaEdicion: fecha.toLocaleTimeString('es-AR', formatoFechaEdicion)// Actualizar la fecha de última edición
       });
 
-      console.log("Documento actualizado correctamente en Firestore");
+
     } catch (error) {
       console.error("Error al actualizar el documento en Firestore", error);
     }
   } else {
     // Entrar en modo de edición
-    detalleParaEditar.classList.add("fondo_input_editable");
+    detalleParaEditar.classList.add("fondo_input_editable"); //Pongo fondo de input blanco
     tituloParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.contentEditable = true;
     detalleParaEditar.contentEditable = true;
@@ -506,6 +560,7 @@ async function botonParaEditar(id) {
     // Cambiar el texto al botón editar y la función
     botonEditar.textContent = "Guardar";
   }
+  cardsEnPantalla(muestraPantalla);
 }
 
 

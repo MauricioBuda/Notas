@@ -256,7 +256,7 @@ background-color: green;
 }
 
 
-.section_cards div{
+.cards{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -265,6 +265,7 @@ background-color: green;
   background-color: rgba(0, 0, 255, 0.169);
   max-width: 99%;
   box-sizing: border-box;
+  min-height: 25vh;
 }
 
 .cards *{
@@ -273,7 +274,7 @@ background-color: green;
   justify-content: center;
 }
 
-.cards button {
+.botonesCards{
   color: #000000;
   font-size: 1.5vw;
   border: solid 1px rgba(0, 0, 0, 0.499);
@@ -283,44 +284,18 @@ background-color: green;
   border-radius: 8px;
 }
 
-.cards button:hover {
+.botonesCards:hover {
   border: solid 1px black;
   background-color: rgba(255, 255, 255, 0.441);
   -webkit-text-stroke: 1px #00000063;
 }
 
-.boton_detalle{
-  overflow-wrap:anywhere;
-  align-items: center!important;
-  text-align: center!important;
-  border: none!important;
-  width: auto!important;
-  color: #000;
-  background-color: rgba(0, 0, 255, 0)!important;
-  overflow: hidden;
-  text-overflow: ellipsis; /* Cortar con puntos suspensivos si el texto es demasiado largo */
-  min-width: 15%;
-  max-width: 30%;
-}
-
-.boton_detalle:hover{
-  color: #000000;
-  -webkit-text-stroke: 2px #00000076!important;
-  background-color: rgba(255, 255, 255, 0.441);
-}
-
-.boton_detalle:active{
-  color: #000!important;
-}
-
 
 .cards p, h3{
   color: #000000;
-  text-overflow: ellipsis;
-  overflow-wrap:anywhere;
   text-align: center;
   margin-left: 2rem;
-  border-radius: 20px;
+  /* border-radius: 20px; */
 }
 
 .cards p{
@@ -341,6 +316,10 @@ background-color: green;
 
 .fondo_input_editable{
   background-color: white;
+  border: solid 1px black;
+  border-radius: 10px;
+  padding-left: 2vw;
+  padding-right: 2vw;
 }
 
 .section_finalizadas div{
@@ -356,10 +335,11 @@ background-color: green;
   .cards p, h3{
     font-size: 2vw;
     text-align: center;
-    margin: 0rem;
+    margin: 0.1rem;
+    border-radius:10px;
   }
 
-  .cards button {
+  .botonesCards {
     font-size: 2vw;
     margin: 0;
     margin: 0px 5px 0 2px;
@@ -375,7 +355,7 @@ background-color: green;
 
 
 /* MODAL CARGANDO */
-.modal {
+.modal_carga {
   display: none;
   position: fixed;
   top: 0;
@@ -388,9 +368,97 @@ background-color: green;
 }
 
 .modal-contenido {
+  font-size: 4vw;
   background-color: white;
   padding: 20px;
   border-radius: 5px;
   text-align: center;
 }
 /* FIN MODAL CARGANDO */
+
+
+/* MODAL DE CARDS GRANDE */
+.modal{
+  --bs-modal-width:90vw!important;
+}
+
+.modalCardContenedor{
+  height: 95vh;
+}
+
+.cardEnModal_Class{
+  height: 95vh!important;
+  height: 85vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cards_modal{
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  flex-direction: column;
+  height: 70vh;
+  width: 85vw;
+}
+
+.cards_modal p,strong{
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  font-size: 2vw;
+  margin-bottom: 2vw;
+}
+
+.h3_modal{
+  font-size: 4vw;
+}
+
+.modal-footer{
+  justify-content: space-evenly;
+}
+
+.botonesCards_modal{
+  color: #000000;
+  font-size: 2.5vw;
+  border: solid 1px rgba(0, 0, 0, 0.499);
+  width: auto;
+  margin: 0 10px 0 20px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.botonesCards_modal:hover {
+  border: solid 1px black;
+  background-color: rgba(255, 255, 255, 0.441);
+  -webkit-text-stroke: 1px #00000063;
+}
+
+
+@media screen and (max-width: 524px) {
+  .cards_modal  p{
+    font-size: 4vw;
+    margin-bottom: 6vw;
+  }
+
+  strong{
+    font-size: 4vw;
+  }
+  
+  .h3_modal{
+    margin-bottom: 6vw;
+    font-size: 8vw;
+  }
+  
+  .botonesCards_modal{
+    color: #000000;
+    font-size: 5vw;
+    border: solid 1px rgba(0, 0, 0, 0.499);
+    width: auto;
+    margin: 0 3px 0 3px;
+    background-color: white;
+    border-radius: 5px;
+  }
+}
