@@ -295,15 +295,20 @@ background-color: green;
   color: #000000;
   text-align: center;
   margin-left: 2rem;
-  /* border-radius: 20px; */
 }
 
 .cards p{
   font-size: 1.5vw;
 }
 
-.p_detalle{
+.p_detalle {
   margin-top: 15px;
+  max-width: 85vw;
+  text-wrap: wrap;
+  overflow-wrap: break-word;
+  white-space: wrap; /* Evita el salto de línea */
+  overflow-wrap: break-word;
+  text-overflow: ellipsis; /* Muestra puntos suspensivos (...) cuando el texto se corta */
 }
 
 .cards h3{ 
@@ -403,18 +408,6 @@ background-color: green;
   width: 85vw;
 }
 
-.cards_modal p,strong{
-  justify-content: center;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  font-size: 2vw;
-  margin-bottom: 2vw;
-}
-
-.h3_modal{
-  font-size: 4vw;
-}
 
 .modal-footer{
   justify-content: space-evenly;
@@ -436,6 +429,36 @@ background-color: green;
   -webkit-text-stroke: 1px #00000063;
 }
 
+.h3_modal{
+  font-size: 3.5vw;
+}
+
+.detalle_modal{
+  justify-content: center;
+  text-align: center;
+  font-size: 2vw;
+  width: 85vw;
+  text-wrap: wrap;
+  overflow-wrap: break-word; 
+}
+
+.div_modales{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.div_modales strong{
+  font-size: 2vw;
+  margin-right:2vw ;
+}
+
+.div_modales p{
+  margin-top: 1vw;
+  font-size: 1.7vw;
+}
+
 
 @media screen and (max-width: 524px) {
 
@@ -444,18 +467,32 @@ background-color: green;
     height: 85vh;
   }
 
-  .cards_modal  p{
-    font-size: 4vw;
-    margin-bottom: 6vw;
-  }
-
-  strong{
-    font-size: 4vw;
+  .h3_modal{
+    font-size: 7vw;
   }
   
-  .h3_modal{
-    margin-bottom: 6vw;
-    font-size: 8vw;
+  .detalle_modal{
+    justify-content: center;
+    text-align: center;
+    font-size: 5vw;
+    width: 85vw;
+  }
+  
+  .div_modales{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .div_modales strong{
+    font-size: 3.6vw;
+    margin-right:2vw ;
+  }
+  
+  .div_modales p{
+    margin-top: 2vw;
+    font-size: 3vw;
   }
   
   .botonesCards_modal{

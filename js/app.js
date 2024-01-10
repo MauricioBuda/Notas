@@ -404,15 +404,26 @@ function masOpciones(id){
     let botonEliminarID = `eliminar-${tarea.id}`;
   
     let nuevaCardHTML = `
-      <div id="${cardID}" class="cards_modal">
-        <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h3>
-        <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
-        <strong>URGENCIA:</strong><p> ${tarea.urgencia}</p>
-        <strong>CREACIÓN:</strong><p> ${tarea.fechaCreacion}</p>
-        <strong>ÚLTIMA EDICIÓN:</strong><p> ${tarea.ultimaEdicion}</p>
-        <strong>FIN:</strong><p> ${tarea.fechaCierre}</p>
-
-      </div>
+    <div id="${cardID}" class="cards_modal">
+    <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
+    <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
+        <div class="div_modales">
+        <strong>URGENCIA → </strong>
+        <p>${tarea.urgencia}</p>
+        </div>
+        <div class="div_modales">
+        <strong>CREACIÓN → </strong>
+        <p> ${tarea.fechaCreacion}</p>
+        </div>
+        <div class="div_modales">
+        <strong>ÚLTIMA EDICIÓN → </strong>
+        <p>${tarea.ultimaEdicion}</p>
+        </div>
+        <div class="div_modales">
+        <strong>FIN → </strong>
+        <p> ${tarea.fechaCierre}</p>
+        </div>
+  </div>
     `;
 
     let botonesCard = `
