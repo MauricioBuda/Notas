@@ -343,11 +343,15 @@ function init() {
       else if (event.target.id.startsWith("cancelar-")) {
           // Extraer el ID de la tarea de la identificación del botón
           cancelarTarea(event.target.id.split("-")[1]);
-      }// Verificar si el clic ocurrió en un botón de cancelar
+      }// Verificar si el clic ocurrió en un botón de opciones
       else if (event.target.id.startsWith("opciones-")) {
         // Extraer el ID de la tarea de la identificación del botón
         masOpciones(event.target.id.split("-")[1]);
-    }
+    }// Verificar si el clic ocurrió en un botón de eliminar
+    else if (event.target.id.startsWith("eliminar-")) {
+      // Extraer el ID de la tarea de la identificación del botón
+      eliminar(event.target.id.split("-")[1]);
+  }
   });
 }
 
@@ -468,6 +472,13 @@ async function finalizarTarea(id) {
 
     cardsEnPantalla(pantallaActual);
   }
+}
+
+
+
+
+function eliminar(){
+  alert("Todavía en proceso...");
 }
 
 
