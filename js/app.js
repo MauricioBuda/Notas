@@ -372,10 +372,13 @@ function agregarCardAlContenedor(tarea) {
   let maxCaracteres = 50;
   let contenidoDetalle = tarea.detalle;
   if (contenidoDetalle.length > maxCaracteres) {
+    console.log("entra")
     let detalleTruncado = contenidoDetalle.substring(0,maxCaracteres) + "...";
+    // console.log(textoCortado)
+    // console.log(detalleTruncado)
     textoCortado = detalleTruncado;
   }
-
+console.log(textoCortado)
 
   if (tarea.estado === "Pendientes") {
     let nuevaCardHTML = `
@@ -394,7 +397,7 @@ function agregarCardAlContenedor(tarea) {
     let nuevaCardHTML = `
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
-      <p class="p_detalle">${tarea.detalle}</p>
+      <p class="p_detalle">${textoCortado}</p>
       <p>URGENCIA: <br> ${tarea.urgencia}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
@@ -407,7 +410,7 @@ function agregarCardAlContenedor(tarea) {
     let nuevaCardHTML = `
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
-      <p class="p_detalle">${tarea.detalle}</p>
+      <p class="p_detalle">${textoCortado}</p>
       <p>URGENCIA: <br> ${tarea.urgencia}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
