@@ -363,10 +363,22 @@ init();
 function agregarCardAlContenedor(tarea) {
   // Genera un ID único para el div (card) basado en el ID de la tarea
   let cardID = `card-${tarea.id}`;
-  // let tituloID = `titulo-${tarea.id}`;
-  // let detalleID = `detalle-${tarea.id}`;
   let botonFinalizarID = `finalizar-${tarea.id}`;
   let botonMasOpcionesID = `opciones-${tarea.id}`;
+
+  let maxCaracteres = 50;
+  let contenidoDetalle = tarea.detalle;
+  // console.log(contenidoDetalle)
+  if (contenidoDetalle.length > maxCaracteres) {
+    console.log("entra")
+    let detalleTruncado = contenidoDetalle.substring(0,maxCaracteres) + "...";
+    tarea.detalle = detalleTruncado;
+    console.log(detalleTruncado)
+  }
+
+  // console.log(contenidoDetalle.length)
+
+
 
   let nuevaCardHTML = `
     <div id="${cardID}" class="cards">

@@ -186,6 +186,10 @@ button {
 .recuadros_formulario_detalle{
     padding-bottom: 10vh;
     height: 15vh;
+    max-width: 30vw;
+    text-wrap: wrap;
+    overflow-wrap: break-word;
+    white-space: wrap; /* Evita el salto de línea */
 }
 
 .boton_agregarTarea{
@@ -227,6 +231,7 @@ background-color: green;
   .recuadros_formulario_detalle{
     padding-bottom: 10vh;
     height: 15vh;
+    background-color: red;
 }
 
   .boton_agregarTarea{
@@ -307,8 +312,6 @@ background-color: green;
   text-wrap: wrap;
   overflow-wrap: break-word;
   white-space: wrap; /* Evita el salto de línea */
-  overflow-wrap: break-word;
-
 }
 
 .cards h3{ 
@@ -401,7 +404,7 @@ background-color: green;
 
 .cards_modal{
   display: flex;
-  align-items: center;
+  align-items:center;
   justify-content:space-evenly;
   flex-direction: column;
   height: 70vh;
