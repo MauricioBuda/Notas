@@ -46,7 +46,7 @@ let modalCard = document.getElementById("cardEnModal")
 let modalFooter = document.getElementById("modal_footerID")
 
 
-
+cardsEnPantalla(pantallaActual)
 
 
 class Tarjetas {
@@ -365,22 +365,20 @@ function agregarCardAlContenedor(tarea) {
   let cardID = `card-${tarea.id}`;
   let botonFinalizarID = `finalizar-${tarea.id}`;
   let botonMasOpcionesID = `opciones-${tarea.id}`;
+  let botonEliminarID = `eliminar-${tarea.id}`;
+
 
   let maxCaracteres = 50;
   let contenidoDetalle = tarea.detalle;
   // console.log(contenidoDetalle)
   if (contenidoDetalle.length > maxCaracteres) {
-    console.log("entra")
     let detalleTruncado = contenidoDetalle.substring(0,maxCaracteres) + "...";
     tarea.detalle = detalleTruncado;
-    console.log(detalleTruncado)
   }
 
-  // console.log(contenidoDetalle.length)
 
-
-
-  let nuevaCardHTML = `
+  if (tarea.estado === "Pendientes") {
+    let nuevaCardHTML = `
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
       <p class="p_detalle">${tarea.detalle}</p>
@@ -391,12 +389,32 @@ function agregarCardAlContenedor(tarea) {
       <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
     </div>
   `;
-
-  if (tarea.estado === "Pendientes") {
     pendientesCards.innerHTML += nuevaCardHTML;
   } else if (tarea.estado === "Finalizadas") {
+    let nuevaCardHTML = `
+    <div id="${cardID}" class="cards">
+      <h3>${tarea.titulo}</h3>
+      <p class="p_detalle">${tarea.detalle}</p>
+      <p>URGENCIA: <br> ${tarea.urgencia}</p>
+      <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
+      <p>FIN: <br> ${tarea.fechaCierre}</p>
+      <button id="${botonEliminarID}" class="btn botonesCards" >Eliminar</button>
+      <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Agrandar</button>
+    </div>
+  `;
     finalizadasCards.innerHTML += nuevaCardHTML;
   } else if (tarea.estado === "Canceladas") {
+    let nuevaCardHTML = `
+    <div id="${cardID}" class="cards">
+      <h3>${tarea.titulo}</h3>
+      <p class="p_detalle">${tarea.detalle}</p>
+      <p>URGENCIA: <br> ${tarea.urgencia}</p>
+      <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
+      <p>FIN: <br> ${tarea.fechaCierre}</p>
+      <button id="${botonEliminarID}" class="btn botonesCards" >Eliminar</button>
+      <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Agrandar</button>
+    </div>
+  `;
     canceladasCards.innerHTML += nuevaCardHTML;
   }
 }
@@ -442,16 +460,25 @@ function masOpciones(id){
   </div>
     `;
 
-    let botonesCard = `
-    <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
-    <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
-    <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
-    <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
-    `
+
 
 modalCard.innerHTML = nuevaCardHTML;
-modalFooter.innerHTML = botonesCard;
+modalFooter.innerHTML="";
 
+if (tarea.estado === "Pendientes") {
+  let botonesCard = `
+  <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
+  <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
+  <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
+  <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
+  `
+modalFooter.innerHTML = botonesCard;
+  }  else if (tarea.estado === "Finalizadas" || tarea.estado === "Canceladas") {
+    let botonesCard = `
+    <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
+    `
+    modalFooter.innerHTML = botonesCard;
+  }
 }
 
 
@@ -489,8 +516,19 @@ async function finalizarTarea(id) {
 
 
 
-function eliminar(){
-  alert("Todavía en proceso...");
+async function eliminar(id){
+  let contenedorModal = document.getElementById("modalContainer");
+  let contenedorModal2 = document.getElementById("exampleModal");
+  var confirmacion = confirm("¿Eliminar? No se puede recuperar");
+  mostrarCarga();
+
+  if(confirmacion){
+  let tarea = unaCard.find((t) => t.id === id);
+  await deleteDoc(doc(db, "tareas", tarea.id));
+  location.reload();
+  }
+  ocultarCarga();
+  cardsEnPantalla(pantallaActual);
 }
 
 

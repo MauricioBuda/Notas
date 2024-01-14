@@ -462,6 +462,11 @@ background-color: green;
   font-size: 1.7vw;
 }
 
+.ocultarModal{
+  display: none!important;
+  opacity: 0!important;
+}
+
 
 @media screen and (max-width: 524px) {
 
