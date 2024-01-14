@@ -231,7 +231,8 @@ background-color: green;
   .recuadros_formulario_detalle{
     padding-bottom: 10vh;
     height: 15vh;
-    background-color: red;
+    max-width: 45vw;
+    width: 45vw;
 }
 
   .boton_agregarTarea{
