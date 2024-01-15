@@ -45,31 +45,58 @@ let canceladasCards = document.getElementById("canceladas-cards");
 let modalCard = document.getElementById("cardEnModal");
 let modalFooter = document.getElementById("modal_footerID");
 
-// Modal de registro
+// Modal de registro estética ↓
 let modalRegistrarse = document.getElementById("modalRegistro");
 let botonCancelar = document.getElementById("cancelar_modal");
 botonCancelar.addEventListener("click",ocultarModalRegistro);
 let botonRegistrarme = document.getElementById("boton_registrarse");
 botonRegistrarme.addEventListener("click",mostrarModalRegistro);
 
-
-
-
-function ocultarModalRegistro(){
-  modalRegistrarse.classList.add("ocultarRegistroModal")
-}
-
-
-function mostrarModalRegistro(){
-  modalRegistrarse.classList.remove("ocultarRegistroModal")
-}
-
-
+// Registro o crear cuenta ↓
+let botonIngresarCuentaExistente = document.getElementById("botonIngresarCuentaExistente");
+let botonRegistrarNuevaCuenta = document.getElementById("botonRegistrarNuevaCuenta");
+botonIngresarCuentaExistente.addEventListener("click", datosDeIngreso);
+botonRegistrarNuevaCuenta.addEventListener("click",datosDeRegistro);
 
 // cardsEnPantalla(pantallaActual);
 
+function datosDeIngreso(event){
+  event.preventDefault();
+  let mailIngresado = document.getElementById("mailInicio").value;
+  let contraseñaIngresada = document.getElementById("contraseñaInicio").value;
+  iniciarSesion(mailIngresado,contraseñaIngresada);
+}
 
 
+
+
+function datosDeRegistro(event){
+  event.preventDefault();
+  let mailIngresado = document.getElementById("MailRegistro").value;
+  let contraseñaIngresada1 = document.getElementById("ContraseñaRegistro1").value;
+  let contraseñaIngresada2 = document.getElementById("ContraseñaRegistro2").value;
+
+  if (contraseñaIngresada1 === contraseñaIngresada2) {
+    if (contraseñaIngresada1.length < 6 ) {
+      alert("La contraseña debe tener al menos seis dígitos")
+      return;
+    }
+    registrarUsuario(mailIngresado, contraseñaIngresada1)
+  } else {
+    alert("Las contraseñas no coinciden")
+  }
+  
+}
+
+
+
+// Mostrar y ocultar el modal del registro
+function ocultarModalRegistro(){
+  modalRegistrarse.classList.add("ocultarRegistroModal")
+}
+function mostrarModalRegistro(){
+  modalRegistrarse.classList.remove("ocultarRegistroModal")
+}
 
 
 
@@ -587,6 +614,7 @@ async function cancelarTarea(id) {
           estado: tarea.estado,
           fechaCierre : tarea.fechaCierre
         });
+        location.reload();
 
     cardsEnPantalla(pantallaActual);
  }

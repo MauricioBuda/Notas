@@ -26,6 +26,12 @@ async function registrarUsuario(email, password) {
     console.log('Usuario registrado:', user);
     // Puedes almacenar información adicional sobre el usuario en tu base de datos si es necesario
   } catch (error) {
+    if (error.message === "Firebase: Error (auth/email-already-in-use).") {
+      alert("Usuario existente")
+    } else {
+      
+    }
+    console.log(error)
     console.error('Error al registrar usuario:', error.message);
     // Maneja el error según sea necesario
   }
@@ -39,6 +45,8 @@ async function iniciarSesion(email, password) {
     // Realiza acciones adicionales después del inicio de sesión si es necesario
   } catch (error) {
     console.error('Error al iniciar sesión:', error.message);
+    alert("Usuario inválido o inexistente");
+    location.reload();
     // Maneja el error según sea necesario
   }
 }
