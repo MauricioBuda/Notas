@@ -1,6 +1,6 @@
 // Importa la función de Firestore para agregar documentos
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db } from './firestoreConfig';
+import { db, registrarUsuario, iniciarSesion } from './firestoreConfig';
 
 // Menu ↓
 let botonMas = document.getElementById("botonMas_id");
@@ -30,10 +30,10 @@ let pantallaActual = "Todas";
 
 // Asigno eventos click a los botones del menú ↓
 botonMas.addEventListener("click", mostrarFormulario);
-mostrarTodas.addEventListener("click", () => {muestraPantalla="Todas", cardsEnPantalla(muestraPantalla)})
-mostrarPendientes.addEventListener("click", () => {muestraPantalla="Pendientes", cardsEnPantalla(muestraPantalla)})
-mostrarFinalizadas.addEventListener("click", () => {muestraPantalla="Finalizadas", cardsEnPantalla(muestraPantalla)})
-mostrarCanceladas.addEventListener("click", () => {muestraPantalla="Canceladas", cardsEnPantalla(muestraPantalla)})
+mostrarTodas.addEventListener("click", () => {muestraPantalla="Todas", cardsEnPantalla(muestraPantalla)});
+mostrarPendientes.addEventListener("click", () => {muestraPantalla="Pendientes", cardsEnPantalla(muestraPantalla)});
+mostrarFinalizadas.addEventListener("click", () => {muestraPantalla="Finalizadas", cardsEnPantalla(muestraPantalla)});
+mostrarCanceladas.addEventListener("click", () => {muestraPantalla="Canceladas", cardsEnPantalla(muestraPantalla)});
 
 // Secciones de las cards ↓
 let todasCards = document.getElementById("todas-cards");
@@ -42,13 +42,41 @@ let finalizadasCards = document.getElementById("finalizadas-cards");
 let canceladasCards = document.getElementById("canceladas-cards");
 
 //Ventana modal de cards grandes ↓
-let modalCard = document.getElementById("cardEnModal")
-let modalFooter = document.getElementById("modal_footerID")
+let modalCard = document.getElementById("cardEnModal");
+let modalFooter = document.getElementById("modal_footerID");
+
+// Modal de registro
+let modalRegistrarse = document.getElementById("modalRegistro");
+let botonCancelar = document.getElementById("cancelar_modal");
+botonCancelar.addEventListener("click",ocultarModalRegistro);
+let botonRegistrarme = document.getElementById("boton_registrarse");
+botonRegistrarme.addEventListener("click",mostrarModalRegistro);
 
 
-cardsEnPantalla(pantallaActual)
 
 
+function ocultarModalRegistro(){
+  modalRegistrarse.classList.add("ocultarRegistroModal")
+}
+
+
+function mostrarModalRegistro(){
+  modalRegistrarse.classList.remove("ocultarRegistroModal")
+}
+
+
+
+cardsEnPantalla(pantallaActual);
+
+
+
+
+
+
+
+
+
+// Clase para generar cada card (tarea)
 class Tarjetas {
   constructor(titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado) {
     this.titulo = titulo;
@@ -372,13 +400,10 @@ function agregarCardAlContenedor(tarea) {
   let maxCaracteres = 50;
   let contenidoDetalle = tarea.detalle;
   if (contenidoDetalle.length > maxCaracteres) {
-    console.log("entra")
     let detalleTruncado = contenidoDetalle.substring(0,maxCaracteres) + "...";
-    // console.log(textoCortado)
-    // console.log(detalleTruncado)
     textoCortado = detalleTruncado;
   }
-console.log(textoCortado)
+
 
   if (tarea.estado === "Pendientes") {
     let nuevaCardHTML = `

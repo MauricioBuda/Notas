@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 
 
@@ -16,5 +17,36 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
+const auth = getAuth();
+
+async function registrarUsuario(email, password) {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    console.log('Usuario registrado:', user);
+    // Puedes almacenar información adicional sobre el usuario en tu base de datos si es necesario
+  } catch (error) {
+    console.error('Error al registrar usuario:', error.message);
+    // Maneja el error según sea necesario
+  }
+}
+
+async function iniciarSesion(email, password) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    console.log('Usuario autenticado:', user);
+    // Realiza acciones adicionales después del inicio de sesión si es necesario
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error.message);
+    // Maneja el error según sea necesario
+  }
+}
+
+
+
+
+export { registrarUsuario, iniciarSesion };
 
 export { db };
+

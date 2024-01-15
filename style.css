@@ -31,6 +31,127 @@ button {
 /* FIN GENERALES */
 
 
+/* INICIO SESION */
+
+.form_inicioSesion{
+  /* display: none!important; */
+  font-size: 3vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 1000;
+  flex-direction: column;
+}
+
+.form_inicioSesion input{
+  text-align: center;
+  font-size: 2vw;
+  width: 40vw;
+  height: 7vh;
+}
+
+.form_inicioSesion button{
+  font-size: 2vw;
+  width: 20vw;
+  height: 8vh;
+}
+
+.sinCuenta{
+  margin-top: 6vw;
+}
+
+.modal_registro{
+  justify-content: center;
+  align-items: center;
+  position: fixed!important;
+  top: 5%!important;
+  left: 15%!important;
+  width: 70%!important;
+  height: 70%!important;
+  }
+
+  .card-body{
+    height: 90vh;
+  }
+
+  .form_registro{
+    margin-top: 5vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .botones_registro{
+    margin-top: 2vw;
+  }
+
+.ocultarRegistroModal{
+  display: none!important;
+}
+
+@media screen and (max-width: 524px) {
+
+  .modal_inicioSesion{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .modal_inicioSesion *{
+    margin: 1.5vh;
+  }
+
+
+  .form_inicioSesion{
+    font-size: 7vw;
+  }
+
+  .form_inicioSesion input{
+    font-size: 6vw;
+    width: 70vw;
+    height: 5vh;
+  }
+
+  .form_inicioSesion button{
+    font-size: 5vw;
+    width: 40vw;
+    height: 6vh;
+  }
+
+  .sinCuenta{
+    margin-top: 10vh;
+  }
+
+  .form_registro input{
+    width: 60vw;
+  }
+
+  .botonesRegistro{
+    margin-bottom: 4vh ;
+  }
+
+  .card-body {
+    justify-content: center;
+  }
+
+  .card-body *{
+    gap: 5vh;
+  }
+}
+
+/* FIN INICIO SESION */
+
+
 
 
 /* MENÚ */

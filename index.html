@@ -12,8 +12,53 @@
 <body>
 
 
-  
-<div class="absolute top-0 -z-10 h-full w-full bg-white"><div class="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(173,109,244,0.5)] opacity-50 blur-[80px]"></div></div>
+<section class="form_inicioSesion">
+  <form id="modalInicioSesion" class="modal_inicioSesion">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Dirección de e-mail</label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+      <input type="password" class="form-control" id="exampleInputPassword1" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Ingresar</button>
+    <div id="emailHelp" class="form-text sinCuenta">No tenés cuenta?</div>
+      <button id="boton_registrarse" class="btn btn-primary " type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+        Registrarse
+      </button>
+    </form>
+
+
+    <div id="modalRegistro" class=" modal_registro ocultarRegistroModal">
+      <div class="collapse collapse-horizontal modal_registro_2" id="collapseWidthExample">
+        <div class="card card-body " >
+
+          <form class="form_registro" id="modalRegistro">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Dirección de e-mail</label>
+              <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="exampleInputPassword" required>
+              <label for="exampleInputPassword1" class="form-label">Repetir contraseña</label>
+              <input type="password" class="form-control" id="exampleInputPassword" required>
+            </div>
+            <div class="botones_registro">
+            <button type="submit" class="btn btn-primary botonesRegistro">Registrarme</button>
+            <button id="cancelar_modal" class="btn btn-primary botonesRegistro" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+              Cancelar
+            </button>
+          </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+</section>
+
 
 
 
@@ -54,7 +99,7 @@
                 </select>
 
 
-                <button class="boton_agregarTarea btn btn-outline-dark" id="boton_agregarTarea_id" type="submit" >Agregar Tarea</button>
+                <button class="boton_agregarTarea btn btn-outline-dark" id="boton_agregarTarea_id" type="submit">Agregar Tarea</button>
 
             </form>
       
@@ -73,6 +118,10 @@
       <p>CARGANDO...</p>
     </div>
   </div>
+
+
+
+  
 
   
   <!-- Modal pantalla grande-->
