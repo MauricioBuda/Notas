@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth';
 
 
 
@@ -19,42 +19,77 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 
-async function registrarUsuario(email, password) {
+
+async function registrarUsuario(nombre, email, password) {
   try {
+    const datos = auth.currentUser;
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+    console.log("Bienvenido ", nombre)
     console.log('Usuario registrado:', user);
-    // Puedes almacenar información adicional sobre el usuario en tu base de datos si es necesario
+    datos.displayName=nombre;
+    return "ok";
+
   } catch (error) {
     if (error.message === "Firebase: Error (auth/email-already-in-use).") {
-      alert("Usuario existente")
-    } else {
-      
+      alert("Mail existente. Elija otro o vaya a 'Olvidé mi clave'")
+
     }
-    console.log(error)
-    console.error('Error al registrar usuario:', error.message);
+    console.log("El motivo por el cual no se pudo es", error)
     // Maneja el error según sea necesario
   }
+
 }
 
 async function iniciarSesion(email, password) {
   try {
+    const datos = auth.currentUser;
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     console.log('Usuario autenticado:', user);
     // Realiza acciones adicionales después del inicio de sesión si es necesario
+    console.log(datos.email)
+    console.log(datos)
+    return "ok";
+
   } catch (error) {
-    console.error('Error al iniciar sesión:', error.message);
-    alert("Usuario inválido o inexistente");
+    console.log(error.message)
+    if (error.message === "Firebase: Error (auth/invalid-credential).") {
+      alert("Credenciales incorrectas/inexistentes")
+    }
     location.reload();
-    // Maneja el error según sea necesario
   }
+
+}
+
+async function recuperarClave(mail){
+  
+  try {
+    const recuperar = await sendPasswordResetEmail(auth,mail)
+    alert("Si el mail existe, en un momento llegará el link")
+  } catch (error) {
+    console.log("error",error.message)
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  }
+}
+
+async function cerrarSesion(){
+    signOut(auth).then(() => {
+      console.log("sesion cerrada")
+      // Sign-out successful.
+    }).catch((error) => {
+      console.log("error", error)
+      // An error happened.
+    });
 }
 
 
 
 
-export { registrarUsuario, iniciarSesion };
+
+
+export { registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion };
 
 export { db };
 

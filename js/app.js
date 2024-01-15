@@ -1,6 +1,6 @@
 // Importa la función de Firestore para agregar documentos
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db, registrarUsuario, iniciarSesion } from './firestoreConfig';
+import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion } from './firestoreConfig';
 
 // Menu ↓
 let botonMas = document.getElementById("botonMas_id");
@@ -54,24 +54,50 @@ botonRegistrarme.addEventListener("click",mostrarModalRegistro);
 
 // Registro o crear cuenta ↓
 let botonIngresarCuentaExistente = document.getElementById("botonIngresarCuentaExistente");
-let botonRegistrarNuevaCuenta = document.getElementById("botonRegistrarNuevaCuenta");
 botonIngresarCuentaExistente.addEventListener("click", datosDeIngreso);
+let botonRegistrarNuevaCuenta = document.getElementById("botonRegistrarNuevaCuenta");
 botonRegistrarNuevaCuenta.addEventListener("click",datosDeRegistro);
+let botonOlvideClave = document.getElementById("olvide_clave")
+botonOlvideClave.addEventListener("click", olvideClave);
+
+// Boton salir
+let pantallaInicioSesion = document.getElementById("formInicioSesion");
+let botonSalir = document.getElementById("boton_salir")
+botonSalir.addEventListener("click",salir)
+
+
+
+
+
 
 // cardsEnPantalla(pantallaActual);
 
-function datosDeIngreso(event){
-  event.preventDefault();
-  let mailIngresado = document.getElementById("mailInicio").value;
-  let contraseñaIngresada = document.getElementById("contraseñaInicio").value;
-  iniciarSesion(mailIngresado,contraseñaIngresada);
+async function salir (){
+ await cerrarSesion();
+ alert("sesion cerrada");
+ pantallaInicioSesion.classList.remove("ocultarRegistroModal")
 }
 
 
 
 
-function datosDeRegistro(event){
+async function datosDeIngreso(event){
   event.preventDefault();
+  let mailIngresado = document.getElementById("mailInicio").value;
+  let contraseñaIngresada = document.getElementById("contraseñaInicio").value;
+  const inicio= await  iniciarSesion(mailIngresado,contraseñaIngresada);
+  if (inicio === "ok") {
+    alert("Inicio exitoso")
+    pantallaInicioSesion.classList.add("ocultarRegistroModal")
+  } 
+}
+
+
+
+
+async function datosDeRegistro(event){
+  event.preventDefault();
+  let nombreRegistro = document.getElementById("nombreRegistro").value;
   let mailIngresado = document.getElementById("MailRegistro").value;
   let contraseñaIngresada1 = document.getElementById("ContraseñaRegistro1").value;
   let contraseñaIngresada2 = document.getElementById("ContraseñaRegistro2").value;
@@ -81,13 +107,26 @@ function datosDeRegistro(event){
       alert("La contraseña debe tener al menos seis dígitos")
       return;
     }
-    registrarUsuario(mailIngresado, contraseñaIngresada1)
+    const registro = await registrarUsuario(nombreRegistro, mailIngresado, contraseñaIngresada1);
+    if (registro === "ok") {
+      alert("Usuario creado");
+    }
   } else {
     alert("Las contraseñas no coinciden")
   }
   
 }
 
+
+
+
+
+function olvideClave(event){
+  event.preventDefault();
+  const recuperoClave= prompt("Ingrese mail, para recibir link");
+  recuperarClave(recuperoClave);
+
+}
 
 
 // Mostrar y ocultar el modal del registro
