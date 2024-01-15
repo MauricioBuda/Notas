@@ -66,7 +66,7 @@ function mostrarModalRegistro(){
 
 
 
-cardsEnPantalla(pantallaActual);
+// cardsEnPantalla(pantallaActual);
 
 
 
