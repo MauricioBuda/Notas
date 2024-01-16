@@ -76,7 +76,7 @@ botonSalir.addEventListener("click",salir)
 
 
 
-
+console.log(mailDeUsuarioDB)
 
 async function corroborarSesionIniciada (){
   auth.onAuthStateChanged(async (usuario) => {
@@ -116,9 +116,12 @@ corroborarSesionIniciada();
 // cardsEnPantalla(pantallaActual);
 
 async function salir (){
- await cerrarSesion();
- alert("sesion cerrada");
- pantallaInicioSesion.classList.remove("ocultarRegistroModal")
+  var confirmacion = confirm("¿Seguro que querés cerrar sesión?")
+  if (confirmacion) {
+    pantallaInicioSesion.classList.remove("ocultarRegistroModal")
+    await cerrarSesion();
+    alert("sesion cerrada");
+  }
 }
 
 
@@ -130,8 +133,9 @@ async function datosDeIngreso(event){
   let contraseñaIngresada = document.getElementById("contraseñaInicio").value;
   const inicio= await  iniciarSesion(mailIngresado,contraseñaIngresada);
   if (inicio === "ok") {
-    alert("Inicio exitoso")
     pantallaInicioSesion.classList.add("ocultarRegistroModal")
+    alert("Inicio exitoso")
+
   } 
 }
 

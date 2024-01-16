@@ -141,7 +141,7 @@ button {
   }
 
   .form_inicioSesion input{
-    font-size: 6vw;
+    font-size: 5vw;
     width: 70vw;
     height: 5vh;
   }
@@ -153,7 +153,7 @@ button {
   }
 
   .modal_registro{
-    font-size: 4.5vw;
+    font-size: 5vw;
     justify-content: center;
     align-items: center;
     position: fixed!important;
@@ -165,6 +165,10 @@ button {
 
   .sinCuenta{
     margin-top: 10vh;
+  }
+
+  .form_registro label{
+    margin-top: 2vh;
   }
 
   .form_registro input{
@@ -265,8 +269,12 @@ button {
 }
 
 @media screen and (max-width: 524px) {
+  .menu{
+    margin: 3rem 0rem 1rem 1rem;
+  }
+
   .menu button{
-    font-size: 4vw;
+    font-size: 3.9vw;
   }
 
   .botonMas_class {
