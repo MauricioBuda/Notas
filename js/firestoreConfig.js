@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 
 
 
@@ -20,14 +20,16 @@ const db = getFirestore(app);
 const auth = getAuth();
 
 
+
+
 async function registrarUsuario(nombre, email, password) {
   try {
-    const datos = auth.currentUser;
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     console.log("Bienvenido ", nombre)
     console.log('Usuario registrado:', user);
-    datos.displayName=nombre;
+    console.log(user.email)
+    await updateProfile(user, { displayName: nombre });
     return "ok";
 
   } catch (error) {
@@ -89,7 +91,7 @@ async function cerrarSesion(){
 
 
 
-export { registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion };
+export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion };
 
 export { db };
 

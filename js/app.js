@@ -1,6 +1,6 @@
 // Importa la función de Firestore para agregar documentos
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion } from './firestoreConfig';
+import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth } from './firestoreConfig';
 
 // Menu ↓
 let botonMas = document.getElementById("botonMas_id");
@@ -60,6 +60,11 @@ botonRegistrarNuevaCuenta.addEventListener("click",datosDeRegistro);
 let botonOlvideClave = document.getElementById("olvide_clave")
 botonOlvideClave.addEventListener("click", olvideClave);
 
+// Datos para guardar en la db
+let nombreDeUsuarioDB = "";
+let mailDeUsuarioDB = "";
+let nombreDeColeccion = "";
+
 // Boton salir
 let pantallaInicioSesion = document.getElementById("formInicioSesion");
 let botonSalir = document.getElementById("boton_salir")
@@ -67,6 +72,44 @@ botonSalir.addEventListener("click",salir)
 
 
 
+// const usuarioActual = auth.currentUser;
+
+
+
+
+
+async function corroborarSesionIniciada (){
+  auth.onAuthStateChanged(async (usuario) => {
+    if (usuario) {
+      console.log("en el if", usuario)
+      // Hay una sesión iniciada
+      console.log('El usuario está autenticado:', usuario.displayName);
+      let nombreDeLaColeccion = await asignarNombreAColeccion (usuario.uid);
+      let nombreDeUsuario = await asignarNombreDeUsuarioDB (usuario.displayName);
+      let mailDeUsuario = await asignarMailDeUsuarioDB (usuario.email);
+      nombreDeUsuarioDB=nombreDeUsuario;
+      mailDeUsuarioDB=mailDeUsuario;
+      nombreDeColeccion = nombreDeLaColeccion;
+      pantallaInicioSesion.classList.add("ocultarRegistroModal")
+    } else {
+      // No hay una sesión iniciada
+      console.log("en el else", usuario)
+      console.log('No hay usuario autenticado');
+    }
+  });
+}
+
+function asignarNombreAColeccion(nombreColeccion){
+  return nombreColeccion;
+}
+function asignarNombreDeUsuarioDB(nombreUsuario){
+  return nombreUsuario;
+}
+function asignarMailDeUsuarioDB(MailUsuario){
+  return MailUsuario;
+}
+
+corroborarSesionIniciada();
 
 
 
@@ -110,6 +153,8 @@ async function datosDeRegistro(event){
     const registro = await registrarUsuario(nombreRegistro, mailIngresado, contraseñaIngresada1);
     if (registro === "ok") {
       alert("Usuario creado");
+      location.reload();
+      
     }
   } else {
     alert("Las contraseñas no coinciden")
@@ -144,7 +189,9 @@ function mostrarModalRegistro(){
 
 // Clase para generar cada card (tarea)
 class Tarjetas {
-  constructor(titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado) {
+  constructor(nombre, mail, titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado) {
+    this.nombre = nombre;
+    this.mail = mail;
     this.titulo = titulo;
     this.detalle = detalle;
     this.urgencia = urgencia;
@@ -233,7 +280,7 @@ actualizarCards();
 unaCard = [];
 
 // Obtener todas las tareas desde Firestore
-const querySnapshot = await getDocs(collection(db, 'tareas'));
+const querySnapshot = await getDocs(collection(db, nombreDeColeccion));
 
 // Iterar sobre las tareas y agregarlas al array y al contenedor
 querySnapshot.forEach((doc) => {
@@ -372,16 +419,20 @@ async function agregarTarea(event) {
   let fechaCierre = "-";
   let ultimaEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
   let estado = "Pendientes";
+  let nombre = nombreDeUsuarioDB;
+  let mail = mailDeUsuarioDB;
 
   if (!titulo || !detalle || !urgencia || !fechaCreacion || !ultimaEdicion) {
     alert("No completaste todo");
     ocultarCarga();
   } else {
-    let nuevaCard = new Tarjetas(titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado);
+    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado);
     unaCard.push(nuevaCard);
 
     try {
-      let docRef = await addDoc(collection(db, 'tareas'), {
+      let docRef = await addDoc(collection(db, nombreDeColeccion), {
+        nombre: nuevaCard.nombre,
+        mail: nuevaCard.mail,
         titulo: nuevaCard.titulo,
         detalle: nuevaCard.detalle,
         urgencia: nuevaCard.urgencia,
@@ -598,7 +649,7 @@ async function finalizarTarea(id) {
   tarea.fechaCierre = fecha.toLocaleTimeString('es-AR', formatoFechaCierre);
 
     // Actualiza la tarea en Firestore
-    const tareaRef = doc(db, 'tareas', id);
+    const tareaRef = doc(db, nombreDeColeccion, id);
     await updateDoc(tareaRef, {
       estado: tarea.estado,
       fechaCierre: tarea.fechaCierre
@@ -619,7 +670,7 @@ async function eliminar(id){
 
   if(confirmacion){
   let tarea = unaCard.find((t) => t.id === id);
-  await deleteDoc(doc(db, "tareas", tarea.id));
+  await deleteDoc(doc(db, nombreDeColeccion, tarea.id));
   location.reload();
   }
   ocultarCarga();
@@ -648,7 +699,7 @@ async function cancelarTarea(id) {
     muestraPantalla = tarea.estado;
 
         // Actualiza la tarea en Firestore
-        const tareaRef = doc(db, 'tareas', id);
+        const tareaRef = doc(db, nombreDeColeccion, id);
         await updateDoc(tareaRef, {
           estado: tarea.estado,
           fechaCierre : tarea.fechaCierre
@@ -674,7 +725,7 @@ async function botonParaEditar(id) {
   let formatoFechaEdicion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
   
   // Obtener la referencia al documento en Firestore
-  const tareaRef = doc(db, "tareas", id);
+  const tareaRef = doc(db, nombreDeColeccion, id);
 
   // Obtener los nuevos valores de los campos editados
   const fechaDeEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaEdicion);
