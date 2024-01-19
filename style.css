@@ -182,7 +182,7 @@ button {
 
   .card-body {
     justify-content: center;
-    height: 90vh;
+    height: 99%;
   }
 
   .card-body *{
@@ -199,7 +199,7 @@ button {
 .menu {
   display: flex;
   justify-content: space-around;
-  margin: 3rem 0rem 1rem 2rem;
+  margin: 5vh 0rem 1rem 2rem;
   align-items: center;
 }
 
@@ -674,10 +674,10 @@ background-color: green;
   
   .botonesCards_modal{
     color: #000000;
-    font-size: 4.5vw;
+    font-size: 4vw;
     border: solid 1px rgba(0, 0, 0, 0.499);
     width: auto;
-    margin: 0 3px 0 3px;
+    margin: 0 1px 0 3px;
     background-color: white;
     border-radius: 5px;
   }
@@ -687,9 +687,9 @@ background-color: green;
 .botonSalir {
   background-color: rgba(255, 0, 0, 0.235);
   height: auto;
-  width: auto;
+  width: 5vw;
   position: fixed;
-  top:90%;
+  top:88%;
   left: 1%;
   border-radius: 10px;
   padding:1vw;
@@ -699,7 +699,7 @@ background-color: green;
   background-color: rgba(255, 0, 0, 0.776);
 }
 
-.spanSalir{
+/* .spanSalir{
   background-color:rgba(255, 0, 0, 0.776);;
   height: 9vh;
   font-size: 2vw;
@@ -708,7 +708,7 @@ background-color: green;
   top:91%;
   left: 8%;
   border-radius: 10px;
-}
+} */
 
 
 @media screen and (max-width: 524px) {
@@ -718,3 +718,41 @@ background-color: green;
     width: 12vw;
   }
 }
+
+/* CONFIG */
+
+.button_config p{
+  font-size: 1.5vw;
+  padding: 1.3vh 0.2vw 0 0.2vw;
+}
+
+.button_config{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  text-align: center;
+  background-color: rgba(0, 128, 0, 0.323);
+  /* width: auto; */
+  height: auto;
+  max-height: 4vh;
+  min-width: 10vw;
+  position: fixed;
+  top:1%;
+  left: 89%;
+  border-radius: 8px;
+  /* margin-right: 2vw; */
+}
+
+
+@media screen and (max-width: 524px) {
+  .button_config{
+    max-height: 3.5vh;
+  }
+
+  .button_config p{
+    font-size: 2.3vw;
+  }
+}
+
+
+

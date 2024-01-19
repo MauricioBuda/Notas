@@ -70,6 +70,10 @@ let pantallaInicioSesion = document.getElementById("formInicioSesion");
 let botonSalir = document.getElementById("boton_salir")
 botonSalir.addEventListener("click",salir)
 
+// Boton config
+let nombreUsuarioIniciado = document.getElementById("usuarioIniciado")
+// nombreUsuarioIniciado.addEventListener("click", opciones)
+
 
 
 // const usuarioActual = auth.currentUser;
@@ -79,10 +83,11 @@ botonSalir.addEventListener("click",salir)
 console.log(mailDeUsuarioDB)
 
 async function corroborarSesionIniciada (){
+  // mostrarCarga();
   auth.onAuthStateChanged(async (usuario) => {
     if (usuario) {
-      console.log("en el if", usuario)
       // Hay una sesión iniciada
+      pantallaInicioSesion.classList.add("ocultarRegistroModal")
       console.log('El usuario está autenticado:', usuario.displayName);
       let nombreDeLaColeccion = await asignarNombreAColeccion (usuario.uid);
       let nombreDeUsuario = await asignarNombreDeUsuarioDB (usuario.displayName);
@@ -90,7 +95,9 @@ async function corroborarSesionIniciada (){
       nombreDeUsuarioDB=nombreDeUsuario;
       mailDeUsuarioDB=mailDeUsuario;
       nombreDeColeccion = nombreDeLaColeccion;
-      pantallaInicioSesion.classList.add("ocultarRegistroModal")
+      nombreUsuarioIniciado.innerHTML= usuario.displayName ;
+
+      // ocultarCarga();
     } else {
       // No hay una sesión iniciada
       console.log("en el else", usuario)
