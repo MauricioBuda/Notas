@@ -182,7 +182,7 @@ button {
 
   .card-body {
     justify-content: center;
-    height: 99%;
+    height: 90vh;
   }
 
   .card-body *{
