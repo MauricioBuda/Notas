@@ -131,7 +131,6 @@ async function salir (){
     pantallaInicioSesion.classList.remove("ocultarRegistroModal")
     navbar_general.classList.add("ocultarRegistroModal")
     await cerrarSesion();
-    alert("sesion cerrada");
   }
 }
 
