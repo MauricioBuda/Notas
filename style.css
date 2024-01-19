@@ -221,9 +221,9 @@ button {
 }
 
 @media screen and (max-width: 524px) {
-  .offcanvas{
+  /*.offcanvas{
     max-width: 70%;
-  }
+  }*/
   
   .offcanvas-header{
     gap: 2vw;
