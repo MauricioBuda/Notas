@@ -228,6 +228,18 @@ button {
 }
 
 @media screen and (max-width: 524px) {
+  .offcanvas-body {
+    padding-left: 3vw;
+  }
+  
+  .offcanvas-backdrop {
+  width: 90vw;  
+  }
+  
+  .offcanvas{
+    max-width: 70%;
+  }
+  
   .offcanvas-header{
     gap: 2vw;
   }
