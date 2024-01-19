@@ -1,6 +1,7 @@
 // Importa la función de Firestore para agregar documentos
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth } from './firestoreConfig';
+import { updateProfile } from 'firebase/auth';
 
 // Menu ↓
 let botonMas = document.getElementById("botonMas_id");
@@ -74,15 +75,14 @@ let botonSalir = document.getElementById("boton_salir")
 let navbar_general = document.getElementById("navbar_general");
 let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
 let salir_navbar =  document.getElementById("navbar_salir");
+let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre")
 salir_navbar.addEventListener("click", salir)
+boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
 
 
-// const usuarioActual = auth.currentUser;
 
-
-
-console.log(mailDeUsuarioDB)
+corroborarSesionIniciada();
 
 async function corroborarSesionIniciada (){
   // mostrarCarga();
@@ -119,7 +119,7 @@ function asignarMailDeUsuarioDB(MailUsuario){
   return MailUsuario;
 }
 
-corroborarSesionIniciada();
+
 
 
 
@@ -195,6 +195,28 @@ function ocultarModalRegistro(){
 }
 function mostrarModalRegistro(){
   modalRegistrarse.classList.remove("ocultarRegistroModal")
+}
+
+
+async function cambiarNombre(){
+  auth.onAuthStateChanged(async (usuario) => {
+let nombreParaEditar = document.getElementById("offcanvasNavbarLabel");
+let verSiGuardoOEditoNombre = boton_cambiar_nombre.textContent === "Cambiar nombre";
+let nuevoNombre = "";
+
+if(verSiGuardoOEditoNombre){
+  nombreParaEditar.contentEditable = true;
+  nombreParaEditar.focus();
+  boton_cambiar_nombre.textContent="GUARDAR"
+  nombreParaEditar.classList.add("bordeParaNombre");
+ } else {
+  nombreParaEditar.contentEditable = false;
+  boton_cambiar_nombre.textContent = "Cambiar nombre";
+  nuevoNombre = nombreParaEditar.textContent;
+  await updateProfile(usuario, { displayName: nuevoNombre });
+  nombreParaEditar.classList.remove("bordeParaNombre");
+ }
+ });
 }
 
 
@@ -528,7 +550,8 @@ function agregarCardAlContenedor(tarea) {
   let botonEliminarID = `eliminar-${tarea.id}`;
   let textoCortado = tarea.detalle
 
-
+ let bordeUrgencias = document.getElementById(`card-${tarea.id}`);
+ console.log(bordeUrgencias)
   let maxCaracteres = 50;
   let contenidoDetalle = tarea.detalle;
   if (contenidoDetalle.length > maxCaracteres) {
@@ -538,6 +561,10 @@ function agregarCardAlContenedor(tarea) {
 
 
   if (tarea.estado === "Pendientes") {
+    // if (tarea.urgencia === "Alta") {
+    //   bordeUrgencias.classList.add("borde_urgencia");
+    //   console.log(bordeUrgencias)
+    // }
     let nuevaCardHTML = `
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
@@ -747,7 +774,7 @@ async function botonParaEditar(id) {
   const nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
   const nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
 
-  console.log(fechaDeEdicion)
+
 
   // Obtener los elementos HTML correspondientes a los campos de título y detalle
   let detalleParaEditar = document.getElementById(`detalle-${tarea.id}`);
