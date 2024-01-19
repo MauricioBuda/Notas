@@ -195,6 +195,51 @@ button {
 
 
 
+/* INICIO NAVBAR */
+.offcanvas-header{
+  justify-content: right;
+  gap: 1vw;
+}
+
+.offcanvas-header  h5{
+  font-size: 1.5vw;
+}
+
+.nav-item{
+  display: flex;
+  gap: 1vw;
+  font-size: 2vw;
+}
+
+.nav-item a{
+  color: #000000;
+}
+
+.nav-item a:hover{
+  -webkit-text-stroke: 2px #00000063;
+  color: #000000;
+}
+
+@media screen and (max-width: 524px) {
+  .offcanvas-header{
+    gap: 2vw;
+  }
+  
+  .offcanvas-header  h5{
+    font-size: 4vw;
+  }
+  
+  .nav-item{
+    display: flex;
+    gap: 2vw;
+    font-size: 5vw;
+  }
+}
+/* FIN NAVBAR */
+
+
+
+
 /* MENÚ */
 .menu {
   display: flex;

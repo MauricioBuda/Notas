@@ -68,11 +68,13 @@ let nombreDeColeccion = "";
 // Boton salir
 let pantallaInicioSesion = document.getElementById("formInicioSesion");
 let botonSalir = document.getElementById("boton_salir")
-botonSalir.addEventListener("click",salir)
+// botonSalir.addEventListener("click",salir)
 
-// Boton config
-let nombreUsuarioIniciado = document.getElementById("usuarioIniciado")
-// nombreUsuarioIniciado.addEventListener("click", opciones)
+// Navbar
+let navbar_general = document.getElementById("navbar_general");
+let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
+let salir_navbar =  document.getElementById("navbar_salir");
+salir_navbar.addEventListener("click", salir)
 
 
 
@@ -87,7 +89,8 @@ async function corroborarSesionIniciada (){
   auth.onAuthStateChanged(async (usuario) => {
     if (usuario) {
       // Hay una sesión iniciada
-      pantallaInicioSesion.classList.add("ocultarRegistroModal")
+      pantallaInicioSesion.classList.add("ocultarRegistroModal");
+      navbar_general.classList.remove("ocultarRegistroModal")
       console.log('El usuario está autenticado:', usuario.displayName);
       let nombreDeLaColeccion = await asignarNombreAColeccion (usuario.uid);
       let nombreDeUsuario = await asignarNombreDeUsuarioDB (usuario.displayName);
@@ -126,6 +129,7 @@ async function salir (){
   var confirmacion = confirm("¿Seguro que querés cerrar sesión?")
   if (confirmacion) {
     pantallaInicioSesion.classList.remove("ocultarRegistroModal")
+    navbar_general.classList.add("ocultarRegistroModal")
     await cerrarSesion();
     alert("sesion cerrada");
   }
