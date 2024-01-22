@@ -1,4 +1,4 @@
-// Importa la función de Firestore para agregar documentos
+// Importa la función de Firestore para agregar documentos ↓
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
@@ -15,7 +15,7 @@ let botonAgregarTarea = document.getElementById("boton_agregarTarea_id");
 // Asigno eventos click al boton del formulario ↓
 botonAgregarTarea.addEventListener("click", agregarTarea);
 
-// Modal de cargando
+// Modal de cargando ↓
 const modalCarga = document.getElementById('modalCarga');
 
 // Array para ir guardando las cards ↓
@@ -61,17 +61,17 @@ botonRegistrarNuevaCuenta.addEventListener("click",datosDeRegistro);
 let botonOlvideClave = document.getElementById("olvide_clave")
 botonOlvideClave.addEventListener("click", olvideClave);
 
-// Datos para guardar en la db
+// Datos para guardar en la db ↓
 let nombreDeUsuarioDB = "";
 let mailDeUsuarioDB = "";
 let nombreDeColeccion = "";
 
-// Boton salir
+// Boton salir ↓
 let pantallaInicioSesion = document.getElementById("formInicioSesion");
 let botonSalir = document.getElementById("boton_salir")
 // botonSalir.addEventListener("click",salir)
 
-// Navbar
+// Navbar ↓
 let navbar_general = document.getElementById("navbar_general");
 let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
 let salir_navbar =  document.getElementById("navbar_salir");
@@ -80,15 +80,16 @@ salir_navbar.addEventListener("click", salir)
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
 
+pantallaInicioSesion.classList.add("ocultarRegistroModal");
 
 
 corroborarSesionIniciada();
 
 async function corroborarSesionIniciada (){
-  // mostrarCarga();
   auth.onAuthStateChanged(async (usuario) => {
     if (usuario) {
       // Hay una sesión iniciada
+
       pantallaInicioSesion.classList.add("ocultarRegistroModal");
       navbar_general.classList.remove("ocultarRegistroModal")
       console.log('El usuario está autenticado:', usuario.displayName);
@@ -99,8 +100,6 @@ async function corroborarSesionIniciada (){
       mailDeUsuarioDB=mailDeUsuario;
       nombreDeColeccion = nombreDeLaColeccion;
       nombreUsuarioIniciado.innerHTML= usuario.displayName ;
-
-      // ocultarCarga();
     } else {
       // No hay una sesión iniciada
       console.log("en el else", usuario)
