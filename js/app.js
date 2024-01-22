@@ -80,7 +80,7 @@ salir_navbar.addEventListener("click", salir)
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
 
-pantallaInicioSesion.classList.add("ocultarRegistroModal");
+// pantallaInicioSesion.classList.add("ocultarRegistroModal");
 
 
 corroborarSesionIniciada();
