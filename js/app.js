@@ -215,6 +215,7 @@ async function olvideClave(event){
     input: 'text',
     inputLabel: 'Ingrese dirección de mail para recibir link de reestablecimiento:',
     showCancelButton: true,
+    position: 'top',
     customClass: {
       popup: 'sweetAlert-recupero-divdiv',
       div: 'sweetAlert-recupero-div',
