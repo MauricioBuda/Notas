@@ -132,7 +132,22 @@ async function salir (){
   if (confirmacion) {
     pantallaInicioSesion.classList.remove("ocultarRegistroModal")
     navbar_general.classList.add("ocultarRegistroModal");
-    await cerrarSesion();
+    const sesionCerrada =  await cerrarSesion();
+    if (sesionCerrada === "ok") {
+      alert("aa")
+      console.log("OKAOOKSOAKS")
+      await Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "¡Adiós  " + "!",
+        showConfirmButton: false,
+        timer: 1200,
+        customClass: {
+          popup: 'cartel-salir-popup',
+          div: 'cartel-salir-container',
+        },
+      });
+    }
     location.reload();
   }
 }
@@ -151,7 +166,7 @@ async function datosDeIngreso(event){
     await Swal.fire({
       position: "center",
       icon: "success",
-      title: "¡Hola  " + usuario.displayName + "!",
+      title: `¡Hola ${usuario ? usuario.displayName : ''}!`,
       showConfirmButton: false,
       timer: 1200,
       customClass: {
@@ -161,7 +176,6 @@ async function datosDeIngreso(event){
     });
   } 
 });
-
 }
 
 
@@ -212,6 +226,16 @@ async function olvideClave(event){
       cancelButton: 'sweetAlert-recupero-boton',
     },
   });
+
+  // const { value: email } = await Swal.fire({
+  //   title: "Input email address",
+  //   input: "email",
+  //   inputLabel: "Your email address",
+  //   inputPlaceholder: "Enter your email address"
+  // });
+  // if (email) {
+  //   Swal.fire(`Entered email: ${email}`);
+  // }
   let mailIngresadoPorClienteSinEspacios = mailIngresadoPorCliente.trim();
   recuperarClave(mailIngresadoPorClienteSinEspacios);
 }

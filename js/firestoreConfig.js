@@ -49,8 +49,6 @@ async function iniciarSesion(email, password) {
     const datos = auth.currentUser;
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    console.log('Usuario autenticado:', user);
-    // Realiza acciones adicionales después del inicio de sesión si es necesario
     return "ok";
 
   } catch (error) {
@@ -74,11 +72,10 @@ async function recuperarClave(mail){
 
 async function cerrarSesion(){
     signOut(auth).then(() => {
-      console.log("sesion cerrada")
+      return "ok";
       // Sign-out successful.
     }).catch((error) => {
       console.log("error", error)
-      // An error happened.
     });
 }
 
