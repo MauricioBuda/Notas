@@ -1,7 +1,9 @@
 // Importa la función de Firestore para agregar documentos ↓
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth } from './firestoreConfig';
-import { updateProfile } from 'firebase/auth';
+import { reload, updateProfile } from 'firebase/auth';
+import { cartelToastify } from './toastify';
+import Swal from 'sweetalert2';
 
 // Menu ↓
 let botonMas = document.getElementById("botonMas_id");
@@ -129,8 +131,9 @@ async function salir (){
   var confirmacion = confirm("¿Seguro que querés cerrar sesión?")
   if (confirmacion) {
     pantallaInicioSesion.classList.remove("ocultarRegistroModal")
-    navbar_general.classList.add("ocultarRegistroModal")
+    navbar_general.classList.add("ocultarRegistroModal");
     await cerrarSesion();
+    location.reload();
   }
 }
 
@@ -138,15 +141,27 @@ async function salir (){
 
 
 async function datosDeIngreso(event){
+  auth.onAuthStateChanged(async (usuario) => {
   event.preventDefault();
   let mailIngresado = document.getElementById("mailInicio").value;
   let contraseñaIngresada = document.getElementById("contraseñaInicio").value;
   const inicio= await  iniciarSesion(mailIngresado,contraseñaIngresada);
   if (inicio === "ok") {
     pantallaInicioSesion.classList.add("ocultarRegistroModal")
-    alert("Inicio exitoso")
-
+    await Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "¡Hola  " + usuario.displayName + "!",
+      showConfirmButton: false,
+      timer: 1200,
+      customClass: {
+        popup: 'cartel-bienvenida-popup',
+        div: 'cartel-bienvenida-container',
+      },
+    });
   } 
+});
+
 }
 
 
@@ -180,9 +195,23 @@ async function datosDeRegistro(event){
 
 
 
-function olvideClave(event){
+async function olvideClave(event){
   event.preventDefault();
-  const mailIngresadoPorCliente= prompt("Ingrese mail, para recibir link");
+  const { value:mailIngresadoPorCliente } = await Swal.fire({
+    input: 'text',
+    inputLabel: 'Ingrese dirección de mail para recibir link de reestablecimiento:',
+    showCancelButton: true,
+    customClass: {
+      popup: 'sweetAlert-recupero-divdiv',
+      div: 'sweetAlert-recupero-div',
+      input: 'sweetAlert-recupero-input',
+      label: 'sweetAlert-recupero-label',
+      title: 'sweetAlert-recupero-titulo',
+      content: 'sweetAlert-recupero-contenido',
+      confirmButton: 'sweetAlert-recupero-boton',
+      cancelButton: 'sweetAlert-recupero-boton',
+    },
+  });
   let mailIngresadoPorClienteSinEspacios = mailIngresadoPorCliente.trim();
   recuperarClave(mailIngresadoPorClienteSinEspacios);
 }

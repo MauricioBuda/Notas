@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
+import { cartelToastify } from './toastify';
 
 
 
@@ -34,7 +35,7 @@ async function registrarUsuario(nombre, email, password) {
 
   } catch (error) {
     if (error.message === "Firebase: Error (auth/email-already-in-use).") {
-      alert("Mail existente. Elija otro o vaya a 'Olvidé mi clave'")
+      cartelToastify("Mail existente. Elegir otro, o ir a 'reestablecer contraseña")
 
     }
     console.log("El motivo por el cual no se pudo es", error)
@@ -50,25 +51,20 @@ async function iniciarSesion(email, password) {
     const user = userCredential.user;
     console.log('Usuario autenticado:', user);
     // Realiza acciones adicionales después del inicio de sesión si es necesario
-    console.log(datos.email)
-    console.log(datos)
     return "ok";
 
   } catch (error) {
-    console.log(error.message)
-    if (error.message === "Firebase: Error (auth/invalid-credential).") {
-      alert("Credenciales incorrectas/inexistentes")
-    }
-    location.reload();
+      console.log(error.message)
+      cartelToastify("Credenciales incorrectas o inexistentes");
+    // location.reload();
   }
 
 }
 
 async function recuperarClave(mail){
-  
   try {
     const recuperar = await sendPasswordResetEmail(auth,mail)
-    alert("Si el mail existe, en un momento llegará el link")
+    cartelToastify("Revise su casilla")
   } catch (error) {
     console.log("error",error.message)
     const errorCode = error.code;
