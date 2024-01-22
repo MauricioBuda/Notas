@@ -166,7 +166,7 @@ async function datosDeIngreso(event){
     await Swal.fire({
       position: "center",
       icon: "success",
-      title: `¡Hola ${usuario ? usuario.displayName : ''}!`,
+      title: "¡Hola" + usuario.displayName + "!",
       showConfirmButton: false,
       timer: 1200,
       customClass: {
