@@ -100,6 +100,7 @@ async function corroborarSesionIniciada (){
       mailDeUsuarioDB=mailDeUsuario;
       nombreDeColeccion = nombreDeLaColeccion;
       nombreUsuarioIniciado.innerHTML= usuario.displayName ;
+      cardsEnPantalla(pantallaActual);
     } else {
       // No hay una sesión iniciada
       console.log("en el else", usuario)
@@ -259,7 +260,6 @@ switch (loQueQuieroQueMuestre) {
 
       pantallaActual = "Todas"; //Para mantenerme en la misma pantalla
       await obtenerCardsDesdeFirestore(pantallaActual); // Obtener las cards desde Firestore
-      
       break;
 
     case "Pendientes":
@@ -309,7 +309,7 @@ ocultarCarga();
 
 // Nueva función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
-  mostrarCarga();
+  // mostrarCarga();
 // Limpiar el array de cards antes de obtener las nuevas desde Firestore
 actualizarCards();
 unaCard = [];
@@ -333,7 +333,7 @@ querySnapshot.forEach((doc) => {
     // Agregar la nueva card al contenedor correspondiente
     agregarCardAlContenedor(tarjetaFirestore);
   }
-ocultarCarga();
+// ocultarCarga();
 });
 }
 
@@ -443,7 +443,6 @@ function vaciarCampos() {
 async function agregarTarea(event) {
   mostrarCarga();
   event.preventDefault();
-  mostrarCarga();
   let fecha = new Date();
   let formatoFechaCreacion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
 
@@ -549,7 +548,7 @@ function agregarCardAlContenedor(tarea) {
   let textoCortado = tarea.detalle
 
  let bordeUrgencias = document.getElementById(`card-${tarea.id}`);
- console.log(bordeUrgencias)
+//  console.log(bordeUrgencias)
   let maxCaracteres = 50;
   let contenidoDetalle = tarea.detalle;
   if (contenidoDetalle.length > maxCaracteres) {
