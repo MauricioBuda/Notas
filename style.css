@@ -496,9 +496,8 @@ background-color: green;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 30px;
-  margin: 1rem;
-  /* background-color: rgba(0, 0, 255, 0.169); */
+  border-radius: 25px;
+  margin: 1rem 0rem 1rem 0.5rem;
   background-image: radial-gradient(circle at 29% 55%, hsla(329,0%,99%,0.05) 0%, hsla(329,0%,99%,0.05) 4%,transparent 4%, transparent 44%,transparent 44%, transparent 100%),radial-gradient(circle at 85% 89%, hsla(329,0%,99%,0.05) 0%, hsla(329,0%,99%,0.05) 51%,transparent 51%, transparent 52%,transparent 52%, transparent 100%),radial-gradient(circle at 6% 90%, hsla(329,0%,99%,0.05) 0%, hsla(329,0%,99%,0.05) 53%,transparent 53%, transparent 64%,transparent 64%, transparent 100%),radial-gradient(circle at 35% 75%, hsla(329,0%,99%,0.05) 0%, hsla(329,0%,99%,0.05) 6%,transparent 6%, transparent 98%,transparent 98%, transparent 100%),radial-gradient(circle at 56% 75%, hsla(329,0%,99%,0.05) 0%, hsla(329,0%,99%,0.05) 16%,transparent 16%, transparent 23%,transparent 23%, transparent 100%),radial-gradient(circle at 42% 0%, hsla(329,0%,99%,0.05) 0%, hsla(329,0%,99%,0.05) 3%,transparent 3%, transparent 26%,transparent 26%, transparent 100%),radial-gradient(circle at 29% 28%, hsla(329,0%,99%,0.05) 0%, hsla(329,0%,99%,0.05) 51%,transparent 51%, transparent 75%,transparent 75%, transparent 100%),radial-gradient(circle at 77% 21%, hsla(329,0%,99%,0.05) 0%, hsla(329,0%,99%,0.05) 35%,transparent 35%, transparent 55%,transparent 55%, transparent 100%),radial-gradient(circle at 65% 91%, hsla(329,0%,99%,0.05) 0%, hsla(329,0%,99%,0.05) 46%,transparent 46%, transparent 76%,transparent 76%, transparent 100%),linear-gradient(45deg, rgba(83,91,235, 0.35),rgb(76, 11, 174));  max-width: 99%;
   box-sizing: border-box;
   min-height: 25vh;
@@ -572,9 +571,9 @@ background-color: green;
 }
 
 .borde_urgencia{
-  background-color: red;
-  border: 3px red solid;
-  box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 0, 0, 0.702);
+  border: 2px rgb(255, 0, 0) solid;
+  box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.9);
 }
 
 
@@ -585,6 +584,10 @@ background-color: green;
     text-align: center;
     margin: 0.6rem;
     border-radius:10px;
+  }
+
+  .p_detalle{
+    max-width: 10vw;
   }
 
   .botonesCards {
@@ -632,7 +635,7 @@ background-color: green;
 }
 
 .modalCardContenedor{
-  height: 95vh;
+  background-image: radial-gradient(circle at 69% 86%, rgba(165,165,165, 0.07) 0%, rgba(165,165,165, 0.07) 25%,rgba(193, 193, 193,0.06) 25%, rgba(193, 193, 193,0.06) 50%,rgba(221,221,221, 0.1) 50%, rgba(221,221,221, 0.1) 75%,rgba(249, 249, 249,0.06) 75%, rgba(249, 249, 249,0.06) 100%),radial-gradient(circle at 49% 76%, rgba(129, 129, 129,0.06) 0%, rgba(129, 129, 129,0.06) 25%,rgba(164,164,164, 0.07) 25%, rgba(164,164,164, 0.07) 50%,rgba(200, 200, 200,0.06) 50%, rgba(200, 200, 200,0.06) 75%,rgba(235, 235, 235,0.06) 75%, rgba(235, 235, 235,0.06) 100%),radial-gradient(circle at 22% 64%, rgba(173,173,173, 0.09) 0%, rgba(173,173,173, 0.09) 25%,rgba(119,119,119, 0.06) 25%, rgba(119,119,119, 0.06) 50%,rgba(64,64,64, 0.04) 50%, rgba(64,64,64, 0.04) 75%,rgba(10,10,10, 0.06) 75%, rgba(10,10,10, 0.06) 100%),linear-gradient(307deg, rgb(255,255,255),rgb(255,255,255));  height: 95vh;
 }
 
 .cardEnModal_Class{

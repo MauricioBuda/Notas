@@ -1,5 +1,5 @@
 // Importa la función de Firestore para agregar documentos ↓
-import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
 
@@ -182,9 +182,9 @@ async function datosDeRegistro(event){
 
 function olvideClave(event){
   event.preventDefault();
-  const recuperoClave= prompt("Ingrese mail, para recibir link");
-  recuperarClave(recuperoClave);
-
+  const mailIngresadoPorCliente= prompt("Ingrese mail, para recibir link");
+  let mailIngresadoPorClienteSinEspacios = mailIngresadoPorCliente.trim();
+  recuperarClave(mailIngresadoPorClienteSinEspacios);
 }
 
 
@@ -307,7 +307,7 @@ ocultarCarga();
 
 
 
-// Nueva función para obtener las cards desde Firestore
+// Función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
   // mostrarCarga();
 // Limpiar el array de cards antes de obtener las nuevas desde Firestore
@@ -336,6 +336,11 @@ querySnapshot.forEach((doc) => {
 // ocultarCarga();
 });
 }
+
+
+
+
+
 
 
 
@@ -557,23 +562,35 @@ function agregarCardAlContenedor(tarea) {
   }
 
 
+
   if (tarea.estado === "Pendientes") {
-    // if (tarea.urgencia === "Alta") {
-    //   bordeUrgencias.classList.add("borde_urgencia");
-    //   console.log(bordeUrgencias)
-    // }
-    let nuevaCardHTML = `
-    <div id="${cardID}" class="cards">
-      <h3>${tarea.titulo}</h3>
-      <p class="p_detalle">${textoCortado}</p>
-      <p>URGENCIA: <br> ${tarea.urgencia}</p>
-      <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
-      <p>FIN: <br> ${tarea.fechaCierre}</p>
-      <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
-      <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
-    </div>
-  `;
-    pendientesCards.innerHTML += nuevaCardHTML;
+        if (tarea.urgencia === "Alta") {
+          let nuevaCardHTML = `
+          <div id="${cardID}" class="cards borde_urgencia">
+            <h3>${tarea.titulo}</h3>
+            <p class="p_detalle">${textoCortado}</p>
+            <p>URGENCIA: <br> ${tarea.urgencia}</p>
+            <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
+            <p>FIN: <br> ${tarea.fechaCierre}</p>
+            <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
+            <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
+          </div>
+        `;
+          pendientesCards.innerHTML += nuevaCardHTML;
+        } else {
+        let nuevaCardHTML = `
+        <div id="${cardID}" class="cards">
+          <h3>${tarea.titulo}</h3>
+          <p class="p_detalle">${textoCortado}</p>
+          <p>URGENCIA: <br> ${tarea.urgencia}</p>
+          <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
+          <p>FIN: <br> ${tarea.fechaCierre}</p>
+          <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
+          <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
+        </div>
+      `;
+        pendientesCards.innerHTML += nuevaCardHTML;
+        }
   } else if (tarea.estado === "Finalizadas") {
     let nuevaCardHTML = `
     <div id="${cardID}" class="cards">
@@ -834,4 +851,5 @@ function actualizarCards() {
   finalizadasCards.innerHTML = "";
   canceladasCards.innerHTML = "";
 }
+
 
