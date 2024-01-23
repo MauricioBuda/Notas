@@ -73,6 +73,7 @@ let botonSalir = document.getElementById("boton_salir")
 // botonSalir.addEventListener("click",salir)
 
 // Navbar ↓
+let navBar_desplegable = document.getElementById("otroDivNavbar");
 let navbar_general = document.getElementById("navbar_general");
 let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
 let salir_navbar =  document.getElementById("navbar_salir");
@@ -158,10 +159,11 @@ async function datosDeIngreso(event){
   let mailIngresado = document.getElementById("mailInicio").value;
   let contraseñaIngresada = document.getElementById("contraseñaInicio").value;
   await  iniciarSesion(mailIngresado,contraseñaIngresada);
-  let nombreParaCartel = "";
   auth.onAuthStateChanged(async (usuario) => {
   if (usuario && usuario.displayName) {
-    pantallaInicioSesion.classList.add("ocultarRegistroModal")
+    // navBar_desplegable.classList.remove("show");
+    // navBar_desplegable.classList.add("ocultarRegistroModal");
+    pantallaInicioSesion.classList.add("ocultarRegistroModal");
       Swal.fire({
       position: "center",
       icon: "success",
@@ -174,6 +176,9 @@ async function datosDeIngreso(event){
       },
     });
   } 
+  setTimeout(() => {
+    location.reload();
+  }, 1000);
 });
 }
 
