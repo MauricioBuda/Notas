@@ -31,6 +31,10 @@
                 <img src="/img/person.svg" alt="icono-persona">
                 <a id="button_cambiar_nombre" class="nav-link active" aria-current="page" href="#">Cambiar nombre</a>
               </li>
+              <li class="nav-item">
+                <img src="/img/trash.svg" alt="icono-persona">
+                <a id="button_eliminar_cuenta" class="nav-link active" aria-current="page" href="#">Eliminar cuenta</a>
+              </li>
               <li id="navbar_salir" class="nav-item">
                 <img src="/img/box-arrow-left.svg" alt="icono-salir">
                 <a class="nav-link" href="#">Salir</a>
@@ -67,7 +71,7 @@
     </div>
     <div class="div_bt_ingresar_olvide">
       <button type="submit" class="btn btn-primary" id="botonIngresarCuentaExistente">Ingresar</button>
-      <button id="olvide_clave" class="form-text olvideClave">Olvidé mi clave</button>
+      <button id="olvide_clave" class="form-text olvideClave">Reestablecer clave</button>
     </div>
     <div id="emailHelp" class="form-text sinCuenta">¿No tenés cuenta?</div>
       <button id="boton_registrarse" class="btn btn-primary " type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
@@ -80,10 +84,10 @@
       <div class="collapse collapse-horizontal modal_registro_2" id="collapseWidthExample">
         <div class="card card-body " >
 
-          <form class="form_registro" id="modalRegistro">
+          <form class="form_registro" id="modalRegistro2">
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">Nombre</label>
-              <input type="email" class="form-control" id="nombreRegistro" aria-describedby="emailHelp" required>
+              <input type="text" class="form-control" id="nombreRegistro" aria-describedby="emailHelp" required>
 
               <label for="exampleInputEmail1" class="form-label contraseña_registro">Dirección de E-mail</label>
               <input type="email" class="form-control" id="MailRegistro" aria-describedby="emailHelp" required>

@@ -70,7 +70,6 @@ async function iniciarSesion(email, password) {
 async function recuperarClave(mail){
   try {
     const recuperar = await sendPasswordResetEmail(auth,mail)
-    cartelToastify("Revise su casilla")
   } catch (error) {
     console.log("error",error.message)
     const errorCode = error.code;
@@ -87,12 +86,23 @@ async function cerrarSesion(){
     });
 }
 
+async function eliminarCuenta() {
+  const user = auth.currentUser;
+
+  try {
+    // Elimina el usuario actual
+    await user.delete();
+    console.log("Usuario eliminado con éxito");
+  } catch (error) {
+    console.error("Error al eliminar el usuario:", error);
+    // Maneja el error según sea necesario
+  }
+}
 
 
 
 
 
-export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion };
+export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta};
 
-export { db };
 

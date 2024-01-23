@@ -1,6 +1,6 @@
 // Importa la función de Firestore para agregar documentos ↓
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
-import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth } from './firestoreConfig';
+import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
 import { reload, updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2';
 
@@ -73,16 +73,15 @@ let botonSalir = document.getElementById("boton_salir")
 // botonSalir.addEventListener("click",salir)
 
 // Navbar ↓
-let navBar_desplegable = document.getElementById("otroDivNavbar");
 let navbar_general = document.getElementById("navbar_general");
 let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
 let salir_navbar =  document.getElementById("navbar_salir");
-let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre")
-salir_navbar.addEventListener("click", salir)
+let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre");
+let boton_eliminar_cuenta = document.getElementById("button_eliminar_cuenta");
+boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
+salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
-
-// pantallaInicioSesion.classList.add("ocultarRegistroModal");
 
 
 corroborarSesionIniciada();
@@ -240,28 +239,75 @@ async function datosDeRegistro(event){
 
 
 
-
 async function olvideClave(event){
+  console.log("1")
   event.preventDefault();
-  const { value:mailIngresadoPorCliente } = await Swal.fire({
-    input: 'text',
-    inputLabel: 'Ingrese dirección de mail para recibir link de reestablecimiento:',
-    showCancelButton: true,
+  console.log("2");
+  const { value: mailIngresadoPorCliente } = await Swal.fire({
+    title: "Ingrese dirección de mail para recibir link de reestablecimiento:",
+    input: "email",
+    inputPlaceholder: "ejemplo@ejemplo.com",
+    allowOutsideClick: false,
     position: 'top',
     customClass: {
-      popup: 'sweetAlert-recupero-divdiv',
-      div: 'sweetAlert-recupero-div',
-      input: 'sweetAlert-recupero-input',
-      label: 'sweetAlert-recupero-label',
-      title: 'sweetAlert-recupero-titulo',
-      content: 'sweetAlert-recupero-contenido',
-      confirmButton: 'sweetAlert-recupero-boton',
-      cancelButton: 'sweetAlert-recupero-boton',
-    },
+            popup: 'sweetAlert-recupero-divdiv',
+            div: 'sweetAlert-recupero-div',
+            input: 'sweetAlert-recupero-input',
+            inputPlaceholder: 'sweetAlert-recupero-input-placeholder',
+            inputValue: 'sweetAlert-recupero-input-value',
+            label: 'sweetAlert-recupero-label',
+            title: 'sweetAlert-recupero-titulo',
+            content: 'sweetAlert-recupero-contenido',
+            confirmButton: 'sweetAlert-recupero-boton',
+            cancelButton: 'sweetAlert-recupero-boton',
+          },
   });
-  let mailIngresadoPorClienteSinEspacios = mailIngresadoPorCliente.trim();
-  recuperarClave(mailIngresadoPorClienteSinEspacios);
+  console.log("3");
+  if (mailIngresadoPorCliente) {
+    console.log("4");
+      let mailIngresadoPorClienteSinEspacios = mailIngresadoPorCliente.trim();
+      recuperarClave(mailIngresadoPorClienteSinEspacios);
+      setTimeout(() => {
+          Swal.fire({
+            title: "Mail enviado",
+            timer: 1200,
+            icon: "success"
+          });
+      }, 1000);
+  }
 }
+
+
+
+
+async function elimnarLaCuenta(){
+  Swal.fire({
+    title: "Borrarás la cuenta y sus tareas de manera permanente",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Borrar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      mostrarCarga();
+      eliminarCuenta();
+      Swal.fire({
+        title: "Cuenta eliminada!",
+        timer: 1500,
+        icon: "success"
+      });
+      setTimeout(() => {
+        location.reload();
+      }, 1200);
+    }
+  }); 
+}
+
+
+
+
+
 
 
 // Mostrar y ocultar el modal del registro
@@ -284,12 +330,14 @@ if(verSiGuardoOEditoNombre){
   nombreParaEditar.focus();
   boton_cambiar_nombre.textContent="GUARDAR"
   nombreParaEditar.classList.add("bordeParaNombre");
+  boton_cambiar_nombre.classList.add("guardar_red");
  } else {
   nombreParaEditar.contentEditable = false;
   boton_cambiar_nombre.textContent = "Cambiar nombre";
   nuevoNombre = nombreParaEditar.textContent;
   await updateProfile(usuario, { displayName: nuevoNombre });
   nombreParaEditar.classList.remove("bordeParaNombre");
+  boton_cambiar_nombre.classList.remove("guardar_red");
  }
  });
 }
