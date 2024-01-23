@@ -1,8 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
-import { cartelToastify } from './toastify';
-
+import Swal from 'sweetalert2';
 
 
 const firebaseConfig = {
@@ -29,7 +28,6 @@ async function registrarUsuario(nombre, email, password) {
     const user = userCredential.user;
     console.log("Bienvenido ", nombre)
     console.log('Usuario registrado:', user);
-    console.log(user.email)
     await updateProfile(user, { displayName: nombre });
     return "ok";
 
@@ -49,12 +47,22 @@ async function iniciarSesion(email, password) {
     const datos = auth.currentUser;
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    return "ok";
+    return user;
 
   } catch (error) {
       console.log(error.message)
-      cartelToastify("Credenciales incorrectas o inexistentes");
-    // location.reload();
+      Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Credenciales incorrectas o inexistentes",
+      showConfirmButton: false,
+      timer: 1200,
+      customClass: {
+        popup: 'cartel-bienvenida-popup',
+        div: 'cartel-bienvenida-container',
+      },
+    });
+      return null;
   }
 
 }

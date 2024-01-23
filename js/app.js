@@ -2,7 +2,6 @@
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth } from './firestoreConfig';
 import { reload, updateProfile } from 'firebase/auth';
-import { cartelToastify } from './toastify';
 import Swal from 'sweetalert2';
 
 // Menu ↓
@@ -105,7 +104,6 @@ async function corroborarSesionIniciada (){
       cardsEnPantalla(pantallaActual);
     } else {
       // No hay una sesión iniciada
-      console.log("en el else", usuario)
       console.log('No hay usuario autenticado');
     }
   });
@@ -128,45 +126,46 @@ function asignarMailDeUsuarioDB(MailUsuario){
 // cardsEnPantalla(pantallaActual);
 
 async function salir (){
-  var confirmacion = confirm("¿Seguro que querés cerrar sesión?")
-  if (confirmacion) {
-    pantallaInicioSesion.classList.remove("ocultarRegistroModal")
-    navbar_general.classList.add("ocultarRegistroModal");
-    const sesionCerrada =  await cerrarSesion();
-    if (sesionCerrada === "ok") {
-      alert("aa")
-      console.log("OKAOOKSOAKS")
-      await Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "¡Adiós  " + "!",
-        showConfirmButton: false,
-        timer: 1200,
-        customClass: {
-          popup: 'cartel-salir-popup',
-          div: 'cartel-salir-container',
-        },
+  let contraseñaIngresada = document.getElementById("contraseñaInicio");
+  Swal.fire({
+    title: "¿Cerrar sersión?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, cerrar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      contraseñaIngresada.value = "";
+
+      pantallaInicioSesion.classList.remove("ocultarRegistroModal")
+      navbar_general.classList.add("ocultarRegistroModal");
+      const sesionCerrada =   cerrarSesion();
+      Swal.fire({
+        title: "Sesión cerrada",
+        timer: 1500,
+        icon: "success"
       });
     }
-    location.reload();
-  }
+  }); 
 }
 
 
 
 
 async function datosDeIngreso(event){
-  auth.onAuthStateChanged(async (usuario) => {
   event.preventDefault();
   let mailIngresado = document.getElementById("mailInicio").value;
   let contraseñaIngresada = document.getElementById("contraseñaInicio").value;
-  const inicio= await  iniciarSesion(mailIngresado,contraseñaIngresada);
-  if (inicio === "ok") {
+  await  iniciarSesion(mailIngresado,contraseñaIngresada);
+  let nombreParaCartel = "";
+  auth.onAuthStateChanged(async (usuario) => {
+  if (usuario && usuario.displayName) {
     pantallaInicioSesion.classList.add("ocultarRegistroModal")
-    await Swal.fire({
+      Swal.fire({
       position: "center",
       icon: "success",
-      title: "¡Hola" + usuario.displayName + "!",
+      title: "¡Hola " + usuario.displayName + "!",
       showConfirmButton: false,
       timer: 1200,
       customClass: {
@@ -190,17 +189,45 @@ async function datosDeRegistro(event){
 
   if (contraseñaIngresada1 === contraseñaIngresada2) {
     if (contraseñaIngresada1.length < 6 ) {
-      alert("La contraseña debe tener al menos seis dígitos")
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "La clave debe tener al menos 6 dígitos",
+        showConfirmButton: false,
+        timer: 1200,
+        customClass: {
+          popup: 'cartel-bienvenida-popup',
+          div: 'cartel-bienvenida-container',
+        },
+      });
       return;
     }
     const registro = await registrarUsuario(nombreRegistro, mailIngresado, contraseñaIngresada1);
     if (registro === "ok") {
-      alert("Usuario creado");
-      location.reload();
-      
+        Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Usuario creado!",
+        showConfirmButton: false,
+        timer: 1200,
+        customClass: {
+          popup: 'cartel-bienvenida-popup',
+          div: 'cartel-bienvenida-container',
+        },
+      });
     }
   } else {
-    alert("Las contraseñas no coinciden")
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Las claves no coinciden",
+      showConfirmButton: false,
+      timer: 1200,
+      customClass: {
+        popup: 'cartel-bienvenida-popup',
+        div: 'cartel-bienvenida-container',
+      },
+    });
   }
   
 }
@@ -227,16 +254,6 @@ async function olvideClave(event){
       cancelButton: 'sweetAlert-recupero-boton',
     },
   });
-
-  // const { value: email } = await Swal.fire({
-  //   title: "Input email address",
-  //   input: "email",
-  //   inputLabel: "Your email address",
-  //   inputPlaceholder: "Enter your email address"
-  // });
-  // if (email) {
-  //   Swal.fire(`Entered email: ${email}`);
-  // }
   let mailIngresadoPorClienteSinEspacios = mailIngresadoPorCliente.trim();
   recuperarClave(mailIngresadoPorClienteSinEspacios);
 }
@@ -516,8 +533,19 @@ async function agregarTarea(event) {
   let mail = mailDeUsuarioDB;
 
   if (!titulo || !detalle || !urgencia || !fechaCreacion || !ultimaEdicion) {
-    alert("No completaste todo");
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title: "Se deben completar todos los campos",
+      showConfirmButton: false,
+      timer: 1200,
+      customClass: {
+        popup: 'cartel-bienvenida-popup',
+        div: 'cartel-bienvenida-container',
+      },
+    });
     ocultarCarga();
+    return;
   } else {
     let nuevaCard = new Tarjetas(nombreDeUsuarioDB, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado);
     unaCard.push(nuevaCard);
@@ -537,9 +565,6 @@ async function agregarTarea(event) {
 
       // Asignar el ID generado por Firestore a la tarjeta
       nuevaCard.asignarId(docRef.id);
-      console.log(docRef.id)
-      console.log(unaCard)
-      console.log(nuevaCard)
             // Agregar la nueva card al contenedor correspondiente
             agregarCardAlContenedor(nuevaCard);
             ocultarFormulario();
@@ -744,30 +769,45 @@ modalFooter.innerHTML = botonesCard;
 
 // Función para finalizar tarea de card
 async function finalizarTarea(id) {
-  var confirmacion = confirm("¿Seguro que querés finalizarla?")
+  Swal.fire({
+    title: "¿Finalizar tarea?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Finalizar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let fecha = new Date();
+      let formatoFechaCierre = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
+    // Buscar la tarea por su ID
+    let tarea = unaCard.find((t) => t.id === id);
+    // let fondoDiv = document.getElementById(`card-${tarea.id}`);
+  
+    // Cambiar el estado y la fecha de cierre
+    tarea.estado = "Finalizadas";
+    muestraPantalla = tarea.estado;
+    tarea.fechaCierre = fecha.toLocaleTimeString('es-AR', formatoFechaCierre);
+  
+      // Actualiza la tarea en Firestore
+      const tareaRef = doc(db, nombreDeColeccion, id);
+      updateDoc(tareaRef, {
+        estado: tarea.estado,
+        fechaCierre: tarea.fechaCierre
+      });
+      Swal.fire({
+        title: "Tarea finalizada!",
+        timer: 1500,
+        icon: "success"
+      });
+      setTimeout(() => {
+        cardsEnPantalla(pantallaActual);
+      }, 1000);
 
-  if(confirmacion){
-    let fecha = new Date();
-    let formatoFechaCierre = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
-  // Buscar la tarea por su ID
-  let tarea = unaCard.find((t) => t.id === id);
-  let fondoDiv = document.getElementById(`card-${tarea.id}`);
-
-  // Cambiar el estado y la fecha de cierre
-  tarea.estado = "Finalizadas";
-  muestraPantalla = tarea.estado;
-  tarea.fechaCierre = fecha.toLocaleTimeString('es-AR', formatoFechaCierre);
-
-    // Actualiza la tarea en Firestore
-    const tareaRef = doc(db, nombreDeColeccion, id);
-    await updateDoc(tareaRef, {
-      estado: tarea.estado,
-      fechaCierre: tarea.fechaCierre
-    });
-
-    cardsEnPantalla(pantallaActual);
-  }
+    }
+  }); 
 }
+
 
 
 
@@ -775,16 +815,31 @@ async function finalizarTarea(id) {
 async function eliminar(id){
   let contenedorModal = document.getElementById("modalContainer");
   let contenedorModal2 = document.getElementById("exampleModal");
-  var confirmacion = confirm("¿Eliminar? No se puede recuperar");
-  mostrarCarga();
 
-  if(confirmacion){
-  let tarea = unaCard.find((t) => t.id === id);
-  await deleteDoc(doc(db, nombreDeColeccion, tarea.id));
-  location.reload();
-  }
-  ocultarCarga();
-  cardsEnPantalla(pantallaActual);
+  Swal.fire({
+    title: "Se eliminará de manera permanente",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Eliminar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      mostrarCarga();
+      let tarea = unaCard.find((t) => t.id === id);
+      deleteDoc(doc(db, nombreDeColeccion, tarea.id));
+      // location.reload();
+      Swal.fire({
+        title: "Tarea eliminada!",
+        timer: 1500,
+        icon: "success"
+      });
+      setTimeout(() => {
+        cardsEnPantalla(pantallaActual);
+        ocultarCarga();
+      }, 1000);
+    }
+  }); 
 }
 
 
@@ -794,10 +849,16 @@ async function eliminar(id){
 // Función para cancelar una tarea
 async function cancelarTarea(id) {
 
- var confirmacion = confirm("¿Seguro que querés cancelarla?")
-
- if(confirmacion){
-    // Buscar la tarea por su ID
+  Swal.fire({
+    title: "¿Cancelar tarea?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Cancelar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Buscar la tarea por su ID
     let tarea = unaCard.find((t) => t.id === id);
     let botonEditar = document.getElementById(`editar-${tarea.id}`);
     let fecha = new Date();
@@ -810,15 +871,22 @@ async function cancelarTarea(id) {
 
         // Actualiza la tarea en Firestore
         const tareaRef = doc(db, nombreDeColeccion, id);
-        await updateDoc(tareaRef, {
+        updateDoc(tareaRef, {
           estado: tarea.estado,
           fechaCierre : tarea.fechaCierre
-        });
-        location.reload();
+      });
+      Swal.fire({
+        title: "Tarea cancelada!",
+        timer: 1500,
+        icon: "success"
+      });
+      setTimeout(() => {
+        cardsEnPantalla(pantallaActual);
+        ocultarCarga();
+      }, 1000);
 
-    cardsEnPantalla(pantallaActual);
- }
-
+    }
+  });
 }
 
 
