@@ -176,7 +176,7 @@ async function datosDeIngreso(event){
     });
   } 
   setTimeout(() => {
-    location.reload();
+    // location.reload();
   }, 1000);
 });
 }
