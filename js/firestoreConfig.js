@@ -33,7 +33,12 @@ async function registrarUsuario(nombre, email, password) {
 
   } catch (error) {
     if (error.message === "Firebase: Error (auth/email-already-in-use).") {
-      cartelToastify("Mail existente. Elegir otro, o ir a 'reestablecer contraseña")
+      Swal.fire({
+        icon: "error",
+        title: "Ya existe un usuario con ese email",
+        text: "Intente con uno distinto",
+        footer: 'O ponga "reestablecer clave"'
+      });
 
     }
     console.log("El motivo por el cual no se pudo es", error)

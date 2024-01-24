@@ -133,7 +133,8 @@ async function salir (){
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, cerrar"
+    confirmButtonText: "Cerrar",
+    cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
       contraseñaIngresada.value = "";
@@ -287,7 +288,8 @@ async function elimnarLaCuenta(){
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Borrar"
+    confirmButtonText: "Borrar",
+    cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
       mostrarCarga();
@@ -828,7 +830,8 @@ async function finalizarTarea(id) {
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Finalizar"
+    confirmButtonText: "Finalizar",
+    cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
       let fecha = new Date();
@@ -875,7 +878,8 @@ async function eliminar(id){
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar"
+    confirmButtonText: "Eliminar",
+    cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
       mostrarCarga();
@@ -908,7 +912,8 @@ async function cancelarTarea(id) {
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Cancelar"
+    confirmButtonText: "Confirmar",
+    cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
       // Buscar la tarea por su ID
