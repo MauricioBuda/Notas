@@ -531,6 +531,8 @@ background-color: green;
 
 
 .cards p, h3{
+  overflow-wrap: anywhere;
+  white-space: wrap;
   color: #000000;
   text-align: center;
   margin-left: 2rem;
