@@ -531,8 +531,6 @@ background-color: green;
 
 
 .cards p, h3{
-  overflow-wrap: anywhere;
-  white-space: wrap;
   color: #000000;
   text-align: center;
   margin-left: 2rem;
@@ -543,6 +541,8 @@ background-color: green;
 }
 
 .p_detalle {
+  overflow-wrap: anywhere;
+  white-space: wrap;
   margin-top: 15px;
   max-width: 85vw;
   text-wrap: wrap;
@@ -551,6 +551,8 @@ background-color: green;
 }
 
 .cards h3{ 
+  overflow-wrap: anywhere;
+  white-space: wrap;
   white-space: pre-line;
   min-width: 10%;
   max-width: 30%;
