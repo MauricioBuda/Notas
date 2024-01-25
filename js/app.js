@@ -632,9 +632,11 @@ async function agregarTarea(event) {
             menuBorroso();
             ocultarCarga();
             cardsEnPantalla("Pendientes");
-
-
-            
+          Swal.fire({
+              title: "Tarea agregada!",
+              timer: 800,
+              icon: "success"
+          });
     } catch (error) {
       console.error("Error al agregar la tarea a Firestore", error);
       ocultarCarga();
@@ -753,11 +755,6 @@ function agregarCardAlContenedor(tarea) {
   `;
     canceladasCards.innerHTML += nuevaCardHTML;
   }
-    Swal.fire({
-    title: "Tarea agregada!",
-    timer: 800,
-    icon: "success"
-  });
 }
 
 
