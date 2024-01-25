@@ -229,7 +229,9 @@ button {
 }
 
 .guardar_red{
+  -webkit-text-stroke: 0px #00000063;
   color: rgb(164, 0, 0)!important;
+  font-weight: 700;
 }
 
 @media screen and (max-width: 524px) {
@@ -719,6 +721,13 @@ background-color: green;
 .ocultarModal{
   display: none!important;
   opacity: 0!important;
+}
+
+.boton-guardar{
+  border: solid 1px red;
+  color: rgb(115, 0, 0);
+  font-weight: 700;
+  background-color: rgba(255, 0, 0, 0.329);
 }
 
 

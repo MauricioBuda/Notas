@@ -340,6 +340,11 @@ if(verSiGuardoOEditoNombre){
   await updateProfile(usuario, { displayName: nuevoNombre });
   nombreParaEditar.classList.remove("bordeParaNombre");
   boton_cambiar_nombre.classList.remove("guardar_red");
+  Swal.fire({
+    title: "Nombre modificado",
+    timer: 800,
+    icon: "success"
+  });
  }
  });
 }
@@ -686,16 +691,12 @@ function agregarCardAlContenedor(tarea) {
   let botonEliminarID = `eliminar-${tarea.id}`;
   let textoCortado = tarea.detalle
 
- let bordeUrgencias = document.getElementById(`card-${tarea.id}`);
-//  console.log(bordeUrgencias)
-  let maxCaracteres = 50;
+  let maxCaracteres = 40;
   let contenidoDetalle = tarea.detalle;
   if (contenidoDetalle.length > maxCaracteres) {
     let detalleTruncado = contenidoDetalle.substring(0,maxCaracteres) + "...";
     textoCortado = detalleTruncado;
   }
-
-
 
   if (tarea.estado === "Pendientes") {
         if (tarea.urgencia === "Alta") {
@@ -990,6 +991,7 @@ async function botonParaEditar(id) {
     detalleParaEditar.contentEditable = false;
 
     // Restaurar el botón de editar
+    botonEditar.classList.remove("boton-guardar");
     botonEditar.textContent = "Editar";
 
     try {
@@ -998,6 +1000,12 @@ async function botonParaEditar(id) {
         titulo: nuevoTitulo,
         detalle: nuevoDetalle,
         ultimaEdicion: fecha.toLocaleTimeString('es-AR', formatoFechaEdicion)// Actualizar la fecha de última edición
+      });
+
+      Swal.fire({
+        title: "Modificado!",
+        timer: 800,
+        icon: "success"
       });
 
 
@@ -1014,6 +1022,7 @@ async function botonParaEditar(id) {
 
     // Cambiar el texto al botón editar y la función
     botonEditar.textContent = "Guardar";
+    botonEditar.classList.add("boton-guardar");
   }
   cardsEnPantalla(muestraPantalla);
 }
