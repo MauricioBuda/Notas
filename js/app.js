@@ -481,10 +481,6 @@ function mostrarCarga() {
   modalCarga.style.display = 'flex';
 }
 
-
-
-
-
 // Ocultar el modal de carga
 function ocultarCarga() {
   modalCarga.style.display = 'none';
@@ -768,7 +764,7 @@ function masOpciones(id){
 
 
     // Genera un ID único para el div (card) basado en el ID de la tarea
-    let cardID = `card-${tarea.id}`;
+    let cardModalID = `cardModal-${tarea.id}`;
     let tituloID = `titulo-${tarea.id}`;
     let detalleID = `detalle-${tarea.id}`;
     let botonEditarID = `editar-${tarea.id}`;
@@ -777,7 +773,7 @@ function masOpciones(id){
     let botonEliminarID = `eliminar-${tarea.id}`;
   
     let nuevaCardHTML = `
-    <div id="${cardID}" class="cards_modal">
+    <div id="${cardModalID}" class="cards_modal">
     <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
     <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
         <div class="div_modales">
@@ -827,6 +823,9 @@ modalFooter.innerHTML = botonesCard;
 
 // Función para finalizar tarea de card
 async function finalizarTarea(id) {
+  let tarea = unaCard.find((t) => t.id === id);
+  
+  if (tarea) {
   Swal.fire({
     title: "¿Finalizar tarea?",
     icon: "warning",
@@ -840,10 +839,9 @@ async function finalizarTarea(id) {
       let fecha = new Date();
       let formatoFechaCierre = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
     // Buscar la tarea por su ID
-    let tarea = unaCard.find((t) => t.id === id);
-    // let fondoDiv = document.getElementById(`card-${tarea.id}`);
   
-    // Cambiar el estado y la fecha de cierre
+
+          // Cambiar el estado y la fecha de cierre
     tarea.estado = "Finalizadas";
     muestraPantalla = tarea.estado;
     tarea.fechaCierre = fecha.toLocaleTimeString('es-AR', formatoFechaCierre);
@@ -862,19 +860,26 @@ async function finalizarTarea(id) {
       setTimeout(() => {
         cardsEnPantalla(pantallaActual);
       }, 1000);
-
+      // location.reload();
     }
-  }); 
-}
+    });
+    } else {
+      Swal.fire({
+        title: "Tarea inexistente o modificada. Cierre la ventana",
+        timer: 1000,
+        icon: "error"
+      });
+    }
+  }
+
 
 
 
 
 
 async function eliminar(id){
-  let contenedorModal = document.getElementById("modalContainer");
-  let contenedorModal2 = document.getElementById("exampleModal");
-
+  let tarea = unaCard.find((t) => t.id === id);
+ if (tarea) {
   Swal.fire({
     title: "Se eliminará de manera permanente",
     icon: "warning",
@@ -886,7 +891,6 @@ async function eliminar(id){
   }).then((result) => {
     if (result.isConfirmed) {
       mostrarCarga();
-      let tarea = unaCard.find((t) => t.id === id);
       deleteDoc(doc(db, nombreDeColeccion, tarea.id));
       // location.reload();
       Swal.fire({
@@ -900,6 +904,14 @@ async function eliminar(id){
       }, 1000);
     }
   }); 
+ } else {
+  Swal.fire({
+    title: "Tarea inexistente o modificada. Cierre la ventana",
+    timer: 1000,
+    icon: "error"
+  });
+ }
+
 }
 
 
@@ -908,7 +920,8 @@ async function eliminar(id){
 
 // Función para cancelar una tarea
 async function cancelarTarea(id) {
-
+  let tarea = unaCard.find((t) => t.id === id);
+if (tarea) {
   Swal.fire({
     title: "¿Cancelar tarea?",
     icon: "warning",
@@ -920,7 +933,6 @@ async function cancelarTarea(id) {
   }).then((result) => {
     if (result.isConfirmed) {
       // Buscar la tarea por su ID
-    let tarea = unaCard.find((t) => t.id === id);
     let botonEditar = document.getElementById(`editar-${tarea.id}`);
     let fecha = new Date();
     let formatoFechaCierre = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
@@ -948,6 +960,14 @@ async function cancelarTarea(id) {
 
     }
   });
+} else {
+  Swal.fire({
+    title: "Tarea inexistente o modificada. Cierre la ventana",
+    timer: 1000,
+    icon: "error"
+  });
+}
+  
 }
 
 
@@ -959,7 +979,8 @@ async function botonParaEditar(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
 
-  //Me fijo fecha para después guardarla
+  if (tarea) {
+     //Me fijo fecha para después guardarla
   let fecha = new Date();
   let formatoFechaEdicion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
   
@@ -1027,6 +1048,15 @@ async function botonParaEditar(id) {
     botonEditar.classList.add("boton-guardar");
   }
   cardsEnPantalla(muestraPantalla);
+  } else {
+    Swal.fire({
+      title: "Tarea inexistente o modificada. Cierre la ventana",
+      timer: 1000,
+      icon: "error"
+    });
+  }
+
+ 
 }
 
 
