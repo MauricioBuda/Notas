@@ -753,6 +753,11 @@ function agregarCardAlContenedor(tarea) {
   `;
     canceladasCards.innerHTML += nuevaCardHTML;
   }
+    Swal.fire({
+    title: "Tarea agregada!",
+    timer: 800,
+    icon: "success"
+  });
 }
 
 
