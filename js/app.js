@@ -144,7 +144,7 @@ async function salir (){
       const sesionCerrada =   cerrarSesion();
       Swal.fire({
         title: "Sesión cerrada",
-        timer: 1500,
+        timer: 1000,
         icon: "success"
       });
     }
@@ -227,7 +227,7 @@ async function datosDeRegistro(event){
       icon: "error",
       title: "Las claves no coinciden",
       showConfirmButton: false,
-      timer: 1200,
+      timer: 1000,
       customClass: {
         popup: 'cartel-bienvenida-popup',
         div: 'cartel-bienvenida-container',
@@ -598,7 +598,7 @@ async function agregarTarea(event) {
       icon: "warning",
       title: "Se deben completar todos los campos",
       showConfirmButton: false,
-      timer: 1200,
+      timer: 1000,
       customClass: {
         popup: 'cartel-bienvenida-popup',
         div: 'cartel-bienvenida-container',
@@ -634,7 +634,7 @@ async function agregarTarea(event) {
             cardsEnPantalla("Pendientes");
           Swal.fire({
               title: "Tarea agregada!",
-              timer: 800,
+              timer: 1200,
               icon: "success"
           });
     } catch (error) {
@@ -856,7 +856,7 @@ async function finalizarTarea(id) {
       });
       Swal.fire({
         title: "Tarea finalizada!",
-        timer: 1500,
+        timer: 1000,
         icon: "success"
       });
       setTimeout(() => {
@@ -891,7 +891,7 @@ async function eliminar(id){
       // location.reload();
       Swal.fire({
         title: "Tarea eliminada!",
-        timer: 1500,
+        timer: 1000,
         icon: "success"
       });
       setTimeout(() => {
@@ -938,7 +938,7 @@ async function cancelarTarea(id) {
       });
       Swal.fire({
         title: "Tarea cancelada!",
-        timer: 1500,
+        timer: 1000,
         icon: "success"
       });
       setTimeout(() => {
