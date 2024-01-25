@@ -27,7 +27,6 @@ async function registrarUsuario(nombre, email, password) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     console.log("Bienvenido ", nombre)
-    console.log('Usuario registrado:', user);
     await updateProfile(user, { displayName: nombre });
     return "ok";
 
@@ -40,7 +39,14 @@ async function registrarUsuario(nombre, email, password) {
         footer: 'O ponga "reestablecer clave"'
       });
 
+    } else if (error.message === "Firebase: Error (auth/invalid-email)."){
+      Swal.fire({
+        icon: "error",
+        title: "El mail ingresado parece incorrecto",
+        text: "Intente con uno distinto",
+      });
     }
+    console.log("este es el error →→  ", error.message)
     console.log("El motivo por el cual no se pudo es", error)
     // Maneja el error según sea necesario
   }

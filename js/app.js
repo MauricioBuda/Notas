@@ -241,9 +241,7 @@ async function datosDeRegistro(event){
 
 
 async function olvideClave(event){
-  console.log("1")
   event.preventDefault();
-  console.log("2");
   const { value: mailIngresadoPorCliente } = await Swal.fire({
     title: "Ingrese dirección de mail para recibir link de reestablecimiento:",
     input: "email",
@@ -263,9 +261,7 @@ async function olvideClave(event){
             cancelButton: 'sweetAlert-recupero-boton',
           },
   });
-  console.log("3");
   if (mailIngresadoPorCliente) {
-    console.log("4");
       let mailIngresadoPorClienteSinEspacios = mailIngresadoPorCliente.trim();
       recuperarClave(mailIngresadoPorClienteSinEspacios);
       setTimeout(() => {
@@ -356,13 +352,14 @@ if(verSiGuardoOEditoNombre){
 
 // Clase para generar cada card (tarea)
 class Tarjetas {
-  constructor(nombre, mail, titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado) {
+  constructor(nombre, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado) {
     this.nombre = nombre;
     this.mail = mail;
     this.titulo = titulo;
     this.detalle = detalle;
     this.urgencia = urgencia;
     this.fechaCreacion = fechaCreacion;
+    this.fechaParaOrdenarlas = fechaParaOrdenarlas;
     this.fechaCierre = fechaCierre;
     this.ultimaEdicion = ultimaEdicion;
     this.estado = estado;
@@ -438,6 +435,7 @@ ocultarCarga();
 
 
 
+
 // Función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
   // mostrarCarga();
@@ -469,8 +467,9 @@ querySnapshot.forEach((doc) => {
 }
 
 
-
-
+function compararFechas(a, b) {
+  return a.fechaParaOrdenarlas - b.fechaParaOrdenarlas;
+}
 
 
 
@@ -577,17 +576,20 @@ async function agregarTarea(event) {
   event.preventDefault();
   let fecha = new Date();
   let formatoFechaCreacion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
-
+  let formatoFechaOrden = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour24: false };
+  console.log(fecha)
   let titulo = document.getElementById("tareaTitulo").value;
   let detalle = document.getElementById("tareaDetalle").value;
   let urgencia = document.getElementById("tareaUrgencia").value;
   let fechaCreacion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
+  let fechaParaOrdenarlas = fecha.toLocaleTimeString('es-AR', formatoFechaOrden);
   let fechaCierre = "-";
   let ultimaEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
   let estado = "Pendientes";
   let nombre = nombreDeUsuarioDB;
   let mail = mailDeUsuarioDB;
 
+  console.log(fechaParaOrdenarlas)
   if (!titulo || !detalle || !urgencia || !fechaCreacion || !ultimaEdicion) {
     Swal.fire({
       position: "center",
@@ -603,7 +605,7 @@ async function agregarTarea(event) {
     ocultarCarga();
     return;
   } else {
-    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado);
+    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
     unaCard.push(nuevaCard);
 
     try {
@@ -614,6 +616,7 @@ async function agregarTarea(event) {
         detalle: nuevaCard.detalle,
         urgencia: nuevaCard.urgencia,
         fechaCreacion: nuevaCard.fechaCreacion,
+        fechaParaOrdenarlas: nuevaCard.fechaParaOrdenarlas,
         fechaCierre: nuevaCard.fechaCierre,
         ultimaEdicion: nuevaCard.ultimaEdicion,
         estado: nuevaCard.estado
@@ -697,6 +700,7 @@ function agregarCardAlContenedor(tarea) {
   }
 
   if (tarea.estado === "Pendientes") {
+    
         if (tarea.urgencia === "Alta") {
           let nuevaCardHTML = `
           <div id="${cardID}" class="cards borde_urgencia">
@@ -710,6 +714,7 @@ function agregarCardAlContenedor(tarea) {
           </div>
         `;
           pendientesCards.innerHTML += nuevaCardHTML;
+          // pendientesCards.insertAdjacentHTML('beforeend', nuevaCardHTML);
         } else {
         let nuevaCardHTML = `
         <div id="${cardID}" class="cards">
@@ -723,6 +728,7 @@ function agregarCardAlContenedor(tarea) {
         </div>
       `;
         pendientesCards.innerHTML += nuevaCardHTML;
+        // pendientesCards.insertAdjacentHTML('beforeend', nuevaCardHTML);
         }
   } else if (tarea.estado === "Finalizadas") {
     let nuevaCardHTML = `
