@@ -59,9 +59,9 @@ let botonIngresarCuentaExistente = document.getElementById("botonIngresarCuentaE
 botonIngresarCuentaExistente.addEventListener("click", datosDeIngreso);
 let botonRegistrarNuevaCuenta = document.getElementById("botonRegistrarNuevaCuenta");
 botonRegistrarNuevaCuenta.addEventListener("click",datosDeRegistro);
-let contraseñaIngresadaPorUsuario = document.getElementById("contraseñaInicio");
-let botonOcultarMostrarClave = document.getElementById("ocultar-mostrar-clave");
-botonOcultarMostrarClave.addEventListener("click", ocultarMostrarClave);
+// let contraseñaIngresadaPorUsuario = document.getElementById("contraseñaInicio");
+// let botonOcultarMostrarClave = document.getElementById("ocultar-mostrar-clave");
+// botonOcultarMostrarClave.addEventListener("click", ocultarMostrarClave);
 let botonOlvideClave = document.getElementById("olvide_clave")
 botonOlvideClave.addEventListener("click", olvideClave);
 
