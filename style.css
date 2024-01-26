@@ -72,6 +72,28 @@ button {
   height: 8vh;
 }
 
+.div-ver-clave{
+  display: flex!important;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex!important;
+
+}
+
+.div-ver-clave span{
+  display: flex!important;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-left: -40px;
+}
+
+.div-ver-clave img{
+margin: 0px;
+padding: 5px;
+}
+
 .sinCuenta{
   margin-top: 6vw;
 }

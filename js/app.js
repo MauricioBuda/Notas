@@ -54,11 +54,14 @@ botonCancelar.addEventListener("click",ocultarModalRegistro);
 let botonRegistrarme = document.getElementById("boton_registrarse");
 botonRegistrarme.addEventListener("click",mostrarModalRegistro);
 
-// Registro o crear cuenta ↓
+// Ingreso o registro de cuenta ↓
 let botonIngresarCuentaExistente = document.getElementById("botonIngresarCuentaExistente");
 botonIngresarCuentaExistente.addEventListener("click", datosDeIngreso);
 let botonRegistrarNuevaCuenta = document.getElementById("botonRegistrarNuevaCuenta");
 botonRegistrarNuevaCuenta.addEventListener("click",datosDeRegistro);
+let contraseñaIngresadaPorUsuario = document.getElementById("contraseñaInicio");
+let botonOcultarMostrarClave = document.getElementById("ocultar-mostrar-clave");
+botonOcultarMostrarClave.addEventListener("click", ocultarMostrarClave);
 let botonOlvideClave = document.getElementById("olvide_clave")
 botonOlvideClave.addEventListener("click", olvideClave);
 
@@ -180,6 +183,17 @@ async function datosDeIngreso(event){
     // location.reload();
   }, 1000);
 });
+}
+
+function ocultarMostrarClave(){
+  let estadoActual = contraseñaIngresadaPorUsuario.type;
+  if (estadoActual === "text") {
+    contraseñaIngresadaPorUsuario.type = "password";
+    botonOcultarMostrarClave.innerHTML = '<img src="img/eye-fill.svg" alt="verClave">'
+  } else {
+    contraseñaIngresadaPorUsuario.type = "text";
+    botonOcultarMostrarClave.innerHTML = '<img src="img/eye-slash.svg" alt="verClave">'
+  }
 }
 
 
