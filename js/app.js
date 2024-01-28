@@ -189,10 +189,10 @@ function ocultarMostrarClave(){
   let estadoActual = contraseñaIngresadaPorUsuario.type;
   if (estadoActual === "text") {
     contraseñaIngresadaPorUsuario.type = "password";
-    botonOcultarMostrarClave.innerHTML = '<img src="img/eye-fill.svg" alt="verClave">'
+    botonOcultarMostrarClave.innerHTML =  `<img src="img/eye-fill.svg" alt="verClave">`
   } else {
     contraseñaIngresadaPorUsuario.type = "text";
-    botonOcultarMostrarClave.innerHTML = '<img src="img/eye-slash.svg" alt="verClave">'
+    botonOcultarMostrarClave.innerHTML = `<img src="img/eye-slash.svg" alt="ocultarClave">`
   }
 }
 
