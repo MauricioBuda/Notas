@@ -54,11 +54,14 @@ botonCancelar.addEventListener("click",ocultarModalRegistro);
 let botonRegistrarme = document.getElementById("boton_registrarse");
 botonRegistrarme.addEventListener("click",mostrarModalRegistro);
 
-// Registro o crear cuenta ↓
+// Ingreso o registro de cuenta ↓
 let botonIngresarCuentaExistente = document.getElementById("botonIngresarCuentaExistente");
 botonIngresarCuentaExistente.addEventListener("click", datosDeIngreso);
 let botonRegistrarNuevaCuenta = document.getElementById("botonRegistrarNuevaCuenta");
 botonRegistrarNuevaCuenta.addEventListener("click",datosDeRegistro);
+// let contraseñaIngresadaPorUsuario = document.getElementById("contraseñaInicio");
+// let botonOcultarMostrarClave = document.getElementById("ocultar-mostrar-clave");
+// botonOcultarMostrarClave.addEventListener("click", ocultarMostrarClave);
 let botonOlvideClave = document.getElementById("olvide_clave")
 botonOlvideClave.addEventListener("click", olvideClave);
 
@@ -144,7 +147,7 @@ async function salir (){
       const sesionCerrada =   cerrarSesion();
       Swal.fire({
         title: "Sesión cerrada",
-        timer: 1500,
+        timer: 1000,
         icon: "success"
       });
     }
@@ -180,6 +183,17 @@ async function datosDeIngreso(event){
     // location.reload();
   }, 1000);
 });
+}
+
+function ocultarMostrarClave(){
+  let estadoActual = contraseñaIngresadaPorUsuario.type;
+  if (estadoActual === "text") {
+    contraseñaIngresadaPorUsuario.type = "password";
+    botonOcultarMostrarClave.innerHTML = '<img src="img/eye-fill.svg" alt="verClave">'
+  } else {
+    contraseñaIngresadaPorUsuario.type = "text";
+    botonOcultarMostrarClave.innerHTML = '<img src="img/eye-slash.svg" alt="verClave">'
+  }
 }
 
 
@@ -227,7 +241,7 @@ async function datosDeRegistro(event){
       icon: "error",
       title: "Las claves no coinciden",
       showConfirmButton: false,
-      timer: 1200,
+      timer: 1000,
       customClass: {
         popup: 'cartel-bienvenida-popup',
         div: 'cartel-bienvenida-container',
@@ -241,9 +255,7 @@ async function datosDeRegistro(event){
 
 
 async function olvideClave(event){
-  console.log("1")
   event.preventDefault();
-  console.log("2");
   const { value: mailIngresadoPorCliente } = await Swal.fire({
     title: "Ingrese dirección de mail para recibir link de reestablecimiento:",
     input: "email",
@@ -263,9 +275,7 @@ async function olvideClave(event){
             cancelButton: 'sweetAlert-recupero-boton',
           },
   });
-  console.log("3");
   if (mailIngresadoPorCliente) {
-    console.log("4");
       let mailIngresadoPorClienteSinEspacios = mailIngresadoPorCliente.trim();
       recuperarClave(mailIngresadoPorClienteSinEspacios);
       setTimeout(() => {
@@ -356,13 +366,14 @@ if(verSiGuardoOEditoNombre){
 
 // Clase para generar cada card (tarea)
 class Tarjetas {
-  constructor(nombre, mail, titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado) {
+  constructor(nombre, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado) {
     this.nombre = nombre;
     this.mail = mail;
     this.titulo = titulo;
     this.detalle = detalle;
     this.urgencia = urgencia;
     this.fechaCreacion = fechaCreacion;
+    this.fechaParaOrdenarlas = fechaParaOrdenarlas;
     this.fechaCierre = fechaCierre;
     this.ultimaEdicion = ultimaEdicion;
     this.estado = estado;
@@ -372,15 +383,6 @@ class Tarjetas {
   asignarId(id) {
     this.id = id;
   }
-}
-
-// Función para comparar dos tareas por fecha
-function compararPorFecha(tareaA, tareaB) {
-  const fechaA = tareaA.fechaSimple;
-  const fechaB = tareaB.fechaSimple;
-
-  // Ordenar en orden descendente (la tarea más reciente primero)
-  return fechaB.localeCompare(fechaA);
 }
 
 
@@ -447,6 +449,7 @@ ocultarCarga();
 
 
 
+
 // Función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
   // mostrarCarga();
@@ -478,8 +481,9 @@ querySnapshot.forEach((doc) => {
 }
 
 
-
-
+function compararFechas(a, b) {
+  return a.fechaParaOrdenarlas - b.fechaParaOrdenarlas;
+}
 
 
 
@@ -489,10 +493,6 @@ querySnapshot.forEach((doc) => {
 function mostrarCarga() {
   modalCarga.style.display = 'flex';
 }
-
-
-
-
 
 // Ocultar el modal de carga
 function ocultarCarga() {
@@ -590,24 +590,27 @@ async function agregarTarea(event) {
   event.preventDefault();
   let fecha = new Date();
   let formatoFechaCreacion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
-
+  let formatoFechaOrden = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour24: false };
+  console.log(fecha)
   let titulo = document.getElementById("tareaTitulo").value;
   let detalle = document.getElementById("tareaDetalle").value;
   let urgencia = document.getElementById("tareaUrgencia").value;
   let fechaCreacion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
+  let fechaParaOrdenarlas = fecha.toLocaleTimeString('es-AR', formatoFechaOrden);
   let fechaCierre = "-";
   let ultimaEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
   let estado = "Pendientes";
   let nombre = nombreDeUsuarioDB;
   let mail = mailDeUsuarioDB;
 
+  console.log(fechaParaOrdenarlas)
   if (!titulo || !detalle || !urgencia || !fechaCreacion || !ultimaEdicion) {
     Swal.fire({
       position: "center",
       icon: "warning",
       title: "Se deben completar todos los campos",
       showConfirmButton: false,
-      timer: 1200,
+      timer: 1000,
       customClass: {
         popup: 'cartel-bienvenida-popup',
         div: 'cartel-bienvenida-container',
@@ -616,7 +619,7 @@ async function agregarTarea(event) {
     ocultarCarga();
     return;
   } else {
-    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaCierre, ultimaEdicion, estado);
+    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
     unaCard.push(nuevaCard);
 
     try {
@@ -627,6 +630,7 @@ async function agregarTarea(event) {
         detalle: nuevaCard.detalle,
         urgencia: nuevaCard.urgencia,
         fechaCreacion: nuevaCard.fechaCreacion,
+        fechaParaOrdenarlas: nuevaCard.fechaParaOrdenarlas,
         fechaCierre: nuevaCard.fechaCierre,
         ultimaEdicion: nuevaCard.ultimaEdicion,
         estado: nuevaCard.estado
@@ -641,9 +645,11 @@ async function agregarTarea(event) {
             menuBorroso();
             ocultarCarga();
             cardsEnPantalla("Pendientes");
-
-
-            
+          Swal.fire({
+              title: "Tarea agregada!",
+              timer: 1200,
+              icon: "success"
+          });
     } catch (error) {
       console.error("Error al agregar la tarea a Firestore", error);
       ocultarCarga();
@@ -721,10 +727,23 @@ function agregarCardAlContenedor(tarea) {
           </div>
         `;
           pendientesCards.innerHTML += nuevaCardHTML;
-      // pendientesCards.insertAdjacentHTML('afterbegin', nuevaCardHTML);
-
-        } else {
+          // pendientesCards.insertAdjacentHTML('beforeend', nuevaCardHTML);
+        } else if (tarea.urgencia === "Baja") {
         let nuevaCardHTML = `
+        <div id="${cardID}" class="cards div-urgencia-baja">
+          <h3>${tarea.titulo}</h3>
+          <p class="p_detalle">${textoCortado}</p>
+          <p>URGENCIA: <br> ${tarea.urgencia}</p>
+          <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
+          <p>FIN: <br> ${tarea.fechaCierre}</p>
+          <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
+          <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
+        </div>
+      `;
+        pendientesCards.innerHTML += nuevaCardHTML;
+        // pendientesCards.insertAdjacentHTML('beforeend', nuevaCardHTML);
+        } else {
+          let nuevaCardHTML = `
         <div id="${cardID}" class="cards">
           <h3>${tarea.titulo}</h3>
           <p class="p_detalle">${textoCortado}</p>
@@ -735,10 +754,11 @@ function agregarCardAlContenedor(tarea) {
           <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
         </div>
       `;
-      // pendientesCards.insertAdjacentHTML('afterbegin', nuevaCardHTML);
         pendientesCards.innerHTML += nuevaCardHTML;
+        // pendientesCards.insertAdjacentHTML('beforeend', nuevaCardHTML);
         }
-  } else if (tarea.estado === "Finalizadas") {
+        }
+    else if (tarea.estado === "Finalizadas") {
     let nuevaCardHTML = `
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
@@ -751,7 +771,6 @@ function agregarCardAlContenedor(tarea) {
     </div>
   `;
     finalizadasCards.innerHTML += nuevaCardHTML;
-    // finalizadasCards.insertAdjacentHTML('afterbegin', nuevaCardHTML);
   } else if (tarea.estado === "Canceladas") {
     let nuevaCardHTML = `
     <div id="${cardID}" class="cards">
@@ -765,7 +784,6 @@ function agregarCardAlContenedor(tarea) {
     </div>
   `;
     canceladasCards.innerHTML += nuevaCardHTML;
-      // canceladasCards.insertAdjacentHTML('afterbegin', nuevaCardHTML);
   }
 }
 
@@ -780,7 +798,7 @@ function masOpciones(id){
 
 
     // Genera un ID único para el div (card) basado en el ID de la tarea
-    let cardID = `card-${tarea.id}`;
+    let cardModalID = `cardModal-${tarea.id}`;
     let tituloID = `titulo-${tarea.id}`;
     let detalleID = `detalle-${tarea.id}`;
     let botonEditarID = `editar-${tarea.id}`;
@@ -789,7 +807,7 @@ function masOpciones(id){
     let botonEliminarID = `eliminar-${tarea.id}`;
   
     let nuevaCardHTML = `
-    <div id="${cardID}" class="cards_modal">
+    <div id="${cardModalID}" class="cards_modal">
     <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
     <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
         <div class="div_modales">
@@ -839,6 +857,9 @@ modalFooter.innerHTML = botonesCard;
 
 // Función para finalizar tarea de card
 async function finalizarTarea(id) {
+  let tarea = unaCard.find((t) => t.id === id);
+  
+  if (tarea) {
   Swal.fire({
     title: "¿Finalizar tarea?",
     icon: "warning",
@@ -852,10 +873,9 @@ async function finalizarTarea(id) {
       let fecha = new Date();
       let formatoFechaCierre = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
     // Buscar la tarea por su ID
-    let tarea = unaCard.find((t) => t.id === id);
-    // let fondoDiv = document.getElementById(`card-${tarea.id}`);
   
-    // Cambiar el estado y la fecha de cierre
+
+          // Cambiar el estado y la fecha de cierre
     tarea.estado = "Finalizadas";
     muestraPantalla = tarea.estado;
     tarea.fechaCierre = fecha.toLocaleTimeString('es-AR', formatoFechaCierre);
@@ -868,25 +888,32 @@ async function finalizarTarea(id) {
       });
       Swal.fire({
         title: "Tarea finalizada!",
-        timer: 1500,
+        timer: 1000,
         icon: "success"
       });
       setTimeout(() => {
         cardsEnPantalla(pantallaActual);
       }, 1000);
-
+      // location.reload();
     }
-  }); 
-}
+    });
+    } else {
+      Swal.fire({
+        title: "Tarea inexistente o modificada. Cierre la ventana",
+        timer: 1000,
+        icon: "error"
+      });
+    }
+  }
+
 
 
 
 
 
 async function eliminar(id){
-  let contenedorModal = document.getElementById("modalContainer");
-  let contenedorModal2 = document.getElementById("exampleModal");
-
+  let tarea = unaCard.find((t) => t.id === id);
+ if (tarea) {
   Swal.fire({
     title: "Se eliminará de manera permanente",
     icon: "warning",
@@ -898,12 +925,11 @@ async function eliminar(id){
   }).then((result) => {
     if (result.isConfirmed) {
       mostrarCarga();
-      let tarea = unaCard.find((t) => t.id === id);
       deleteDoc(doc(db, nombreDeColeccion, tarea.id));
       // location.reload();
       Swal.fire({
         title: "Tarea eliminada!",
-        timer: 1500,
+        timer: 1000,
         icon: "success"
       });
       setTimeout(() => {
@@ -912,6 +938,14 @@ async function eliminar(id){
       }, 1000);
     }
   }); 
+ } else {
+  Swal.fire({
+    title: "Tarea inexistente o modificada. Cierre la ventana",
+    timer: 1000,
+    icon: "error"
+  });
+ }
+
 }
 
 
@@ -920,7 +954,8 @@ async function eliminar(id){
 
 // Función para cancelar una tarea
 async function cancelarTarea(id) {
-
+  let tarea = unaCard.find((t) => t.id === id);
+if (tarea) {
   Swal.fire({
     title: "¿Cancelar tarea?",
     icon: "warning",
@@ -932,7 +967,6 @@ async function cancelarTarea(id) {
   }).then((result) => {
     if (result.isConfirmed) {
       // Buscar la tarea por su ID
-    let tarea = unaCard.find((t) => t.id === id);
     let botonEditar = document.getElementById(`editar-${tarea.id}`);
     let fecha = new Date();
     let formatoFechaCierre = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
@@ -950,7 +984,7 @@ async function cancelarTarea(id) {
       });
       Swal.fire({
         title: "Tarea cancelada!",
-        timer: 1500,
+        timer: 1000,
         icon: "success"
       });
       setTimeout(() => {
@@ -960,6 +994,14 @@ async function cancelarTarea(id) {
 
     }
   });
+} else {
+  Swal.fire({
+    title: "Tarea inexistente o modificada. Cierre la ventana",
+    timer: 1000,
+    icon: "error"
+  });
+}
+  
 }
 
 
@@ -971,7 +1013,8 @@ async function botonParaEditar(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
 
-  //Me fijo fecha para después guardarla
+  if (tarea) {
+     //Me fijo fecha para después guardarla
   let fecha = new Date();
   let formatoFechaEdicion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
   
@@ -1039,6 +1082,15 @@ async function botonParaEditar(id) {
     botonEditar.classList.add("boton-guardar");
   }
   cardsEnPantalla(muestraPantalla);
+  } else {
+    Swal.fire({
+      title: "Tarea inexistente o modificada. Cierre la ventana",
+      timer: 1000,
+      icon: "error"
+    });
+  }
+
+ 
 }
 
 
@@ -1054,5 +1106,3 @@ function actualizarCards() {
   finalizadasCards.innerHTML = "";
   canceladasCards.innerHTML = "";
 }
-
-
