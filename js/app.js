@@ -899,6 +899,7 @@ async function finalizarTarea(id) {
         icon: "success"
       });
       setTimeout(() => {
+        console.log(pantallaActual)
         cardsEnPantalla(pantallaActual);
       }, 1000);
       // location.reload();
@@ -920,6 +921,7 @@ async function finalizarTarea(id) {
 
 async function eliminar(id){
   let tarea = unaCard.find((t) => t.id === id);
+  console.log(tarea)
  if (tarea) {
   Swal.fire({
     title: "Se eliminará de manera permanente",
@@ -1019,7 +1021,8 @@ if (tarea) {
 async function botonParaEditar(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
-
+  console.log(tarea)
+  console.log(pantallaActual)
   if (tarea) {
      //Me fijo fecha para después guardarla
   let fecha = new Date();
@@ -1088,7 +1091,7 @@ async function botonParaEditar(id) {
     botonEditar.textContent = "Guardar";
     botonEditar.classList.add("boton-guardar");
   }
-  cardsEnPantalla(muestraPantalla);
+  // cardsEnPantalla(muestraPantalla);
   } else {
     Swal.fire({
       title: "Tarea inexistente o modificada. Cierre la ventana",

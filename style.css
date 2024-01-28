@@ -680,6 +680,9 @@ background-color: green;
 /* FIN MODAL CARGANDO */
 
 
+
+
+
 /* MODAL DE CARDS GRANDE */
 .modal{
   --bs-modal-width:90vw!important;
@@ -763,6 +766,13 @@ background-color: green;
 }
 
 .boton-guardar{
+  border: solid 1px red;
+  color: rgb(115, 0, 0);
+  font-weight: 700;
+  background-color: rgba(255, 0, 0, 0.329);
+}
+
+.boton-guardar:hover{
   border: solid 1px red;
   color: rgb(115, 0, 0);
   font-weight: 700;
