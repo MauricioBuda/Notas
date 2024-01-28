@@ -921,7 +921,6 @@ async function finalizarTarea(id) {
 
 async function eliminar(id){
   let tarea = unaCard.find((t) => t.id === id);
-  console.log(tarea)
  if (tarea) {
   Swal.fire({
     title: "Se eliminará de manera permanente",
