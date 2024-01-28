@@ -374,6 +374,15 @@ class Tarjetas {
   }
 }
 
+// Función para comparar dos tareas por fecha
+function compararPorFecha(tareaA, tareaB) {
+  const fechaA = tareaA.fechaSimple;
+  const fechaB = tareaB.fechaSimple;
+
+  // Ordenar en orden descendente (la tarea más reciente primero)
+  return fechaB.localeCompare(fechaA);
+}
+
 
 
 
@@ -712,6 +721,8 @@ function agregarCardAlContenedor(tarea) {
           </div>
         `;
           pendientesCards.innerHTML += nuevaCardHTML;
+      // pendientesCards.insertAdjacentHTML('afterbegin', nuevaCardHTML);
+
         } else {
         let nuevaCardHTML = `
         <div id="${cardID}" class="cards">
@@ -724,6 +735,7 @@ function agregarCardAlContenedor(tarea) {
           <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
         </div>
       `;
+      // pendientesCards.insertAdjacentHTML('afterbegin', nuevaCardHTML);
         pendientesCards.innerHTML += nuevaCardHTML;
         }
   } else if (tarea.estado === "Finalizadas") {
@@ -739,6 +751,7 @@ function agregarCardAlContenedor(tarea) {
     </div>
   `;
     finalizadasCards.innerHTML += nuevaCardHTML;
+    // finalizadasCards.insertAdjacentHTML('afterbegin', nuevaCardHTML);
   } else if (tarea.estado === "Canceladas") {
     let nuevaCardHTML = `
     <div id="${cardID}" class="cards">
@@ -752,6 +765,7 @@ function agregarCardAlContenedor(tarea) {
     </div>
   `;
     canceladasCards.innerHTML += nuevaCardHTML;
+      // canceladasCards.insertAdjacentHTML('afterbegin', nuevaCardHTML);
   }
 }
 
