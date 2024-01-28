@@ -95,6 +95,7 @@ padding: 5px;
 }
 
 .sinCuenta{
+  color: black;
   margin-top: 6vw;
 }
 
@@ -138,11 +139,15 @@ padding: 5px;
     flex-direction: column;
   }
 
+  .olvideClave{
+    color: #000000;
+  }
+
+
   .olvideClave:hover{
     -webkit-text-stroke: 2px #00000063;
     color: #000;
   }
-
 
 
 @media screen and (max-width: 524px) {
@@ -211,6 +216,11 @@ padding: 5px;
 
   .card-body *{
     gap: 5vh;
+  }
+
+  
+  .olvideClave{
+    font-size: 4.2vw!important;
   }
 
   .div-ver-clave span{
