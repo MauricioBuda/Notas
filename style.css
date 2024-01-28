@@ -212,7 +212,18 @@ padding: 5px;
   .card-body *{
     gap: 5vh;
   }
+
+  .div-ver-clave span{
+    display: flex!important;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-left: -45px;
+  }
+  
 }
+
+
 
 /* FIN INICIO SESION */
 
