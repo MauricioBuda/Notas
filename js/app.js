@@ -801,6 +801,7 @@ function masOpciones(id){
     let cardModalID = `cardModal-${tarea.id}`;
     let tituloID = `titulo-${tarea.id}`;
     let detalleID = `detalle-${tarea.id}`;
+    let urgenciaID = `urgencia-${tarea.id}`;
     let botonEditarID = `editar-${tarea.id}`;
     let botonFinalizarID = `finalizar-${tarea.id}`;
     let botonCancelarID = `cancelar-${tarea.id}`;
@@ -812,7 +813,7 @@ function masOpciones(id){
     <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
         <div class="div_modales">
         <strong>URGENCIA → </strong>
-        <p>${tarea.urgencia}</p>
+        <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
         </div>
         <div class="div_modales">
         <strong>CREACIÓN → </strong>
@@ -1013,39 +1014,76 @@ if (tarea) {
 async function botonParaEditar(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
+
   if (tarea) {
      //Me fijo fecha para después guardarla
   let fecha = new Date();
   let formatoFechaEdicion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
   
   // Obtener la referencia al documento en Firestore
-  const tareaRef = doc(db, nombreDeColeccion, id);
+  let tareaRef = doc(db, nombreDeColeccion, id);
 
   // Obtener los nuevos valores de los campos editados
-  const fechaDeEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaEdicion);
-  const nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
-  const nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
+  let nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
+  let nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
+  let nuevaUrgencia = document.getElementById(`urgencia-${tarea.id}`).textContent;
 
 
 
-  // Obtener los elementos HTML correspondientes a los campos de título y detalle
-  let detalleParaEditar = document.getElementById(`detalle-${tarea.id}`);
+  // Obtener los elementos HTML correspondientes a los campos de título, detalle y urgencia
   let tituloParaEditar = document.getElementById(`titulo-${tarea.id}`);
+  let detalleParaEditar = document.getElementById(`detalle-${tarea.id}`);
+  let urgenciaParaEditar = document.getElementById(`urgencia-${tarea.id}`);
   let botonEditar = document.getElementById(`editar-${tarea.id}`);
 
   // Verificar si estamos en modo de edición o no
-  const verSiGuardoOEdito = botonEditar.textContent === "Guardar";
+  let verSiGuardoOEdito = botonEditar.textContent === "Guardar";
 
   if (verSiGuardoOEdito) {
     // Guardar cambios
+    switch (nuevaUrgencia) {
+      case "alta":
+      case "Alta":
+      case "ALta":
+      case "ALTa":
+      case "ALTA":
+      nuevaUrgencia="Alta";
+          break;
+      case "media":
+      case "Media":
+      case "MEdia":
+      case "MEDIa":
+      case "MEDia":
+      case "MEDIA":
+        nuevaUrgencia="Media";
+          break;
+      case "baja":
+      case "Baja":
+      case "BAja":
+      case "BAJa":
+      case "BAJA":
+        nuevaUrgencia="Baja";
+          break;
+      default:
+        Swal.fire({
+          icon: "error",
+          title: "Ingrese un valor de urgencia válido",
+          footer: "Alta / Media / Baja"
+        });
+        return;
+        // break;
+    }
     tarea.titulo = nuevoTitulo;
     tarea.detalle = nuevoDetalle;
+    tarea.urgencia = nuevaUrgencia;
 
     // Deshabilitar la edición en el DOM
     detalleParaEditar.classList.remove("fondo_input_editable");
     tituloParaEditar.classList.remove("fondo_input_editable");
+    urgenciaParaEditar.classList.remove("fondo_input_editable");
     tituloParaEditar.contentEditable = false;
     detalleParaEditar.contentEditable = false;
+    urgenciaParaEditar.contentEditable = false;
 
     // Restaurar el botón de editar
     botonEditar.classList.remove("boton-guardar");
@@ -1056,6 +1094,7 @@ async function botonParaEditar(id) {
       await updateDoc(tareaRef, {
         titulo: nuevoTitulo,
         detalle: nuevoDetalle,
+        urgencia: nuevaUrgencia,
         ultimaEdicion: fecha.toLocaleTimeString('es-AR', formatoFechaEdicion)// Actualizar la fecha de última edición
       });
 
@@ -1073,15 +1112,16 @@ async function botonParaEditar(id) {
     // Entrar en modo de edición
     detalleParaEditar.classList.add("fondo_input_editable"); //Pongo fondo de input blanco
     tituloParaEditar.classList.add("fondo_input_editable");
+    urgenciaParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.contentEditable = true;
     detalleParaEditar.contentEditable = true;
+    urgenciaParaEditar.contentEditable = true;
     detalleParaEditar.focus();
 
     // Cambiar el texto al botón editar y la función
     botonEditar.textContent = "Guardar";
     botonEditar.classList.add("boton-guardar");
-  }
-  // cardsEnPantalla(muestraPantalla);
+    }
   } else {
     Swal.fire({
       title: "Tarea inexistente o modificada. Cierre la ventana",
