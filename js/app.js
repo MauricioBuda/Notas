@@ -338,6 +338,9 @@ function mostrarModalRegistro(){
 }
 
 
+
+
+
 async function cambiarNombre(){
   auth.onAuthStateChanged(async (usuario) => {
 let nombreParaEditar = document.getElementById("offcanvasNavbarLabel");
@@ -460,37 +463,31 @@ ocultarCarga();
 // Función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
   // mostrarCarga();
-// Limpiar el array de cards antes de obtener las nuevas desde Firestore
-actualizarCards();
-unaCard = [];
+  // Limpiar el array de cards antes de obtener las nuevas desde Firestore
+  actualizarCards();
+  unaCard = [];
 
-// Obtener todas las tareas desde Firestore
-const querySnapshot = await getDocs(collection(db, nombreDeColeccion));
+  // Obtener todas las tareas desde Firestore
+  const querySnapshot = await getDocs(collection(db, nombreDeColeccion));
 
-// Iterar sobre las tareas y agregarlas al array y al contenedor
-querySnapshot.forEach((doc) => {
-  const tarjetaFirestore = doc.data();
-  if (tarjetaFirestore.estado === estado) {
-    tarjetaFirestore.id = doc.id;
-    unaCard.push(tarjetaFirestore);
-  
-    // Agregar la nueva card al contenedor correspondiente
-    agregarCardAlContenedor(tarjetaFirestore);
-  } else if (pantallaActual === "Todas"){
-    tarjetaFirestore.id = doc.id;
-    unaCard.push(tarjetaFirestore);
-  
-    // Agregar la nueva card al contenedor correspondiente
-    agregarCardAlContenedor(tarjetaFirestore);
-  }
-// ocultarCarga();
-});
+  // Iterar sobre las tareas y agregarlas al array y al contenedor
+  querySnapshot.forEach((doc) => {
+    const tarjetaFirestore = doc.data();
+    if (tarjetaFirestore.estado === estado || pantallaActual === "Todas") {
+      tarjetaFirestore.id = doc.id;
+      unaCard.push(tarjetaFirestore);
+    }
+  });
+
+  // Ordenar las tarjetas cronológicamente
+  unaCard.sort((b, a) => new Date(a.fechaParaOrdenarlas) - new Date(b.fechaParaOrdenarlas));
+
+  // Iterar sobre las tarjetas ordenadas y agregarlas al contenedor
+  unaCard.forEach(tarjeta => {
+    agregarCardAlContenedor(tarjeta);
+  });
 }
 
-
-function compararFechas(a, b) {
-  return a.fechaParaOrdenarlas - b.fechaParaOrdenarlas;
-}
 
 
 
@@ -603,14 +600,12 @@ async function agregarTarea(event) {
   let detalle = document.getElementById("tareaDetalle").value;
   let urgencia = document.getElementById("tareaUrgencia").value;
   let fechaCreacion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
-  let fechaParaOrdenarlas = fecha.toLocaleTimeString('es-AR', formatoFechaOrden);
+  let fechaParaOrdenarlas = fecha.toISOString();
   let fechaCierre = "-";
   let ultimaEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
   let estado = "Pendientes";
-  let nombre = nombreDeUsuarioDB;
-  let mail = mailDeUsuarioDB;
 
-  console.log(fechaParaOrdenarlas)
+
   if (!titulo || !detalle || !urgencia || !fechaCreacion || !ultimaEdicion) {
     Swal.fire({
       position: "center",
@@ -704,7 +699,6 @@ function init() {
 init();
 
 
-// Renderizo la card, dependiendo su estado
 function agregarCardAlContenedor(tarea) {
   // Genera un ID único para el div (card) basado en el ID de la tarea
   let cardID = `card-${tarea.id}`;
@@ -734,7 +728,6 @@ function agregarCardAlContenedor(tarea) {
           </div>
         `;
           pendientesCards.innerHTML += nuevaCardHTML;
-          // pendientesCards.insertAdjacentHTML('beforeend', nuevaCardHTML);
         } else if (tarea.urgencia === "Baja") {
         let nuevaCardHTML = `
         <div id="${cardID}" class="cards div-urgencia-baja">
@@ -748,7 +741,6 @@ function agregarCardAlContenedor(tarea) {
         </div>
       `;
         pendientesCards.innerHTML += nuevaCardHTML;
-        // pendientesCards.insertAdjacentHTML('beforeend', nuevaCardHTML);
         } else {
           let nuevaCardHTML = `
         <div id="${cardID}" class="cards">
@@ -762,7 +754,6 @@ function agregarCardAlContenedor(tarea) {
         </div>
       `;
         pendientesCards.innerHTML += nuevaCardHTML;
-        // pendientesCards.insertAdjacentHTML('beforeend', nuevaCardHTML);
         }
         }
     else if (tarea.estado === "Finalizadas") {
@@ -793,6 +784,8 @@ function agregarCardAlContenedor(tarea) {
     canceladasCards.innerHTML += nuevaCardHTML;
   }
 }
+
+
 
 
 
@@ -1020,8 +1013,6 @@ if (tarea) {
 async function botonParaEditar(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
-  console.log(tarea)
-  console.log(pantallaActual)
   if (tarea) {
      //Me fijo fecha para después guardarla
   let fecha = new Date();
@@ -1073,7 +1064,7 @@ async function botonParaEditar(id) {
         timer: 800,
         icon: "success"
       });
-
+      cardsEnPantalla(pantallaActual);
 
     } catch (error) {
       console.error("Error al actualizar el documento en Firestore", error);
