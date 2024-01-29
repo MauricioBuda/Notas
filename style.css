@@ -713,7 +713,7 @@ background-color: green;
 .cards_modal{
   display: flex;
   align-items:center;
-  justify-content:space-evenly;
+  justify-content:space-between;
   flex-direction: column;
   height: 70vh;
   width: 85vw;

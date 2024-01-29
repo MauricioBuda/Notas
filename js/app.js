@@ -1,7 +1,7 @@
 // Importa la función de Firestore para agregar documentos ↓
-import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
+import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
-import { reload, updateProfile } from 'firebase/auth';
+import { updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2';
 
 // Menu ↓
@@ -172,7 +172,7 @@ async function datosDeIngreso(event){
       icon: "success",
       title: "¡Hola " + usuario.displayName + "!",
       showConfirmButton: false,
-      timer: 1200,
+      timer: 1500,
       customClass: {
         popup: 'cartel-bienvenida-popup',
         div: 'cartel-bienvenida-container',
@@ -235,7 +235,7 @@ async function datosDeRegistro(event){
         icon: "success",
         title: "Usuario creado!",
         showConfirmButton: false,
-        timer: 1200,
+        timer: 1500,
         customClass: {
           popup: 'cartel-bienvenida-popup',
           div: 'cartel-bienvenida-container',
@@ -288,7 +288,7 @@ async function olvideClave(event){
       setTimeout(() => {
           Swal.fire({
             title: "Mail enviado",
-            timer: 1200,
+            timer: 1500,
             icon: "success"
           });
       }, 1000);
@@ -594,8 +594,6 @@ async function agregarTarea(event) {
   event.preventDefault();
   let fecha = new Date();
   let formatoFechaCreacion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
-  let formatoFechaOrden = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour24: false };
-  console.log(fecha)
   let titulo = document.getElementById("tareaTitulo").value;
   let detalle = document.getElementById("tareaDetalle").value;
   let urgencia = document.getElementById("tareaUrgencia").value;
@@ -902,7 +900,7 @@ async function finalizarTarea(id) {
     } else {
       Swal.fire({
         title: "Tarea inexistente o modificada. Cierre la ventana",
-        timer: 1000,
+        timer: 1200,
         icon: "error"
       });
     }
@@ -943,7 +941,7 @@ async function eliminar(id){
  } else {
   Swal.fire({
     title: "Tarea inexistente o modificada. Cierre la ventana",
-    timer: 1000,
+    timer: 1200,
     icon: "error"
   });
  }
@@ -999,7 +997,7 @@ if (tarea) {
 } else {
   Swal.fire({
     title: "Tarea inexistente o modificada. Cierre la ventana",
-    timer: 1000,
+    timer: 1200,
     icon: "error"
   });
 }
@@ -1068,7 +1066,8 @@ async function botonParaEditar(id) {
         Swal.fire({
           icon: "error",
           title: "Ingrese un valor de urgencia válido",
-          footer: "Alta / Media / Baja"
+          text: "Alta / Media / Baja",
+          timer: 1500
         });
         return;
         // break;
@@ -1125,7 +1124,7 @@ async function botonParaEditar(id) {
   } else {
     Swal.fire({
       title: "Tarea inexistente o modificada. Cierre la ventana",
-      timer: 1000,
+      timer: 1200,
       icon: "error"
     });
   }

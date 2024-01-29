@@ -36,14 +36,16 @@ async function registrarUsuario(nombre, email, password) {
         icon: "error",
         title: "Ya existe un usuario con ese email",
         text: "Intente con uno distinto",
-        footer: 'O ponga "reestablecer clave"'
+        footer: 'O ponga "reestablecer clave"',
+        timer: 2000
       });
 
     } else if (error.message === "Firebase: Error (auth/invalid-email)."){
       Swal.fire({
         icon: "error",
-        title: "El mail ingresado parece incorrecto",
+        title: "El mail ingresado es incorrecto",
         text: "Intente con uno distinto",
+        timer: 2000
       });
     }
     console.log("este es el error →→  ", error.message)
@@ -67,7 +69,7 @@ async function iniciarSesion(email, password) {
       icon: "error",
       title: "Credenciales incorrectas o inexistentes",
       showConfirmButton: false,
-      timer: 1200,
+      timer: 1500,
       customClass: {
         popup: 'cartel-bienvenida-popup',
         div: 'cartel-bienvenida-container',
