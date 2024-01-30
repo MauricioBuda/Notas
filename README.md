@@ -18,5 +18,5 @@
             
 - [Instalación](#instalación): Para su instalación utilizamos npm, Vite, Firebase, GitHub
 - [Tecnologías Utilizadas](#tecnologías-utilizadas): HTML, CSS, JS, REACT, GIT, GITHUB, VERCEL, NPM, SweetAlert2
-- [Contacto](#contacto) mauricio.ariel.buda@gmail.com
+- [Contacto](#contacto):  mauricio.ariel.buda@gmail.com
 
