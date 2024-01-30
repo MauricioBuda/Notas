@@ -5,12 +5,12 @@ import Swal from 'sweetalert2';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyABZOA8qx3lXr7Z2POXoPaT-pToiXvVEfc",
-  authDomain: "notas-307ba.firebaseapp.com",
-  projectId: "notas-307ba",
-  storageBucket: "notas-307ba.appspot.com",
-  messagingSenderId: "558524290384",
-  appId: "1:558524290384:web:7cba0a20d83c3a4cdf8855"
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId
 };
 
 // Initialize Firebase
