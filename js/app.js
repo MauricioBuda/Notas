@@ -1,28 +1,45 @@
-// Importa la función de Firestore para agregar documentos ↓
+// Imports ↓
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2';
 
-// Menu ↓
-let botonMas = document.getElementById("botonMas_id");
-let menu = document.getElementById("id_menu");
-let filtroParaMenuBorroso = document.getElementById("botonMas_id");
 
-// Formulario ↓
-let formulario = document.getElementById("section_formulario_id");
-let botonAgregarTarea = document.getElementById("boton_agregarTarea_id");
 
-// Asigno eventos click al boton del formulario ↓
-botonAgregarTarea.addEventListener("click", agregarTarea);
 
-// Modal de cargando ↓
-const modalCarga = document.getElementById('modalCarga');
+
 
 // Array para ir guardando las cards ↓
 let unaCard = [];
 
-// Definir que se muestra en pantalla con los botones del menú ↓
+
+
+
+
+
+
+
+//DECLARO VARIABLES Y LES ASIGNO EVENTOS ↓
+
+// Variables menú ↓
+let botonMas = document.getElementById("botonMas_id");
+let menu = document.getElementById("id_menu");
+
+
+// Variables formulario para agregar tarea ↓
+let formulario = document.getElementById("section_formulario_id");
+let botonAgregarTarea = document.getElementById("boton_agregarTarea_id");
+
+
+// Eventos del formulario ↓
+botonAgregarTarea.addEventListener("click", agregarTarea);
+
+
+// Variable del modal de cargando ↓
+const modalCarga = document.getElementById('modalCarga');
+
+
+// Variables para definir que se muestra en pantalla con los botones del menú superior ↓
 let mostrarTodas = document.getElementById("id_todas");
 let mostrarPendientes = document.getElementById("id_pendientes");
 let mostrarFinalizadas = document.getElementById("id_finalizadas");
@@ -30,71 +47,116 @@ let mostrarCanceladas = document.getElementById("id_canceladas");
 let muestraPantalla = "Todas";
 let pantallaActual = "Todas";
 
-// Asigno eventos click a los botones del menú ↓
+
+// Eventos a los botones del menú superior ↓
 botonMas.addEventListener("click", mostrarFormulario);
 mostrarTodas.addEventListener("click", () => {muestraPantalla="Todas", cardsEnPantalla(muestraPantalla)});
 mostrarPendientes.addEventListener("click", () => {muestraPantalla="Pendientes", cardsEnPantalla(muestraPantalla)});
 mostrarFinalizadas.addEventListener("click", () => {muestraPantalla="Finalizadas", cardsEnPantalla(muestraPantalla)});
 mostrarCanceladas.addEventListener("click", () => {muestraPantalla="Canceladas", cardsEnPantalla(muestraPantalla)});
 
-// Secciones de las cards ↓
+
+// Variables de las secciones de las cards ↓
 let todasCards = document.getElementById("todas-cards");
 let pendientesCards = document.getElementById("pendientes-cards");
 let finalizadasCards = document.getElementById("finalizadas-cards");
 let canceladasCards = document.getElementById("canceladas-cards");
 
-//Ventana modal de cards grandes ↓
+
+// Variables de la ventana modal, de cards grandes ↓
 let modalCard = document.getElementById("cardEnModal");
 let modalFooter = document.getElementById("modal_footerID");
 
-// Modal de registro estética ↓
-let modalRegistrarse = document.getElementById("modalRegistro");
-let botonCancelar = document.getElementById("cancelar_modal");
-botonCancelar.addEventListener("click",ocultarModalRegistro);
-let botonRegistrarme = document.getElementById("boton_registrarse");
-botonRegistrarme.addEventListener("click",mostrarModalRegistro);
 
-// Ingreso o registro de cuenta ↓
+// Variables para pantalla de ingreso ↓
+let pantallaInicioSesion = document.getElementById("formInicioSesion");
 let botonIngresarCuentaExistente = document.getElementById("botonIngresarCuentaExistente");
-botonIngresarCuentaExistente.addEventListener("click", datosDeIngreso);
-let botonRegistrarNuevaCuenta = document.getElementById("botonRegistrarNuevaCuenta");
-botonRegistrarNuevaCuenta.addEventListener("click",datosDeRegistro);
 let contraseñaIngresadaPorUsuario = document.getElementById("contraseñaInicio");
 let botonOcultarMostrarClave = document.getElementById("ocultar-mostrar-clave");
-botonOcultarMostrarClave.addEventListener("click", ocultarMostrarClave);
+let botonRegistrarme = document.getElementById("boton_registrarse");
 let botonOlvideClave = document.getElementById("olvide_clave")
-botonOlvideClave.addEventListener("click", olvideClave);
 
-// Datos para guardar en la db ↓
+
+// Eventos para pantalla de inicio ↓
+botonIngresarCuentaExistente.addEventListener("click", datosDeIngreso);
+botonRegistrarme.addEventListener("click",mostrarModalRegistro);
+botonOlvideClave.addEventListener("click", olvideClave);
+botonOcultarMostrarClave.addEventListener("click", ocultarMostrarClave);
+
+
+// Variables pantalla de registro de nueva cuenta ↓
+let modalRegistrarse = document.getElementById("modalRegistro");
+let botonCancelar = document.getElementById("cancelar_modal");
+let botonRegistrarNuevaCuenta = document.getElementById("botonRegistrarNuevaCuenta");
+
+
+// Eventos para pantalla de registro
+botonRegistrarNuevaCuenta.addEventListener("click",datosDeRegistro);
+botonCancelar.addEventListener("click",ocultarModalRegistro);
+
+
+// Variables para guardar en la db ↓
 let nombreDeUsuarioDB = "";
 let mailDeUsuarioDB = "";
 let nombreDeColeccion = "";
 
-// Boton salir ↓
-let pantallaInicioSesion = document.getElementById("formInicioSesion");
-let botonSalir = document.getElementById("boton_salir")
-// botonSalir.addEventListener("click",salir)
 
-// Navbar ↓
+// Variables del menú desplegable ↓
 let navbar_general = document.getElementById("navbar_general");
 let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
 let salir_navbar =  document.getElementById("navbar_salir");
 let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre");
 let boton_eliminar_cuenta = document.getElementById("button_eliminar_cuenta");
+
+
+// Eventos del menú desplegable
 boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
 salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
+// TERMINO DE DECLARAR VARIABLES Y LES ASIGNO EVENTOS ↑
 
 
+
+
+
+
+
+
+
+
+// EJECUTO FUNCIONES NECESARIAS ↓
+
+
+// Cuando se abre la página, compruebo si hay una sesión iniciada
 corroborarSesionIniciada();
 
+// Le asigno eventos a los botones de las cards
+asignarEventosSegunDondeHagaClick();
+
+
+// TERMINO CON EJECUCIÓN DE FUNCIONES NECESARIAS ↑
+
+
+
+
+
+
+
+
+
+// EMPIEZO CON LA DECLARACIÓN DE TODAS LAS FUNCIONES (PRIMERO ESTÁN LAS RELACIONADAS CON LA DB, LUEGO LAS DE LA PÁGINNA EN SI) ↓
+
+
+
+
+
+// Funcion con la que compruebo si hay una sesión iniciada
 async function corroborarSesionIniciada (){
   mostrarCarga();
   auth.onAuthStateChanged(async (usuario) => {
     if (usuario) {
       // Hay una sesión iniciada
-
       pantallaInicioSesion.classList.add("ocultarRegistroModal");
       navbar_general.classList.remove("ocultarRegistroModal")
       console.log('El usuario está autenticado:', usuario.displayName);
@@ -107,7 +169,6 @@ async function corroborarSesionIniciada (){
       nombreUsuarioIniciado.innerHTML= usuario.displayName ;
       cardsEnPantalla(pantallaActual);
     } else {
-      // No hay una sesión iniciada
       console.log('No hay usuario autenticado');
     }
   });
@@ -128,8 +189,8 @@ function asignarMailDeUsuarioDB(MailUsuario){
 
 
 
-// cardsEnPantalla(pantallaActual);
 
+// Función para cerrar sesión
 async function salir (){
   let contraseñaIngresada = document.getElementById("contraseñaInicio");
   Swal.fire({
@@ -143,7 +204,6 @@ async function salir (){
   }).then((result) => {
     if (result.isConfirmed) {
       contraseñaIngresada.value = "";
-
       pantallaInicioSesion.classList.remove("ocultarRegistroModal")
       navbar_general.classList.add("ocultarRegistroModal");
       const sesionCerrada =   cerrarSesion();
@@ -159,6 +219,9 @@ async function salir (){
 
 
 
+
+
+// Función para corroborar el inicio de sesión
 async function datosDeIngreso(event){
   event.preventDefault();
   let mailIngresado = document.getElementById("mailInicio").value;
@@ -166,8 +229,6 @@ async function datosDeIngreso(event){
   await  iniciarSesion(mailIngresado,contraseñaIngresada);
   auth.onAuthStateChanged(async (usuario) => {
   if (usuario && usuario.displayName) {
-    // navBar_desplegable.classList.remove("show");
-    // navBar_desplegable.classList.add("ocultarRegistroModal");
     pantallaInicioSesion.classList.add("ocultarRegistroModal");
       Swal.fire({
       position: "center",
@@ -182,11 +243,15 @@ async function datosDeIngreso(event){
     });
   } 
   setTimeout(() => {
-    // location.reload();
   }, 1000);
 });
 }
 
+
+
+
+
+// Función para mostrar u ocultar clave con el ojo
 function ocultarMostrarClave(){
   let estadoActual = contraseñaIngresadaPorUsuario.type;
   if (estadoActual === "text") {
@@ -208,6 +273,8 @@ function ocultarMostrarClave(){
 
 
 
+
+// Función para registrar una nueva cuenta
 async function datosDeRegistro(event){
   event.preventDefault();
   let nombreRegistro = document.getElementById("nombreRegistro").value;
@@ -263,6 +330,8 @@ async function datosDeRegistro(event){
 
 
 
+
+// Función para enviar mal y reestablecer clave de la cuenta
 async function olvideClave(event){
   event.preventDefault();
   const { value: mailIngresadoPorCliente } = await Swal.fire({
@@ -300,6 +369,8 @@ async function olvideClave(event){
 
 
 
+
+// Función para eliminar definitivamente la cuenta
 async function elimnarLaCuenta(){
   Swal.fire({
     title: "Borrarás la cuenta y sus tareas de manera permanente",
@@ -330,7 +401,6 @@ async function elimnarLaCuenta(){
 
 
 
-
 // Mostrar y ocultar el modal del registro
 function ocultarModalRegistro(){
   modalRegistrarse.classList.add("ocultarRegistroModal")
@@ -343,6 +413,7 @@ function mostrarModalRegistro(){
 
 
 
+// Función para cambiar el nombre de la cuenta
 async function cambiarNombre(){
   auth.onAuthStateChanged(async (usuario) => {
 let nombreParaEditar = document.getElementById("offcanvasNavbarLabel");
@@ -391,7 +462,6 @@ class Tarjetas {
     this.estado = estado;
     this.id = null; // Inicializamos el ID como nulo
   }
-
   asignarId(id) {
     this.id = id;
   }
@@ -402,7 +472,7 @@ class Tarjetas {
 
 
 
-// Defino que se va a ver en pantalla
+// Funcion que define que se va a ver en pantalla
 async function cardsEnPantalla(loQueQuieroQueMuestre) {
   mostrarCarga();
 switch (loQueQuieroQueMuestre) {
@@ -460,8 +530,6 @@ ocultarCarga();
 
 
 
-
-
 // Función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
   // mostrarCarga();
@@ -499,12 +567,10 @@ async function obtenerCardsDesdeFirestore(estado) {
 function mostrarCarga() {
   modalCarga.style.display = 'flex';
 }
-
 // Ocultar el modal de carga
 function ocultarCarga() {
   modalCarga.style.display = 'none';
 }
-
 
 
 
@@ -582,7 +648,6 @@ function vaciarCampos() {
   let tituloInput = document.getElementById("tareaTitulo");
   let detalleInput = document.getElementById("tareaDetalle");
   let urgenciaInput = document.getElementById("tareaUrgencia");
-
   tituloInput.value = "";
   detalleInput.value = "";
   urgenciaInput.value = "";
@@ -591,6 +656,8 @@ function vaciarCampos() {
 
 
 
+
+// Función para aagarrar los datos que ingresa el usuario cuando agrega una tarea, y guardarlos en la DB
 async function agregarTarea(event) {
   mostrarCarga();
   event.preventDefault();
@@ -657,7 +724,6 @@ async function agregarTarea(event) {
       ocultarCarga();
     }
     ocultarCarga();
-
   }
 }
 
@@ -665,8 +731,8 @@ async function agregarTarea(event) {
 
 
 
-  //Función para asignar los eventos a los botones de las cards ↓
-function init() {
+  // Función para asignar los eventos a los botones de las cards ↓
+function asignarEventosSegunDondeHagaClick() {
   // Asignar eventos a los botones
   document.addEventListener("click", (event) => {
       // Verificar si el clic ocurrió en un botón de editar
@@ -696,9 +762,10 @@ function init() {
 }
 
 
-init();
 
 
+
+// Función que renderiza las cards, dependiendo su estado y su urgencia
 function agregarCardAlContenedor(tarea) {
   // Genera un ID único para el div (card) basado en el ID de la tarea
   let cardID = `card-${tarea.id}`;
@@ -789,13 +856,9 @@ function agregarCardAlContenedor(tarea) {
 
 
 
-
-
-
-
+// Función para el botón de "mas opciones", para abrir el modal grande de las cards
 function masOpciones(id){
   let tarea = unaCard.find((t) => t.id === id);
-
 
     // Genera un ID único para el div (card) basado en el ID de la tarea
     let cardModalID = `cardModal-${tarea.id}`;
@@ -830,8 +893,6 @@ function masOpciones(id){
   </div>
     `;
 
-
-
 modalCard.innerHTML = nuevaCardHTML;
 modalFooter.innerHTML="";
 
@@ -858,6 +919,7 @@ modalFooter.innerHTML = botonesCard;
 
 // Función para finalizar tarea de card
 async function finalizarTarea(id) {
+  // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
   
   if (tarea) {
@@ -873,10 +935,8 @@ async function finalizarTarea(id) {
     if (result.isConfirmed) {
       let fecha = new Date();
       let formatoFechaCierre = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
-    // Buscar la tarea por su ID
-  
 
-          // Cambiar el estado y la fecha de cierre
+    // Cambiar el estado y la fecha de cierre
     tarea.estado = "Finalizadas";
     muestraPantalla = tarea.estado;
     tarea.fechaCierre = fecha.toLocaleTimeString('es-AR', formatoFechaCierre);
@@ -896,7 +956,6 @@ async function finalizarTarea(id) {
         console.log(pantallaActual)
         cardsEnPantalla(pantallaActual);
       }, 1000);
-      // location.reload();
     }
     });
     } else {
@@ -912,7 +971,7 @@ async function finalizarTarea(id) {
 
 
 
-
+// Función para eliminar una tarea de la DB
 async function eliminar(id){
   let tarea = unaCard.find((t) => t.id === id);
  if (tarea) {
@@ -947,8 +1006,8 @@ async function eliminar(id){
     icon: "error"
   });
  }
-
 }
+
 
 
 
@@ -956,6 +1015,7 @@ async function eliminar(id){
 
 // Función para cancelar una tarea
 async function cancelarTarea(id) {
+  // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
 if (tarea) {
   Swal.fire({
@@ -968,8 +1028,6 @@ if (tarea) {
     cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
-      // Buscar la tarea por su ID
-    let botonEditar = document.getElementById(`editar-${tarea.id}`);
     let fecha = new Date();
     let formatoFechaCierre = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
     tarea.fechaCierre = fecha.toLocaleTimeString('es-AR', formatoFechaCierre);
@@ -1002,8 +1060,7 @@ if (tarea) {
     timer: 1200,
     icon: "error"
   });
-}
-  
+ }
 }
 
 
@@ -1130,8 +1187,6 @@ async function botonParaEditar(id) {
       icon: "error"
     });
   }
-
- 
 }
 
 
@@ -1147,4 +1202,3 @@ function actualizarCards() {
   finalizadasCards.innerHTML = "";
   canceladasCards.innerHTML = "";
 }
-

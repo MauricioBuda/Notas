@@ -52,6 +52,7 @@ async function registrarUsuario(nombre, email, password) {
     console.log("este es el error →→  ", error.message)
     console.log("El motivo por el cual no se pudo es", error)
     // Maneja el error según sea necesario
+    return null;
   }
 
 }
@@ -71,10 +72,6 @@ async function iniciarSesion(email, password) {
       title: "Credenciales incorrectas o inexistentes",
       showConfirmButton: false,
       timer: 1500,
-      customClass: {
-        popup: 'cartel-bienvenida-popup',
-        div: 'cartel-bienvenida-container',
-      },
     });
       return null;
   }
