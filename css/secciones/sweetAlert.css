@@ -1,14 +1,27 @@
-.input-recupero-clave {
-  text-align: center;
-  min-height: 6vh;
+.ventana-recupero-clave {
+  width: 60% !important;
+  font-size: 1vw;
 }
+
+
 
 .input-recupero-clave {
   text-align: center;
+  min-height: 6vh;
+  font-size: 1.5vw;
 }
 
 @media screen and (max-width: 524px) {
   .ventana-recupero-clave {
     width: 95% !important;
+    font-size: 2vw;
+  }
+
+  .input-recupero-clave {
+    font-size: 4vw;
+  }
+
+  .input-recupero-clave::placeholder {
+    font-size: 4vw;
   }
 }

@@ -236,10 +236,6 @@ async function datosDeIngreso(event){
       title: "¡Hola " + usuario.displayName + "!",
       showConfirmButton: false,
       timer: 1500,
-      customClass: {
-        popup: 'cartel-bienvenida-popup',
-        div: 'cartel-bienvenida-container',
-      },
     });
   } 
   setTimeout(() => {
@@ -282,6 +278,17 @@ async function datosDeRegistro(event){
   let contraseñaIngresada1 = document.getElementById("ContraseñaRegistro1").value;
   let contraseñaIngresada2 = document.getElementById("ContraseñaRegistro2").value;
 
+  if (nombreRegistro.length > 15) {
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title: "El nombre debe tener menos de 15 dígitos",
+      showConfirmButton: false,
+      timer: 1200,
+    });
+    return;
+  }
+
   if (contraseñaIngresada1 === contraseñaIngresada2) {
     if (contraseñaIngresada1.length < 6 ) {
       Swal.fire({
@@ -290,10 +297,6 @@ async function datosDeRegistro(event){
         title: "La clave debe tener al menos 6 dígitos",
         showConfirmButton: false,
         timer: 1200,
-        customClass: {
-          popup: 'cartel-bienvenida-popup',
-          div: 'cartel-bienvenida-container',
-        },
       });
       return;
     }
@@ -305,10 +308,6 @@ async function datosDeRegistro(event){
         title: "Usuario creado!",
         showConfirmButton: false,
         timer: 1500,
-        customClass: {
-          popup: 'cartel-bienvenida-popup',
-          div: 'cartel-bienvenida-container',
-        },
       });
     }
   } else {
@@ -318,10 +317,6 @@ async function datosDeRegistro(event){
       title: "Las claves no coinciden",
       showConfirmButton: false,
       timer: 1000,
-      customClass: {
-        popup: 'cartel-bienvenida-popup',
-        div: 'cartel-bienvenida-container',
-      },
     });
   }
   
@@ -335,22 +330,14 @@ async function datosDeRegistro(event){
 async function olvideClave(event){
   event.preventDefault();
   const { value: mailIngresadoPorCliente } = await Swal.fire({
-    title: "Ingrese dirección de mail para recibir link de reestablecimiento:",
+    title: "Mail para recibir link de reestablecimiento:",
+    showCancelButton: true,
     input: "email",
     inputPlaceholder: "ejemplo@ejemplo.com",
-    allowOutsideClick: false,
     position: 'top',
     customClass: {
-            popup: 'sweetAlert-recupero-divdiv',
-            div: 'sweetAlert-recupero-div',
-            input: 'sweetAlert-recupero-input',
-            inputPlaceholder: 'sweetAlert-recupero-input-placeholder',
-            inputValue: 'sweetAlert-recupero-input-value',
-            label: 'sweetAlert-recupero-label',
-            title: 'sweetAlert-recupero-titulo',
-            content: 'sweetAlert-recupero-contenido',
-            confirmButton: 'sweetAlert-recupero-boton',
-            cancelButton: 'sweetAlert-recupero-boton',
+            popup: 'ventana-recupero-clave',
+            input: 'input-recupero-clave',
           },
   });
   if (mailIngresadoPorCliente) {
@@ -680,10 +667,6 @@ async function agregarTarea(event) {
       title: "Se deben completar todos los campos",
       showConfirmButton: false,
       timer: 1000,
-      customClass: {
-        popup: 'cartel-bienvenida-popup',
-        div: 'cartel-bienvenida-container',
-      },
     });
     ocultarCarga();
     return;
