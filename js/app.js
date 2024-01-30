@@ -90,6 +90,7 @@ boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 corroborarSesionIniciada();
 
 async function corroborarSesionIniciada (){
+  mostrarCarga();
   auth.onAuthStateChanged(async (usuario) => {
     if (usuario) {
       // Hay una sesión iniciada
@@ -110,6 +111,7 @@ async function corroborarSesionIniciada (){
       console.log('No hay usuario autenticado');
     }
   });
+  ocultarCarga();
 }
 
 function asignarNombreAColeccion(nombreColeccion){
@@ -1145,3 +1147,4 @@ function actualizarCards() {
   finalizadasCards.innerHTML = "";
   canceladasCards.innerHTML = "";
 }
+

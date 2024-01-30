@@ -1,0 +1,100 @@
+/* SWEET ALERT */
+/* INICIO RECUPERO CONRTRASEÑA */
+.sweetAlert-recupero-div{
+    display: flex!important;
+    flex-direction: column!important;
+    justify-content: center!important;
+    text-align: center!important;
+    align-items: center!important;
+    }
+    
+    .sweetAlert-recupero-input{
+      text-align: center!important;
+      font-size: 2vw!important;
+      color: #000000!important;
+      width: 85%!important;
+      height: 9vh!important;
+    }
+    
+    .sweetAlert-recupero-input-value{
+    font-size: 10vw!important;
+    }
+    
+    .sweetAlert-recupero-divdiv{
+      width: 60%!important;
+      height: auto!important;
+    }
+    
+    .swal2-input-label{
+      color: #000000!important;
+      font-size: 1.5vw!important;
+    }
+    
+    .sweetAlert-recupero-boton{
+      display: flex!important;
+      justify-content: center!important;
+      text-align: center!important;
+      align-items: center!important;
+      font-size: 1.2vw!important;
+      height: 5vh!important;
+      min-width: 10vw!important;
+    }
+    
+    
+
+
+
+      /* MEDIA QUERYS */
+    @media screen and (max-width: 524px) {
+      .sweetAlert-recupero-input{
+        align-self: center!important;
+        align-items: center!important;
+        font-size: 6vw!important;
+        width:85%!important;
+        min-height: 4vh!important;
+        max-height: 5vh!important;
+        margin: 2rem!important;
+      }
+      
+      .swal2-modal{
+        align-self: center!important;
+        align-items: center!important;
+        width: 95%!important;
+        height: auto!important;
+      }
+      
+      .swal2-input-label{
+        text-align: center!important;
+        font-size: 3vw!important;
+      }
+      .sweetAlert-recupero-input-placeholder{
+        font-size: 2.5vw!important;
+      }
+      
+      .sweetAlert-recupero-boton{
+        font-size: 4vw!important;
+        height: 5vh!important;
+        min-width: 20vw!important;
+      }
+    }
+    /* FINRECUPERO CONRTRASEÑA */
+    
+    
+
+
+    
+    
+    /* INICIO BIENVENIDA */
+    .cartel-bienvenida-popup{
+      width: 30%!important;
+    }
+    
+    @media screen and (max-width: 524px) {
+      .cartel-bienvenida-popup{
+        width: 50%!important;
+      }
+    }
+    /* FIN BIENVENIDA */
+    /* FIN SWEET ALERT */
+    
+    

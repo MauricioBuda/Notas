@@ -1,45 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="img/agenda.png" type="logo_chico">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <!-- <link rel="stylesheet" href="sweetalert2.min.css"> -->
-    <title>Notitas</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="img/agenda.png" type="logo_chico">
+  <title>Notitas</title>
 </head>
+
 <body>
 
+  <!-- INICIO SECCIÓN DE MENÚ DESPLEGABLE LATERAL -->
   <nav id="navbar_general" class="  ocultarRegistroModal navbar fixed-top">
-    <div  class="container-fluid">
+    <div class="container-fluid">
       <a class="navbar-brand" href="#"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+        aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-          <div class="offcanvas-header">
-            <img src="/img/person-gear.svg" alt="icono-persona">
-            <h5 class="offcanvas-title" id="offcanvasNavbarLabel"></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-          </div>
-          <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-              <li class="nav-item">
-                <img src="/img/person.svg" alt="icono-persona">
-                <a id="button_cambiar_nombre" class="nav-link active" aria-current="page" href="#">Cambiar nombre</a>
-              </li>
-              <li class="nav-item">
-                <img src="/img/trash.svg" alt="icono-persona">
-                <a id="button_eliminar_cuenta" class="nav-link active" aria-current="page" href="#">Eliminar cuenta</a>
-              </li>
-              <li id="navbar_salir" class="nav-item">
-                <img src="/img/box-arrow-left.svg" alt="icono-salir">
-                <a class="nav-link" href="#">Salir</a>
-              </li>
-              <!-- <li class="nav-item dropdown">
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <img src="/img/person-gear.svg" alt="icono-persona">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <img src="/img/person.svg" alt="icono-persona">
+              <a id="button_cambiar_nombre" class="nav-link active" aria-current="page" href="#">Cambiar nombre</a>
+            </li>
+            <li class="nav-item">
+              <img src="/img/trash.svg" alt="icono-persona">
+              <a id="button_eliminar_cuenta" class="nav-link active" aria-current="page" href="#">Eliminar cuenta</a>
+            </li>
+            <li id="navbar_salir" class="nav-item">
+              <img src="/img/box-arrow-left.svg" alt="icono-salir">
+              <a class="nav-link" href="#">Salir</a>
+            </li>
+            <!-- <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Dropdown
                 </a>
@@ -52,139 +55,160 @@
                   <li><a class="dropdown-item" href="#">Something else here</a></li>
                 </ul>
               </li> -->
-            </ul>
-          </div>
+          </ul>
         </div>
+      </div>
     </div>
   </nav>
+  <!-- FIN SECCIÓN DE MENÚ DESPLEGABLE LATERAL-->
 
 
-<section id="formInicioSesion" class="form_inicioSesion">
-  <form id="modalInicioSesion" class="modal_inicioSesion">
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Dirección de E-mail</label>
-      <input type="email" class="form-control" id="mailInicio" aria-describedby="emailHelp" required>
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-      <div class="div-ver-clave">      
-        <input type="password" class="form-control" id="contraseñaInicio" required >
-        <span id="ocultar-mostrar-clave"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-          <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
-          <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
-        </svg>
+
+
+
+
+  <!-- INICIO SECCIÓN INICIAR SESIÓN -->
+  <section id="formInicioSesion" class="form_inicioSesion">
+    <form id="modalInicioSesion" class="modal_inicioSesion">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Dirección de E-mail</label>
+        <input type="email" class="form-control" id="mailInicio" aria-describedby="emailHelp" required>
       </div>
-
-    </div>
-    <div class="div_bt_ingresar_olvide">
-      <button type="submit" class="btn btn-primary" id="botonIngresarCuentaExistente">Ingresar</button>
-      <button id="olvide_clave" class="form-text olvideClave">Reestablecer clave</button>
-    </div>
-    <div id="emailHelp" class="form-text sinCuenta">¿No tenés cuenta?</div>
-      <button id="boton_registrarse" class="btn btn-primary " type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+        <div class="div-ver-clave">
+          <input type="password" class="form-control" id="contraseñaInicio" required>
+          <span id="ocultar-mostrar-clave"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+              fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+              <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+              <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+            </svg>
+        </div>
+      </div>
+      <div class="div_bt_ingresar_olvide">
+        <button type="submit" class="btn btn-primary" id="botonIngresarCuentaExistente">Ingresar</button>
+        <button id="olvide_clave" class="form-text olvideClave">Reestablecer clave</button>
+      </div>
+      <div id="emailHelp" class="form-text sinCuenta">¿No tenés cuenta?</div>
+      <button id="boton_registrarse" class="btn btn-primary " type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
         Registrarse
       </button>
     </form>
+    <!-- FIN SECCIÓN INICIO SESIÓN -->
 
 
+
+
+
+
+    <!-- SECCIÓN REGISTRAR NUEVO USUARIO -->
     <div id="modalRegistro" class=" modal_registro ocultarRegistroModal">
       <div class="collapse collapse-horizontal modal_registro_2" id="collapseWidthExample">
-        <div class="card card-body " >
-
+        <div class="card card-body ">
           <form class="form_registro" id="modalRegistro2">
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">Nombre</label>
               <input type="text" class="form-control" id="nombreRegistro" aria-describedby="emailHelp" required>
-
               <label for="exampleInputEmail1" class="form-label contraseña_registro">Dirección de E-mail</label>
               <input type="email" class="form-control" id="MailRegistro" aria-describedby="emailHelp" required>
-
               <label for="exampleInputPassword1" class="form-label contraseña_registro">Contraseña</label>
               <input type="password" class="form-control" id="ContraseñaRegistro1" required>
-
               <label for="exampleInputPassword1" class="form-label contraseña_registro">Repetir contraseña</label>
               <input type="password" class="form-control" id="ContraseñaRegistro2" required>
             </div>
             <div class="botones_registro">
-            <button type="submit" class="btn btn-primary botonesRegistro" id="botonRegistrarNuevaCuenta">Registrarme</button>
-            <button id="cancelar_modal" class="btn btn-primary botonesRegistro" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
-              Cancelar
-            </button>
-          </div>
+              <button type="submit" class="btn btn-primary botonesRegistro"
+                id="botonRegistrarNuevaCuenta">Registrarme</button>
+              <button id="cancelar_modal" class="btn btn-primary botonesRegistro" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseWidthExample" aria-expanded="false"
+                aria-controls="collapseWidthExample">
+                Cancelar
+              </button>
+            </div>
           </form>
-
         </div>
       </div>
     </div>
-
-</section>
-
-
+  </section>
+  <!-- FIN SECCIÓN REGISTRAR NUEVO USUARIO -->
 
 
-    <main id="id_menu" class="menu">
-        <button id="botonMas_id" class="botonMas_class btn btn-primary" type="button" >+</button>
-        <div class="filtro" id="filtro_id_menu">
-            <button id="id_todas">
-                Todas
-            </button >
-            <button id="id_pendientes">
-                Pendientes
-            </button>
-            <button id="id_finalizadas">
-                Finalizadas
-            </button>
-            <button id="id_canceladas">
-                Canceladas
-            </button>
-        </div>
-    </main>
 
 
-    <section id="section_formulario_id" class="section_formulario oculto">
-        
-            <h2 class="h2_nuevaTarea">NUEVA TAREA</h2>
-            <form id="tabla_datos" class="formulario">
-                <label for="tareaTitulo">Título: </label>
-                <input placeholder="Título de la tarea" class="recuadros_formulario" type="text" id="tareaTitulo" name="tareaTitulo" required>
 
-                <label for="tareaDetalle">Detalle: </label>
-                <input placeholder="Aclaraciones" class="recuadros_formulario recuadros_formulario_detalle" type="text" id="tareaDetalle" name="tareaDetalle" required>
-
-                <label for="tareaUrgencia">Urgencia: </label>
-                    <select class="recuadros_formulario" id="tareaUrgencia" name="tareaUrgencia" required>
-                    <option value="Alta">Alta</option>
-                    <option value="Media">Media</option>
-                    <option value="Baja">Baja</option>
-                </select>
-
-
-                <button class="boton_agregarTarea btn btn-outline-dark" id="boton_agregarTarea_id" type="submit">Agregar Tarea</button>
-
-            </form>
-      
-    </section>
-<div class="divDeSecciones">
+  <!-- INICIO MENÚ SUPERIOR -->
+  <main id="id_menu" class="menu">
+    <button id="botonMas_id" class="botonMas_class btn btn-primary" type="button">+</button>
+    <div class="filtro" id="filtro_id_menu">
+      <button id="id_todas">
+        Todas
+      </button>
+      <button id="id_pendientes">
+        Pendientes
+      </button>
+      <button id="id_finalizadas">
+        Finalizadas
+      </button>
+      <button id="id_canceladas">
+        Canceladas
+      </button>
+    </div>
+  </main>
+  <div class="divDeSecciones">
     <section class="section_cards section_todas" id="todas-cards"></section>
     <section class="section_cards section_pendientes" id="pendientes-cards"></section>
     <section class="section_cards section_finalizadas" id="finalizadas-cards"></section>
     <section class="section_cards section_canceladas" id="canceladas-cards"></section>
-</div>
+  </div>
+  <!-- FIN MENÚ SUPERIOR -->
 
 
-  <!-- Modal de carga -->
+
+
+
+  <!-- INICIO FORMULARIO TAREA -->
+  <section id="section_formulario_id" class="section_formulario oculto">
+    <h2 class="h2_nuevaTarea">NUEVA TAREA</h2>
+    <form id="tabla_datos" class="formulario">
+      <label for="tareaTitulo">Título: </label>
+      <input placeholder="Título de la tarea" class="recuadros_formulario" type="text" id="tareaTitulo"
+        name="tareaTitulo" required>
+
+      <label for="tareaDetalle">Detalle: </label>
+      <input placeholder="Aclaraciones" class="recuadros_formulario recuadros_formulario_detalle" type="text"
+        id="tareaDetalle" name="tareaDetalle" required>
+
+      <label for="tareaUrgencia">Urgencia: </label>
+      <select class="recuadros_formulario" id="tareaUrgencia" name="tareaUrgencia" required>
+        <option value="Alta">Alta</option>
+        <option value="Media">Media</option>
+        <option value="Baja">Baja</option>
+      </select>
+
+      <button class="boton_agregarTarea btn btn-outline-dark" id="boton_agregarTarea_id" type="submit">Agregar
+        Tarea</button>
+    </form>
+  </section>
+  <!-- FIN FORMULARIO TAREA -->
+
+
+
+
+
+  <!-- INICIO MODAL DE CARGA -->
   <div id="modalCarga" class="modal_carga">
     <div class="modal-contenido">
       <p>CARGANDO...</p>
     </div>
   </div>
+  <!-- FIN MODAL DE CARGA -->
 
 
 
-  
 
-  
-  <!-- Modal pantalla grande-->
+
+  <!-- INICIO MODAL TAREA PANTALLA GRANDE-->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div id="modalContainer" class="modal-content modalCardContenedor">
@@ -192,27 +216,31 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="cardEnModal_Class" id="cardEnModal">
-
         </div>
         <div id="modal_footerID" class="modal-footer">
-          <button id="${botonEditarID}" class="btn botonesCards" >Editar</button>
-          <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
+          <button id="${botonEditarID}" class="btn botonesCards">Editar</button>
+          <button id="${botonFinalizarID}" class="btn botonesCards">Finalizar</button>
           <button id="${botonCancelarID}" class="btn botonesCards">Cancelar</button>
         </div>
       </div>
     </div>
   </div>
+  <!-- FIN MODAL TAREA PANTALLA GRANDE-->
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 
-    <script  type="module" src="./js/firestoreConfig.js"></script>
-    <script type="module" src="./js/app.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <!-- <script src="sweetalert2.min.js"></script> -->
+  <!-- BOOSTRAP -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
 
-    
+<!-- ARCHIVOS JS -->
+  <script type="module" src="./js/firestoreConfig.js"></script>
+  <script type="module" src="./js/app.js"></script>
+
+
 </body>
+
 </html>

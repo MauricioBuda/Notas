@@ -1,0 +1,128 @@
+/* SECTION_FORMULARIO TAREAS*/
+.section_formulario {
+    height: 100vh;
+    background-image: linear-gradient(216deg, rgba(77, 77, 77,0.05) 0%, rgba(77, 77, 77,0.05) 25%,rgba(42, 42, 42,0.05) 25%, rgba(42, 42, 42,0.05) 38%,rgba(223, 223, 223,0.05) 38%, rgba(223, 223, 223,0.05) 75%,rgba(36, 36, 36,0.05) 75%, rgba(36, 36, 36,0.05) 100%),linear-gradient(44deg, rgba(128, 128, 128,0.05) 0%, rgba(128, 128, 128,0.05) 34%,rgba(212, 212, 212,0.05) 34%, rgba(212, 212, 212,0.05) 57%,rgba(25, 25, 25,0.05) 57%, rgba(25, 25, 25,0.05) 89%,rgba(135, 135, 135,0.05) 89%, rgba(135, 135, 135,0.05) 100%),linear-gradient(241deg, rgba(55, 55, 55,0.05) 0%, rgba(55, 55, 55,0.05) 14%,rgba(209, 209, 209,0.05) 14%, rgba(209, 209, 209,0.05) 60%,rgba(245, 245, 245,0.05) 60%, rgba(245, 245, 245,0.05) 69%,rgba(164, 164, 164,0.05) 69%, rgba(164, 164, 164,0.05) 100%),linear-gradient(249deg, rgba(248, 248, 248,0.05) 0%, rgba(248, 248, 248,0.05) 32%,rgba(148, 148, 148,0.05) 32%, rgba(148, 148, 148,0.05) 35%,rgba(202, 202, 202,0.05) 35%, rgba(202, 202, 202,0.05) 51%,rgba(181, 181, 181,0.05) 51%, rgba(181, 181, 181,0.05) 100%),linear-gradient(92deg, rgba(28,28,28, 0.55),rgba(28,28,28, 0.55));  /* background-image: url('img/Fondo.jpg'); */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: top;
+    padding-top: 1vw;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .oculto {
+    display: none;
+  }
+  
+  
+  .h2_nuevaTarea{
+    font-size: 2.5vw;
+    font-weight: 800;
+    color: white;
+  }
+  
+  .formulario {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .formulario label{
+    font-size: 1.5vw;
+    font-weight: 500;
+    color: white;
+  }
+  
+  .recuadros_formulario{
+    padding: 1vw;
+    font-size: 1vw;
+    font-weight: 500;
+    background-color: rgb(255, 255, 255, 0.5);
+    width: 30vw;
+    display: flex;
+    text-align: center;
+    margin: 1rem 0 1rem 0;
+  }
+  
+  .recuadros_formulario::placeholder{
+    font-size: 1vw;
+    color: rgba(0, 0, 0, 0.632);
+  }
+  
+  .recuadros_formulario_detalle{
+      padding-bottom: 10vh;
+      height: 15vh;
+      max-width: 30vw;
+      text-wrap: wrap;
+      overflow-wrap: break-word;
+      white-space: wrap; /* Evita el salto de línea */
+  }
+  
+  .boton_agregarTarea{
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+    font-size: 2.5vw;
+    width: 25vw;
+    margin-top: 2vh;
+    background-color: rgba(0, 128, 0, 0.475);
+  }
+  
+  .boton_agregarTarea:hover{
+  background-color: green;
+  }
+  
+
+
+
+
+    /* MEDIA QUERYS */
+  @media screen and (max-width: 524px) {
+    .h2_nuevaTarea{
+      -webkit-text-stroke: white;
+      font-size: 7vw;
+      padding-top: 5vh;
+    }
+  
+    .formulario label{
+      font-size: 5vw;
+    }
+  
+    .formulario input{
+      font-size: 4vw;
+    }
+  
+    .recuadros_formulario{
+      font-size: 3vw;
+      height: 4vh;
+      width: 45vw;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .recuadros_formulario_detalle{
+      padding-bottom: 10vh;
+      height: 15vh;
+      max-width: 45vw;
+      width: 45vw;
+  }
+  
+    .boton_agregarTarea{
+      font-weight: 500;
+      font-size: 5vw;
+      width: 40vw;
+      margin-top: 3vh;
+    }
+  
+    .recuadros_formulario::placeholder{
+      font-size: 3vw;
+      align-items: center;
+      text-align: center;
+    }
+  
+  }
+  /* FIN SECTION_FORMULARIO TAREAS*/
+  
