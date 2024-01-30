@@ -278,7 +278,7 @@ async function datosDeRegistro(event){
   let contraseñaIngresada1 = document.getElementById("ContraseñaRegistro1").value;
   let contraseñaIngresada2 = document.getElementById("ContraseñaRegistro2").value;
 
-  if (nombreRegistro.length > 15) {
+  if (nombreRegistro.length > 18) {
     Swal.fire({
       position: "center",
       icon: "warning",
@@ -414,12 +414,25 @@ if(verSiGuardoOEditoNombre){
   nombreParaEditar.classList.add("bordeParaNombre");
   boton_cambiar_nombre.classList.add("guardar_red");
  } else {
-  nombreParaEditar.contentEditable = false;
-  boton_cambiar_nombre.textContent = "Cambiar nombre";
   nuevoNombre = nombreParaEditar.textContent;
+  console.log(nuevoNombre.length)
+  console.log(nuevoNombre)
+
+  if (nuevoNombre.length > 18) {
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title: "El nombre debe tener menos de 15 dígitos",
+      showConfirmButton: false,
+      timer: 1200,
+    });
+    return;
+  }
+  nombreParaEditar.contentEditable = false;
   await updateProfile(usuario, { displayName: nuevoNombre });
   nombreParaEditar.classList.remove("bordeParaNombre");
   boton_cambiar_nombre.classList.remove("guardar_red");
+  boton_cambiar_nombre.textContent = "Cambiar nombre";
   Swal.fire({
     title: "Nombre modificado",
     timer: 800,
