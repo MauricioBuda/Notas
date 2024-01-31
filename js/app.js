@@ -1073,114 +1073,120 @@ if (tarea) {
 
 
 
+
+
+
 // Función para editar una tarea
 async function botonParaEditar(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
 
+  
   if (tarea) {
      //Me fijo fecha para después guardarla
-  let fecha = new Date();
+  let fecha = new Date();         
   let formatoFechaEdicion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
   
+
   // Obtener la referencia al documento en Firestore
   let tareaRef = doc(db, nombreDeColeccion, id);
 
-  // Obtener los nuevos valores de los campos editados
-  let nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
-  let nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
-  let nuevaUrgencia = document.getElementById(`urgencia-${tarea.id}`).textContent;
 
-
-
-  // Obtener los elementos HTML correspondientes a los campos de título, detalle y urgencia
+  // Obtener los elementos HTML correspondientes a los campos de título, detalle y urgencia; y el botón editar
   let tituloParaEditar = document.getElementById(`titulo-${tarea.id}`);
   let detalleParaEditar = document.getElementById(`detalle-${tarea.id}`);
   let urgenciaParaEditar = document.getElementById(`urgencia-${tarea.id}`);
   let botonEditar = document.getElementById(`editar-${tarea.id}`);
 
+
   // Verificar si estamos en modo de edición o no
   let verSiGuardoOEdito = botonEditar.textContent === "Guardar";
 
+
   if (verSiGuardoOEdito) {
     // Guardar cambios
-    switch (nuevaUrgencia) {
-      case "alta":
-      case "Alta":
-      case "ALta":
-      case "ALTa":
-      case "ALTA":
-      nuevaUrgencia="Alta";
-          break;
-      case "media":
-      case "Media":
-      case "MEdia":
-      case "MEDIa":
-      case "MEDia":
-      case "MEDIA":
-        nuevaUrgencia="Media";
-          break;
-      case "baja":
-      case "Baja":
-      case "BAja":
-      case "BAJa":
-      case "BAJA":
-        nuevaUrgencia="Baja";
-          break;
-      default:
-        Swal.fire({
-          icon: "error",
-          title: "Ingrese un valor de urgencia válido",
-          text: "Alta / Media / Baja",
-          timer: 1500
-        });
-        return;
-        // break;
+
+    // Obtener los nuevos valores de los campos editados
+    let nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
+    let nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
+    let nuevaUrgencia = document.getElementById("tareaUrgencia-editar").value;
+
+
+    // Me aseguro de que no hayan campos vacíos
+    if (nuevoDetalle === "" || nuevaUrgencia === "" || nuevoTitulo === "") {
+      Swal.fire({
+        title: "Complete todos los campos",
+        timer: 1200,
+        icon: "warning"
+      });
+      return;
     }
+
+
+    // Guardo los nuevos valores
+    urgenciaParaEditar.innerHTML = nuevaUrgencia;
     tarea.titulo = nuevoTitulo;
     tarea.detalle = nuevoDetalle;
     tarea.urgencia = nuevaUrgencia;
 
-    // Deshabilitar la edición en el DOM
+
+    // Deshabilitar la edición en el DOM y borro las clases
     detalleParaEditar.classList.remove("fondo_input_editable");
     tituloParaEditar.classList.remove("fondo_input_editable");
-    urgenciaParaEditar.classList.remove("fondo_input_editable");
     tituloParaEditar.contentEditable = false;
     detalleParaEditar.contentEditable = false;
-    urgenciaParaEditar.contentEditable = false;
+
 
     // Restaurar el botón de editar
     botonEditar.classList.remove("boton-guardar");
     botonEditar.textContent = "Editar";
 
+
+    // Realizar la actualización en Firestore
     try {
-      // Realizar la actualización en Firestore
       await updateDoc(tareaRef, {
         titulo: nuevoTitulo,
         detalle: nuevoDetalle,
         urgencia: nuevaUrgencia,
         ultimaEdicion: fecha.toLocaleTimeString('es-AR', formatoFechaEdicion)// Actualizar la fecha de última edición
       });
-
       Swal.fire({
         title: "Modificado!",
         timer: 800,
         icon: "success"
       });
       cardsEnPantalla(pantallaActual);
-
     } catch (error) {
+      Swal.fire({
+        title: "Ocurrió un error. Revise su conexión",
+        timer: 1200,
+        icon: "error"
+      });
       console.error("Error al actualizar el documento en Firestore", error);
     }
   } else {
     // Entrar en modo de edición
-    detalleParaEditar.classList.add("fondo_input_editable"); //Pongo fondo de input blanco
+
+    // Camcio estilos de los campos a editar, y habilito su edición
+    detalleParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.classList.add("fondo_input_editable");
-    urgenciaParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.contentEditable = true;
     detalleParaEditar.contentEditable = true;
-    urgenciaParaEditar.contentEditable = true;
+
+
+    // Genero el desplegable para elegir urgencia
+    urgenciaParaEditar.innerHTML = `
+    <select class="select-urgencia-editar" id="tareaUrgencia-editar" name="tareaUrgencia" required>
+        <option value="" disabled selected hidden>Selecciona una urgencia</option>
+        <option value="Alta">Alta</option>
+        <option value="Media">Media</option>
+        <option value="Baja">Baja</option>
+    </select>
+    `
+
+    // Pongo el cursor en el detalle, que es el más factible que se quiera editar
     detalleParaEditar.focus();
+
 
     // Cambiar el texto al botón editar y la función
     botonEditar.textContent = "Guardar";
