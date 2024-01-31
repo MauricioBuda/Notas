@@ -436,14 +436,29 @@ async function cambiarNombre(){
 let nombreParaEditar = document.getElementById("offcanvasNavbarLabel");
 let verSiGuardoOEditoNombre = boton_cambiar_nombre.textContent === "Cambiar nombre";
 let nuevoNombre = "";
+
+// Si entra al IF es porque apretó "cambiar nombre"
 if(verSiGuardoOEditoNombre){
+
+  // Habilito edición, pongo ahí el cursor; y cambio el texto del botón a GUARDAR
   nombreParaEditar.contentEditable = true;
   nombreParaEditar.focus();
   boton_cambiar_nombre.textContent="GUARDAR"
+
+  // Con este evento prevengo que aprieten Enter. El 13 representa al ENTER en keycode
+  document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+    }
+  });
+
+  // Cambio estilos del botón
   nombreParaEditar.classList.add("bordeParaNombre");
   boton_cambiar_nombre.classList.add("guardar_red");
  } else {
-  nuevoNombre = nombreParaEditar.textContent;
+  // Si entra acá es porque ya puso guardar
+  let nombreNuevoIngresado = nombreParaEditar.textContent.trim();
+  nuevoNombre = nombreNuevoIngresado;
 
   if (nuevoNombre.length > 12) {
     Swal.fire({
