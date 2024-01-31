@@ -459,6 +459,7 @@ if(verSiGuardoOEditoNombre){
   // Si entra acá es porque ya puso guardar
   let nombreNuevoIngresado = nombreParaEditar.textContent.trim();
   nuevoNombre = nombreNuevoIngresado;
+  nombreParaEditar.textContent = nuevoNombre;
 
   if (nuevoNombre.length > 12) {
     Swal.fire({
