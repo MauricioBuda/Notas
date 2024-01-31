@@ -280,6 +280,16 @@ async function datosDeRegistro(event){
   let contraseñaIngresada1 = document.getElementById("ContraseñaRegistro1").value;
   let contraseñaIngresada2 = document.getElementById("ContraseñaRegistro2").value;
 
+  if (!nombreRegistro || !mailIngresado || !contraseñaIngresada1 || !contraseñaIngresada2) {
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title: "Complete todos los campos",
+      showConfirmButton: false,
+      timer: 1200,
+    });
+    return;
+  }
   if (nombreRegistro.length > 12) {
     Swal.fire({
       position: "center",
