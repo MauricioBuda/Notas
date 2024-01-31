@@ -167,9 +167,9 @@ async function corroborarSesionIniciada (){
       usuarioConSesionIniciada=usuario; 
 
       // Oculo/muestro las pantallas necesarias
-      pantallaInicioSesion.classList.add("ocultarRegistroModal");
-      menu.classList.remove("ocultarRegistroModal");
-      navbar_general.classList.remove("ocultarRegistroModal")
+      pantallaInicioSesion.classList.add("aplicar-display-none");
+      menu.classList.remove("aplicar-display-none");
+      navbar_general.classList.remove("aplicar-display-none")
 
       // Cargo en la DB nombre, mail y genero una nueva colección (o ingreso a la existente)
       let nombreDeLaColeccion = await asignarNombreAColeccion (usuario.uid);
@@ -186,7 +186,7 @@ async function corroborarSesionIniciada (){
       cardsEnPantalla(pantallaActual);
     } else {
       // Si no hay nadie ingresado, solo muestro pantalla de loguin
-      pantallaInicioSesion.classList.remove("ocultarRegistroModal");
+      pantallaInicioSesion.classList.remove("aplicar-display-none");
       console.log('No hay usuario autenticado');
     }
   });
@@ -222,8 +222,8 @@ async function salir (){
   }).then((result) => {
     if (result.isConfirmed) {
       contraseñaIngresada.value = "";
-      pantallaInicioSesion.classList.remove("ocultarRegistroModal")
-      navbar_general.classList.add("ocultarRegistroModal");
+      pantallaInicioSesion.classList.remove("aplicar-display-none")
+      navbar_general.classList.add("aplicar-display-none");
       const sesionCerrada =   cerrarSesion();
       Swal.fire({
         title: "Sesión cerrada",
@@ -247,7 +247,7 @@ async function datosDeIngreso(event){
   await  iniciarSesion(mailIngresado,contraseñaIngresada);
   auth.onAuthStateChanged(async (usuario) => {
   if (usuario && usuario.displayName) {
-    pantallaInicioSesion.classList.add("ocultarRegistroModal");
+    pantallaInicioSesion.classList.add("aplicar-display-none");
       Swal.fire({
       position: "center",
       icon: "success",
@@ -418,10 +418,10 @@ async function elimnarLaCuenta(){
 
 // Mostrar y ocultar el modal del registro
 function ocultarModalRegistro(){
-  modalRegistrarse.classList.add("ocultarRegistroModal")
+  modalRegistrarse.classList.add("aplicar-display-none")
 }
 function mostrarModalRegistro(){
-  modalRegistrarse.classList.remove("ocultarRegistroModal")
+  modalRegistrarse.classList.remove("aplicar-display-none")
 }
 
 
