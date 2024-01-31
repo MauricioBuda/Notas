@@ -136,6 +136,7 @@ corroborarSesionIniciada();
 asignarEventosSegunDondeHagaClick();
 
 
+
 // TERMINO CON EJECUCIÓN DE FUNCIONES NECESARIAS ↑
 
 
@@ -155,22 +156,37 @@ asignarEventosSegunDondeHagaClick();
 // Funcion con la que compruebo si hay una sesión iniciada
 async function corroborarSesionIniciada (){
   mostrarCarga();
+
+  // Me fijo si hay sesión iniciada
   auth.onAuthStateChanged(async (usuario) => {
+
+    // Si entro al IF es que hay una sesión iniciada
     if (usuario) {
-      // Hay una sesión iniciada
-      usuarioConSesionIniciada=usuario; // Para la función de cambiarNombre
+      console.log('Usuario autenticado:  ', usuario.displayName);
+      // Creo esta variable como bandera para poder cambiar nombre en cambiarNombre();
+      usuarioConSesionIniciada=usuario; 
+
+      // Oculo/muestro las pantallas necesarias
       pantallaInicioSesion.classList.add("ocultarRegistroModal");
+      menu.classList.remove("ocultarRegistroModal");
       navbar_general.classList.remove("ocultarRegistroModal")
-      console.log('El usuario está autenticado:', usuario.displayName);
+
+      // Cargo en la DB nombre, mail y genero una nueva colección (o ingreso a la existente)
       let nombreDeLaColeccion = await asignarNombreAColeccion (usuario.uid);
       let nombreDeUsuario = await asignarNombreDeUsuarioDB (usuario.displayName);
       let mailDeUsuario = await asignarMailDeUsuarioDB (usuario.email);
       nombreDeUsuarioDB=nombreDeUsuario;
       mailDeUsuarioDB=mailDeUsuario;
       nombreDeColeccion = nombreDeLaColeccion;
+
+      // Renderizo el nombre del usuario en el menú desplegable
       nombreUsuarioIniciado.innerHTML= usuario.displayName ;
+
+      // Cuando entra a la cuenta, se muestran todas las cards existentes
       cardsEnPantalla(pantallaActual);
     } else {
+      // Si no hay nadie ingresado, solo muestro pantalla de loguin
+      pantallaInicioSesion.classList.remove("ocultarRegistroModal");
       console.log('No hay usuario autenticado');
     }
   });
