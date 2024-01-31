@@ -107,6 +107,7 @@ let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
 let salir_navbar =  document.getElementById("navbar_salir");
 let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre");
 let boton_eliminar_cuenta = document.getElementById("button_eliminar_cuenta");
+let usuarioConSesionIniciada = null;
 
 
 // Eventos del menú desplegable
@@ -157,6 +158,7 @@ async function corroborarSesionIniciada (){
   auth.onAuthStateChanged(async (usuario) => {
     if (usuario) {
       // Hay una sesión iniciada
+      usuarioConSesionIniciada=usuario; // Para la función de cambiarNombre
       pantallaInicioSesion.classList.add("ocultarRegistroModal");
       navbar_general.classList.remove("ocultarRegistroModal")
       console.log('El usuario está autenticado:', usuario.displayName);
@@ -278,11 +280,11 @@ async function datosDeRegistro(event){
   let contraseñaIngresada1 = document.getElementById("ContraseñaRegistro1").value;
   let contraseñaIngresada2 = document.getElementById("ContraseñaRegistro2").value;
 
-  if (nombreRegistro.length > 18) {
+  if (nombreRegistro.length > 12) {
     Swal.fire({
       position: "center",
       icon: "warning",
-      title: "El nombre debe tener menos de 15 dígitos",
+      title: "El nombre debe tener menos de 12 dígitos",
       showConfirmButton: false,
       timer: 1200,
     });
@@ -300,7 +302,7 @@ async function datosDeRegistro(event){
       });
       return;
     }
-    const registro = await registrarUsuario(nombreRegistro, mailIngresado, contraseñaIngresada1);
+    const registro = await registrarUsuario(nombreRegistro.trim(), mailIngresado, contraseñaIngresada1);
     if (registro === "ok") {
         Swal.fire({
         position: "center",
@@ -400,13 +402,14 @@ function mostrarModalRegistro(){
 
 
 
+
+
+
 // Función para cambiar el nombre de la cuenta
 async function cambiarNombre(){
-  auth.onAuthStateChanged(async (usuario) => {
 let nombreParaEditar = document.getElementById("offcanvasNavbarLabel");
 let verSiGuardoOEditoNombre = boton_cambiar_nombre.textContent === "Cambiar nombre";
 let nuevoNombre = "";
-
 if(verSiGuardoOEditoNombre){
   nombreParaEditar.contentEditable = true;
   nombreParaEditar.focus();
@@ -415,21 +418,19 @@ if(verSiGuardoOEditoNombre){
   boton_cambiar_nombre.classList.add("guardar_red");
  } else {
   nuevoNombre = nombreParaEditar.textContent;
-  console.log(nuevoNombre.length)
-  console.log(nuevoNombre)
 
-  if (nuevoNombre.length > 18) {
+  if (nuevoNombre.length > 12) {
     Swal.fire({
       position: "center",
       icon: "warning",
-      title: "El nombre debe tener menos de 15 dígitos",
+      title: "El nombre debe tener menos de 12 dígitos",
       showConfirmButton: false,
       timer: 1200,
     });
     return;
   }
   nombreParaEditar.contentEditable = false;
-  await updateProfile(usuario, { displayName: nuevoNombre });
+  await updateProfile(usuarioConSesionIniciada, { displayName: nuevoNombre });
   nombreParaEditar.classList.remove("bordeParaNombre");
   boton_cambiar_nombre.classList.remove("guardar_red");
   boton_cambiar_nombre.textContent = "Cambiar nombre";
@@ -439,8 +440,8 @@ if(verSiGuardoOEditoNombre){
     icon: "success"
   });
  }
- });
 }
+
 
 
 
@@ -949,7 +950,6 @@ async function finalizarTarea(id) {
         icon: "success"
       });
       setTimeout(() => {
-        console.log(pantallaActual)
         cardsEnPantalla(pantallaActual);
       }, 1000);
     }
