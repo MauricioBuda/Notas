@@ -306,7 +306,7 @@ async function datosDeRegistro(event){
     });
     return;
   }
-  if (nombreRegistro.length > 15) {
+  if (nombreRegistro.length > 16) {
     Swal.fire({
       position: "center",
       icon: "warning",
@@ -445,12 +445,21 @@ if(verSiGuardoOEditoNombre){
   nombreParaEditar.focus();
   boton_cambiar_nombre.textContent="GUARDAR"
 
-  // Con este evento prevengo que aprieten Enter, y limito la escitura. El 13 representa al ENTER en keycode
+  // Con este evento prevengo que aprieten Enter. El 13 representa al ENTER en keycode
   document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
     if (event.keyCode === 13 || nombreParaEditar.textContent.length > 15) {
       event.preventDefault();
     }
   });
+
+
+    // Con este evento limito escritura
+    document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
+      if (nombreParaEditar.textContent.length > 15) {
+        event.preventDefault();
+      }
+    });
+
 
   // Cambio estilos del botón
   nombreParaEditar.classList.add("bordeParaNombre");
@@ -461,11 +470,22 @@ if(verSiGuardoOEditoNombre){
   nuevoNombre = nombreNuevoIngresado;
   nombreParaEditar.textContent = nuevoNombre;
 
-  if (nuevoNombre.length > 15) {
+  if (nuevoNombre.length > 16) {
     Swal.fire({
       position: "center",
       icon: "warning",
       title: "El nombre debe tener menos de 15 dígitos",
+      showConfirmButton: false,
+      timer: 1200,
+    });
+    return;
+  }
+
+  if (nuevoNombre === "") {
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title: "No puede estar vacío",
       showConfirmButton: false,
       timer: 1200,
     });
