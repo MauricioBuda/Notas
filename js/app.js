@@ -449,28 +449,27 @@ if(verSiGuardoOEditoNombre){
 
   // Con este evento prevengo que aprieten Enter. El 13 representa al ENTER en keycode
   document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
-    console.log(event.keyCode )
+
     switch (true) {
-      case event.keyCode === 13:
+      case event.keyCode === 13 || nombreParaEditar.textContent.length >= 15:
+        // Si entra acá es porque pusieron ENTER o llegó a 15 dígitos
         event.preventDefault();
         break;
-        case event.keyCode > 47 && event.keyCode < 59:
-          console.log("numero")
+      case event.keyCode > 47 && event.keyCode < 59:
+          // Si entra acá es porque ingresaron un número
         break;
     
-        case event.keyCode >= 65 && event.keyCode <= 90:
-          console.log("mayusculas")
+      case event.keyCode >= 65 && event.keyCode <= 90:
+         // Si entra acá es porque ingresaron una mayúscula
+
         break;
 
-        case (event.keyCode >= 97 && event.keyCode <= 122) ||  event.keyCode === 32:
-          console.log("minu")
-        break;
-    
-        case nombreParaEditar.textContent.length >= 15:
-          event.preventDefault();
+      case (event.keyCode >= 97 && event.keyCode <= 122) ||  event.keyCode === 32:
+         // Si entra acá es porque ingresaron una minúscula
         break;
 
       default:
+        // Si ingresaron otra cosa, lo rechaza
         event.preventDefault();
         break;
     }
