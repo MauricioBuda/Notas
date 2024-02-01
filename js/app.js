@@ -306,11 +306,11 @@ async function datosDeRegistro(event){
     });
     return;
   }
-  if (nombreRegistro.length > 12) {
+  if (nombreRegistro.length > 15) {
     Swal.fire({
       position: "center",
       icon: "warning",
-      title: "El nombre debe tener menos de 12 dígitos",
+      title: "El nombre debe tener menos de 15 dígitos",
       showConfirmButton: false,
       timer: 1200,
     });
@@ -447,7 +447,7 @@ if(verSiGuardoOEditoNombre){
 
   // Con este evento prevengo que aprieten Enter. El 13 representa al ENTER en keycode
   document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13 || nombreParaEditar.textContent.length > 15) {
       event.preventDefault();
     }
   });
@@ -461,11 +461,11 @@ if(verSiGuardoOEditoNombre){
   nuevoNombre = nombreNuevoIngresado;
   nombreParaEditar.textContent = nuevoNombre;
 
-  if (nuevoNombre.length > 12) {
+  if (nuevoNombre.length > 15) {
     Swal.fire({
       position: "center",
       icon: "warning",
-      title: "El nombre debe tener menos de 12 dígitos",
+      title: "El nombre debe tener menos de 15 dígitos",
       showConfirmButton: false,
       timer: 1200,
     });
