@@ -445,7 +445,7 @@ if(verSiGuardoOEditoNombre){
   nombreParaEditar.focus();
   boton_cambiar_nombre.textContent="GUARDAR"
 
-  // Con este evento prevengo que aprieten Enter. El 13 representa al ENTER en keycode
+  // Con este evento prevengo que aprieten Enter, y limito la escitura. El 13 representa al ENTER en keycode
   document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
     if (event.keyCode === 13 || nombreParaEditar.textContent.length > 15) {
       event.preventDefault();
@@ -784,7 +784,12 @@ function asignarEventosSegunDondeHagaClick() {
           // Extraer el ID de la tarea de la identificación del botón
           finalizarTarea(event.target.id.split("-")[1]);
       } 
+      // Verificar si el clic ocurrió en un botón de finalizar
+      else if (event.target.id.startsWith("modal-finalizar-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        finalizarTarea(event.target.id.split("-")[2]);
       // Verificar si el clic ocurrió en un botón de cancelar
+      }
       else if (event.target.id.startsWith("cancelar-")) {
           // Extraer el ID de la tarea de la identificación del botón
           cancelarTarea(event.target.id.split("-")[1]);
@@ -905,7 +910,7 @@ function masOpciones(id){
     let detalleID = `detalle-${tarea.id}`;
     let urgenciaID = `urgencia-${tarea.id}`;
     let botonEditarID = `editar-${tarea.id}`;
-    let botonFinalizarID = `finalizar-${tarea.id}`;
+    let botonFinalizarID = `modal-finalizar-${tarea.id}`;
     let botonCancelarID = `cancelar-${tarea.id}`;
     let botonEliminarID = `eliminar-${tarea.id}`;
   
@@ -1130,6 +1135,11 @@ async function botonParaEditar(id) {
   let urgenciaParaEditar = document.getElementById(`urgencia-${tarea.id}`);
   let botonEditar = document.getElementById(`editar-${tarea.id}`);
 
+  // Obtener los demás botones, para anularlos
+  let botonDeFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
+  let botonDeCancelarID = document.getElementById(`cancelar-${tarea.id}`);
+  let botonDeEliminarID = document.getElementById(`eliminar-${tarea.id}`);
+
 
   // Verificar si estamos en modo de edición o no
   let verSiGuardoOEdito = botonEditar.textContent === "Guardar";
@@ -1153,6 +1163,12 @@ async function botonParaEditar(id) {
       });
       return;
     }
+
+    // Habilito los demás botones
+    botonDeFinalizarID.disabled = false;
+    botonDeCancelarID.disabled = false;
+    botonDeEliminarID.disabled = false;
+ 
 
 
     // Guardo los nuevos valores
@@ -1199,11 +1215,17 @@ async function botonParaEditar(id) {
   } else {
     // Entrar en modo de edición
 
-    // Camcio estilos de los campos a editar, y habilito su edición
+    // Cambio estilos de los campos a editar, y habilito su edición
     detalleParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.contentEditable = true;
     detalleParaEditar.contentEditable = true;
+
+    // Anulo los demás botones
+    botonDeFinalizarID.disabled = true;
+    botonDeCancelarID.disabled = true;
+    botonDeEliminarID.disabled = true;
+  
 
 
     // Genero el desplegable para elegir urgencia
