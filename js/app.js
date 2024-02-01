@@ -1227,16 +1227,15 @@ async function botonParaEditar(id) {
     botonDeEliminarID.disabled = true;
   
 
-
+    let urgenciaSeleccionada = tarea.urgencia;
     // Genero el desplegable para elegir urgencia
     urgenciaParaEditar.innerHTML = `
     <select class="select-urgencia-editar" id="tareaUrgencia-editar" name="tareaUrgencia" required>
-        <option value="" disabled selected hidden>Selecciona una urgencia</option>
-        <option value="Alta">Alta</option>
-        <option value="Media">Media</option>
-        <option value="Baja">Baja</option>
+        <option value="Alta" ${urgenciaSeleccionada === "Alta" ? "selected" : ""}>Alta</option>
+        <option value="Media" ${urgenciaSeleccionada === "Media" ? "selected" : ""}>Media</option>
+        <option value="Baja" ${urgenciaSeleccionada === "Baja" ? "selected" : ""}>Baja</option>
     </select>
-    `
+    `;
 
     // Pongo el cursor en el detalle, que es el más factible que se quiera editar
     detalleParaEditar.focus();
