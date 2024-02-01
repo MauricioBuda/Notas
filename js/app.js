@@ -445,20 +445,46 @@ if(verSiGuardoOEditoNombre){
   nombreParaEditar.focus();
   boton_cambiar_nombre.textContent="GUARDAR"
 
+
+
   // Con este evento prevengo que aprieten Enter. El 13 representa al ENTER en keycode
   document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
-    if (event.keyCode === 13 || nombreParaEditar.textContent.length > 15) {
-      event.preventDefault();
+    console.log(event.keyCode )
+    switch (true) {
+      case event.keyCode === 13:
+        event.preventDefault();
+        break;
+        case event.keyCode > 47 && event.keyCode < 59:
+          console.log("numero")
+        break;
+    
+        case event.keyCode >= 65 && event.keyCode <= 90:
+          console.log("mayusculas")
+        break;
+
+        case (event.keyCode >= 97 && event.keyCode <= 122) ||  event.keyCode === 32:
+          console.log("minu")
+        break;
+    
+        case nombreParaEditar.textContent.length >= 15:
+          event.preventDefault();
+        break;
+
+      default:
+        event.preventDefault();
+        break;
     }
   });
 
 
-    // Con este evento limito escritura
-    document.getElementById('offcanvasNavbarLabel').addEventListener('input', function(event) {
-      if (nombreParaEditar.textContent.length > 15) {
-        event.preventDefault();
-      }
-    });
+
+    // // Con este evento limito escritura
+    // document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
+
+    //   if (nombreParaEditar.textContent.length > 14) {
+    //     event.preventDefault();
+    //   }
+    // });
 
 
   // Cambio estilos del botón
