@@ -454,7 +454,7 @@ if(verSiGuardoOEditoNombre){
 
 
     // Con este evento limito escritura
-    document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
+    document.getElementById('offcanvasNavbarLabel').addEventListener('input', function(event) {
       if (nombreParaEditar.textContent.length > 15) {
         event.preventDefault();
       }
