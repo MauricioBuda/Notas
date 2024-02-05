@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
+import { getMessaging } from 'firebase/messaging';
+// import { getToken } from 'firebase/messaging/sw';
 import Swal from 'sweetalert2';
 
 
@@ -20,9 +22,57 @@ const db = getFirestore(app);
 
 const auth = getAuth();
 
+const messaging = getMessaging(app);
+
+
+// Add the public key generated from the console here.
+getToken(messaging, {vapidKey: "BKMLDVHGRcehfl-5P0R_NqlCWSv53tTq11izVr2nxOwxZECkuujvAaJ1o7MeaXldJnZrkU1UQ0qg0BEe5oWEZe0"});
+
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    obtenerTokenDeRegistro();
+  } else {
+    console.log('Usuario no autenticado.');
+  }
+});
+
+
+function obtenerTokenDeRegistro() {
+  console.log('Solicitando permiso para notificaciones...');
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      console.log('Permiso para notificaciones concedido.');
+      // Obtener el token de registro
+      messaging.getToken().then((token) => {
+        if (token) {
+          console.log('Token de registro:', token);
+          // Aquí puedes enviar el token a tu servidor para enviar notificaciones
+        } else {
+          console.log('No se pudo obtener el token de registro.');
+        }
+      }).catch((error) => {
+        console.log('Error al obtener el token de registro:', error);
+      });
+    } else {
+      console.log('Permiso para notificaciones denegado.');
+    }
+  });
+}
 
 
 
+
+
+
+
+
+
+
+
+
+
+// Función para registrar un usuario nuevo
 async function registrarUsuario(nombre, email, password) {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -57,6 +107,12 @@ async function registrarUsuario(nombre, email, password) {
 
 }
 
+
+
+
+
+
+// Función para iniciar sesión con cuenta existente
 async function iniciarSesion(email, password) {
   try {
     const datos = auth.currentUser;
@@ -78,6 +134,12 @@ async function iniciarSesion(email, password) {
 
 }
 
+
+
+
+
+
+// Función para recuperar clave
 async function recuperarClave(mail){
   try {
     const recuperar = await sendPasswordResetEmail(auth,mail)
@@ -88,6 +150,12 @@ async function recuperarClave(mail){
   }
 }
 
+
+
+
+
+
+// Función para cerrar sesión
 async function cerrarSesion(){
     signOut(auth).then(() => {
       return "ok";
@@ -97,11 +165,16 @@ async function cerrarSesion(){
     });
 }
 
+
+
+
+
+
+// Función para eliminar cuenta
 async function eliminarCuenta() {
   const user = auth.currentUser;
 
   try {
-    // Elimina el usuario actual
     await user.delete();
     console.log("Usuario eliminado con éxito");
   } catch (error) {
@@ -114,6 +187,6 @@ async function eliminarCuenta() {
 
 
 
-export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta};
+export { auth, db,  registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, eliminarCuenta};
 
 
