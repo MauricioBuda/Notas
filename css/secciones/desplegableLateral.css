@@ -1,4 +1,9 @@
 /* INICIO DESPLEGABLE LATERAL */
+.boton-menu-lateral:hover{
+    background-color: #00000021;
+}
+
+
 .offcanvas-header{
     justify-content: right;
     gap: 1vw;
@@ -38,7 +43,10 @@
   }
   
 
-
+  .container-fluid{
+    margin-right: 0;
+    width: auto;
+  }
 
 
     /* MEDIA QUERYS */

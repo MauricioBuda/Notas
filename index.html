@@ -14,11 +14,53 @@
 
 <body>
 
-  <!-- INICIO SECCIÓN DE MENÚ DESPLEGABLE LATERAL -->
+
+
+  <!-- INICIO SECCIÓN DE MENÚ DESPLEGABLE LATERAL // Y TAMBIÉN EL MENÚ DE SECCIONES -->
   <nav id="navbar_general" class="  aplicar-display-none navbar fixed-top">
+
+
+
+
+    <!-- INICIO MENÚ DE SECCIONES -->
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle menu-secciones" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        SECCIONES
+      </button>
+      <ul class="dropdown-menu">
+        <div class="div-menu-secciones">
+          <li><button class="dropdown-item li-secciones" type="button">Todas las secciones</button></li>
+        </div>
+        <div class="div-menu-secciones">
+          <li><button class="dropdown-item li-secciones" type="button">Compras</button></li>
+          <img src="img/pencil.svg" alt="lapiz-editar">
+          <img src="img/trash.svg" alt="tachito-eliminar">
+        </div>
+        <div class="div-menu-secciones">
+          <li><button class="dropdown-item li-secciones" type="button">Trabajo</button></li>
+          <img src="img/pencil.svg" alt="lapiz-editar">
+          <img src="img/trash.svg" alt="tachito-eliminar">
+        </div>
+        <div class="div-menu-secciones">
+          <li><button class="dropdown-item li-secciones" type="button">Otras</button></li>
+          <img src="img/pencil.svg" alt="lapiz-editar">
+          <img src="img/trash.svg" alt="tachito-eliminar">
+        </div>
+        <div class="div-menu-secciones">
+          <li><button class="dropdown-item li-secciones secciones-nueva" type="button">Agregar nueva</button></li>
+          <img src="img/file-earmark-plus.svg" alt="add">
+        </div>
+
+      </ul>
+    </div>
+    <!-- FIN MENÚ DE SECCIONES -->
+
+
+
+
     <div class="container-fluid">
       <a class="navbar-brand" href="#"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+      <button class="navbar-toggler boton-menu-lateral" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
         aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
