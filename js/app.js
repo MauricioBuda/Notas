@@ -39,6 +39,15 @@ botonAgregarTarea.addEventListener("click", agregarTarea);
 const modalCarga = document.getElementById('modalCarga');
 
 
+// Variables del menú de secciones ↓
+let contenedorMenuSecciones = document.getElementById("contenedor-secciones");
+let botonSecciones = document.getElementById("boton-para-secciones");
+let divDentroContenedorSecciones = document.getElementById("div-dentro-contenedor-secciones")
+
+// Eventos menú secciones
+botonSecciones.addEventListener("click", menuSecciones)
+
+
 // Variables para definir que se muestra en pantalla con los botones del menú superior ↓
 let mostrarTodas = document.getElementById("id_todas");
 let mostrarPendientes = document.getElementById("id_pendientes");
@@ -636,6 +645,72 @@ async function obtenerCardsDesdeFirestore(estado) {
   unaCard.forEach(tarjeta => {
     agregarCardAlContenedor(tarjeta);
   });
+}
+
+
+
+
+
+// Función para generar menú de filtro de secciones
+function menuSecciones(){
+  console.log("ingreso a funciion")
+
+  let menuSeccionesDivHTML = document.createElement('div');
+  menuSeccionesDivHTML.id = "div-dentro-contenedor-secciones";
+  menuSeccionesDivHTML.classList.add("div-general-menu-secciones");
+
+let menuSeccionesTodasHTML = `
+        <div class="div-menu-secciones">
+        <li><button class="dropdown-item li-secciones" type="button">Todas las secciones</button></li>
+        </div>
+        `
+
+  let menuSeccionesDelUsuarioHTML = `
+          <div class="div-menu-secciones">
+            <li><button class="dropdown-item li-secciones" type="button">Compras</button></li>
+            <img src="img/pencil.svg" alt="lapiz-editar">
+            <img src="img/trash.svg" alt="tachito-eliminar">
+          </div>
+
+          <div class="div-menu-secciones">
+            <li><button class="dropdown-item li-secciones" type="button">Trabajo</button></li>
+            <img src="img/pencil.svg" alt="lapiz-editar">
+            <img src="img/trash.svg" alt="tachito-eliminar">
+          </div>
+
+          <div class="div-menu-secciones">
+            <li><button class="dropdown-item li-secciones" type="button">Otras</button></li>
+            <img src="img/pencil.svg" alt="lapiz-editar">
+            <img src="img/trash.svg" alt="tachito-eliminar">
+          </div>
+          `
+
+
+
+
+let menuSeccionesAgregarNuevaHTML = `
+        <div class="div-menu-secciones div-seccion-nueva">
+        <li><button class="dropdown-item li-secciones li-seccion-nueva" type="button">Agregar nueva</button></li>
+        <img src="img/file-earmark-plus.svg" alt="add">
+        </div>
+        `
+
+// contenedorMenuSecciones.innerHTML = menuSeccionesDivHTML;
+// menuSeccionesDivHTML.innerHTML = menuSeccionesTodasHTML + menuSeccionesDelUsuarioHTML + menuSeccionesAgregarNuevaHTML;
+
+  // Agregar los elementos HTML al menú de secciones
+  menuSeccionesDivHTML.innerHTML = `
+    ${menuSeccionesTodasHTML}
+    ${menuSeccionesDelUsuarioHTML}
+    ${menuSeccionesAgregarNuevaHTML}
+  `;
+
+  // Limpiar el contenido actual del contenedor
+  contenedorMenuSecciones.innerHTML = '';
+
+  // Agregar el menú de secciones al contenedor
+  contenedorMenuSecciones.appendChild(menuSeccionesDivHTML);
+
 }
 
 
