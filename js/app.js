@@ -39,13 +39,25 @@ botonAgregarTarea.addEventListener("click", agregarTarea);
 const modalCarga = document.getElementById('modalCarga');
 
 
-// Variables del menú de secciones ↓
-let contenedorMenuSecciones = document.getElementById("contenedor-secciones");
-let botonSecciones = document.getElementById("boton-para-secciones");
-let divDentroContenedorSecciones = document.getElementById("div-dentro-contenedor-secciones")
+// // Variables del menú de secciones ↓
+let botonSeccionesTodas = document.getElementById("boton-secciones-todas");
+let botonSeccionesCompras = document.getElementById("boton-secciones-compras");
+let botonSeccionesTrabajo = document.getElementById("boton-secciones-trabajo");
+let botonSeccionesCasa = document.getElementById("boton-secciones-casa");
+let botonSeccionesOtras = document.getElementById("boton-secciones-otras");
+let seccionQueSeMuestraEnPantalla = ""
+let muestraSeccionPantalla = "Todas"
+
+
+
 
 // Eventos menú secciones
-botonSecciones.addEventListener("click", menuSecciones)
+botonSeccionesTodas.addEventListener("click", () => {muestraSeccionPantalla="Todas", cardsEnPantalla(pantallaActual)});
+botonSeccionesCompras.addEventListener("click", () => {muestraSeccionPantalla="Compras", cardsEnPantalla(pantallaActual)});
+botonSeccionesTrabajo.addEventListener("click", () => {muestraSeccionPantalla="Trabajo", cardsEnPantalla(pantallaActual)});
+botonSeccionesCasa.addEventListener("click", () => {muestraSeccionPantalla="Casa", cardsEnPantalla(pantallaActual)});
+botonSeccionesOtras.addEventListener("click", () => {muestraSeccionPantalla="Otras", cardsEnPantalla(pantallaActual)});
+
 
 
 // Variables para definir que se muestra en pantalla con los botones del menú superior ↓
@@ -124,7 +136,7 @@ boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
 salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
-// TERMINO DE DECLARAR VARIABLES Y LES ASIGNO EVENTOS ↑
+// TERMINO DE DECLARAR VARIABLES Y ASIGNAR EVENTOS ↑
 
 
 
@@ -538,8 +550,9 @@ if(verSiGuardoOEditoNombre){
 
 // Clase para generar cada card (tarea)
 class Tarjetas {
-  constructor(nombre, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado) {
+  constructor(nombre, seccion, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado) {
     this.nombre = nombre;
+    this.seccion = seccion;
     this.mail = mail;
     this.titulo = titulo;
     this.detalle = detalle;
@@ -562,9 +575,9 @@ class Tarjetas {
 
 
 // Funcion que define que se va a ver en pantalla
-async function cardsEnPantalla(loQueQuieroQueMuestre) {
+async function cardsEnPantalla(estadoOSeccionDeLaTarjetaSeleccionada) {
   mostrarCarga();
-switch (loQueQuieroQueMuestre) {
+switch (estadoOSeccionDeLaTarjetaSeleccionada) {
     case "Todas":
       mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
       mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
@@ -618,10 +631,18 @@ ocultarCarga();
 
 
 
+// función para filtrar por secciones
+function filtroDeSecciones () {
+  
+}
+
+
+
+
+
 
 // Función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
-  // mostrarCarga();
   // Limpiar el array de cards antes de obtener las nuevas desde Firestore
   actualizarCards();
   unaCard = [];
@@ -632,7 +653,7 @@ async function obtenerCardsDesdeFirestore(estado) {
   // Iterar sobre las tareas y agregarlas al array y al contenedor
   querySnapshot.forEach((doc) => {
     const tarjetaFirestore = doc.data();
-    if (tarjetaFirestore.estado === estado || pantallaActual === "Todas") {
+    if ((tarjetaFirestore.estado === estado && tarjetaFirestore.seccion === muestraSeccionPantalla) || pantallaActual === "Todas") {
       tarjetaFirestore.id = doc.id;
       unaCard.push(tarjetaFirestore);
     }
@@ -826,9 +847,10 @@ async function agregarTarea(event) {
   let fechaCierre = "-";
   let ultimaEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
   let estado = "Pendientes";
+  seccionQueSeMuestraEnPantalla = document.getElementById("secciones-id").value
 
 
-  if (!titulo || !detalle || !urgencia || !fechaCreacion || !ultimaEdicion) {
+  if (!titulo || !detalle || !urgencia || !seccionQueSeMuestraEnPantalla) {
     Swal.fire({
       position: "center",
       icon: "warning",
@@ -839,12 +861,13 @@ async function agregarTarea(event) {
     ocultarCarga();
     return;
   } else {
-    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
+    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, seccionQueSeMuestraEnPantalla, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
     unaCard.push(nuevaCard);
 
     try {
       let docRef = await addDoc(collection(db, nombreDeColeccion), {
         nombre: nuevaCard.nombre,
+        seccion: nuevaCard.seccion,
         mail: nuevaCard.mail,
         titulo: nuevaCard.titulo,
         detalle: nuevaCard.detalle,
@@ -1021,6 +1044,7 @@ function masOpciones(id){
     let tituloID = `titulo-${tarea.id}`;
     let detalleID = `detalle-${tarea.id}`;
     let urgenciaID = `urgencia-${tarea.id}`;
+    let seccionID = `seccion-${tarea.id}`
     let botonEditarID = `editar-${tarea.id}`;
     let botonFinalizarID = `modal-finalizar-${tarea.id}`;
     let botonCancelarID = `cancelar-${tarea.id}`;
@@ -1033,6 +1057,10 @@ function masOpciones(id){
         <div class="div_modales">
         <strong>URGENCIA → </strong>
         <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
+        </div>
+        <div class="div_modales">
+        <strong>SECCIÓN → </strong>
+        <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otros"}</p>
         </div>
         <div class="div_modales">
         <strong>CREACIÓN → </strong>
@@ -1241,10 +1269,11 @@ async function botonParaEditar(id) {
   let tareaRef = doc(db, nombreDeColeccion, id);
 
 
-  // Obtener los elementos HTML correspondientes a los campos de título, detalle y urgencia; y el botón editar
+  // Obtener los elementos HTML correspondientes a los campos de título, detalle,sección y urgencia; y el botón editar
   let tituloParaEditar = document.getElementById(`titulo-${tarea.id}`);
   let detalleParaEditar = document.getElementById(`detalle-${tarea.id}`);
   let urgenciaParaEditar = document.getElementById(`urgencia-${tarea.id}`);
+  let seccionParaEditar = document.getElementById(`seccion-${tarea.id}`);
   let botonEditar = document.getElementById(`editar-${tarea.id}`);
 
   // Obtener los demás botones, para anularlos
@@ -1264,10 +1293,12 @@ async function botonParaEditar(id) {
     let nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
     let nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
     let nuevaUrgencia = document.getElementById("tareaUrgencia-editar").value;
+    let nuevaSeccion = document.getElementById("tareaSeccion-editar").value;
+
 
 
     // Me aseguro de que no hayan campos vacíos
-    if (nuevoDetalle === "" || nuevaUrgencia === "" || nuevoTitulo === "") {
+    if (nuevoDetalle === "" || nuevaUrgencia === "" || nuevaSeccion === "" || nuevoTitulo === "") {
       Swal.fire({
         title: "Complete todos los campos",
         timer: 1200,
@@ -1285,9 +1316,11 @@ async function botonParaEditar(id) {
 
     // Guardo los nuevos valores
     urgenciaParaEditar.innerHTML = nuevaUrgencia;
+    seccionParaEditar.innerHTML = nuevaSeccion;
     tarea.titulo = nuevoTitulo;
     tarea.detalle = nuevoDetalle;
     tarea.urgencia = nuevaUrgencia;
+    tarea.seccion = nuevaSeccion;
 
 
     // Deshabilitar la edición en el DOM y borro las clases
@@ -1308,6 +1341,7 @@ async function botonParaEditar(id) {
         titulo: nuevoTitulo,
         detalle: nuevoDetalle,
         urgencia: nuevaUrgencia,
+        seccion: nuevaSeccion,
         ultimaEdicion: fecha.toLocaleTimeString('es-AR', formatoFechaEdicion)// Actualizar la fecha de última edición
       });
       Swal.fire({
@@ -1328,8 +1362,8 @@ async function botonParaEditar(id) {
     // Entrar en modo de edición
 
     // Cambio estilos de los campos a editar, y habilito su edición
-    detalleParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.classList.add("fondo_input_editable");
+    detalleParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.contentEditable = true;
     detalleParaEditar.contentEditable = true;
 
@@ -1337,6 +1371,20 @@ async function botonParaEditar(id) {
     botonDeFinalizarID.disabled = true;
     botonDeCancelarID.disabled = true;
     botonDeEliminarID.disabled = true;
+
+
+    let seccionSeleccionada = tarea.seccion?tarea.seccion: "Otros";
+    // Genero el desplegable para elegir sección
+    seccionParaEditar.innerHTML = `
+    <select class="select-urgencia-editar" id="tareaSeccion-editar" name="tareaSeccion" required>
+        <option value="Compras" ${seccionSeleccionada === "Compras" ? "selected" : ""}>Compras</option>
+        <option value="Trabajo" ${seccionSeleccionada === "Trabajo" ? "selected" : ""}>Trabajo</option>
+        <option value="Casa" ${seccionSeleccionada === "Casa" ? "selected" : ""}>Casa</option>
+        <option value="Otros" ${seccionSeleccionada === "Otros" ? "selected" : ""}>Otros</option>
+    </select>
+    `;
+
+
   
 
     let urgenciaSeleccionada = tarea.urgencia;
@@ -1348,6 +1396,8 @@ async function botonParaEditar(id) {
         <option value="Baja" ${urgenciaSeleccionada === "Baja" ? "selected" : ""}>Baja</option>
     </select>
     `;
+
+
 
     // Pongo el cursor en el detalle, que es el más factible que se quiera editar
     detalleParaEditar.focus();

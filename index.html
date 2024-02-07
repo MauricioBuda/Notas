@@ -30,6 +30,16 @@
       <div>
         <ul id="contenedor-secciones" class="dropdown-menu">
           
+            <li><button id="boton-secciones-todas" class="dropdown-item li-secciones" type="button">Todas las secciones</button></li>
+          
+            <li><button id="boton-secciones-compras" class="dropdown-item li-secciones" type="button">Compras</button></li>
+          
+            <li><button id="boton-secciones-trabajo" class="dropdown-item li-secciones" type="button">Trabajo</button></li>
+
+            <li><button id="boton-secciones-casa" class="dropdown-item li-secciones" type="button">Casa</button></li>
+          
+            <li><button id="boton-secciones-otras" class="dropdown-item li-secciones" type="button">Otras</button></li>
+
         </ul>
       </div>
     </div>
@@ -193,8 +203,14 @@
 
       <label for="tareaDetalle">Detalle: </label>
       <textarea class="recuadros_formulario recuadros_formulario_detalle" name="tareaDetalle" id="tareaDetalle" cols="30" rows="10"></textarea>
-      <!-- <input placeholder="Aclaraciones" class="recuadros_formulario recuadros_formulario_detalle" type="text"
-        id="tareaDetalle" name="tareaDetalle" required> -->
+
+      <label for="secciones">Sección: </label>
+      <select class="recuadros_formulario" id="secciones-id" name="secciones" required>
+        <option value="Compras">Compras</option>
+        <option value="Trabajo">Trabajo</option>
+        <option value="Casa">Casa</option>
+        <option value="Otros">Otros</option>
+      </select>
 
       <label for="tareaUrgencia">Urgencia: </label>
       <select class="recuadros_formulario" id="tareaUrgencia" name="tareaUrgencia" required>
