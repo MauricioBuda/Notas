@@ -1,5 +1,7 @@
+/* MENU SECCIONES */
 .menu-secciones{
-    font-size: 1vw;
+    font-size: 1.2vw;
+    font-weight: 700;
     margin-left: 2rem;
     color: black;
     background-color: white;
@@ -13,5 +15,41 @@
 
 .dropdown-menu[data-bs-popper]{
     font-size: 2vw;
-    margin-left: 20%;
+    margin-left: 2rem;
+    border-radius: 12px;
 }
+
+.desplegable-seciones{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.p-seccion{
+    display: flex;
+    align-items: center;
+    margin: 0 0 0 2rem;
+}
+
+.fondo-para-seccion-seleccionada-en-desplegable{
+    border-radius: 10px;
+    -webkit-text-stroke: 2px #00000063;
+    background-image: repeating-linear-gradient(45deg, rgba(208, 208, 208, 0.13) 0px, rgba(208, 208, 208, 0.13) 43px,rgba(195, 195, 195, 0.13) 43px, rgba(195, 195, 195, 0.13) 85px,rgba(41,41,41, 0.07) 85px, rgba(41,41,41, 0.07) 109px,rgba(88, 88, 88, 0.13) 109px, rgba(88, 88, 88, 0.13) 129px,rgba(24,24,24, 0.06) 129px, rgba(24,24,24, 0.06) 139px,rgba(92,92,92, 0.07) 139px, rgba(92,92,92, 0.07) 179px,rgba(37,37,37, 0.07) 179px, rgba(37,37,37, 0.07) 219px),repeating-linear-gradient(45deg, rgba(18,18,18, 0.04) 0px, rgba(18,18,18, 0.04) 13px,rgba(48,48,48, 0.07) 13px, rgba(48,48,48, 0.07) 61px,rgba(130,130,130, 0.07) 61px, rgba(130,130,130, 0.07) 84px,rgba(233, 233, 233, 0.13) 84px, rgba(233, 233, 233, 0.13) 109px,rgba(8,8,8, 0.05) 109px, rgba(8,8,8, 0.05) 143px,rgba(248, 248, 248, 0.13) 143px, rgba(248, 248, 248, 0.13) 173px,rgba(37,37,37, 0.07) 173px, rgba(37,37,37, 0.07) 188px),repeating-linear-gradient(45deg, rgba(3,3,3, 0.06) 0px, rgba(3,3,3, 0.06) 134px,rgba(82,82,82, 0.07) 134px, rgba(82,82,82, 0.07) 282px,rgba(220, 220, 220, 0.1) 282px, rgba(220, 220, 220, 0.1) 389px,rgba(173, 173, 173, 0.1) 389px, rgba(173, 173, 173, 0.1) 458px,rgba(109, 109, 109, 0.1) 458px, rgba(109, 109, 109, 0.1) 516px,rgba(240, 240, 240, 0.1) 516px, rgba(240, 240, 240, 0.1) 656px,rgba(205, 205, 205, 0.1) 656px, rgba(205, 205, 205, 0.1) 722px),linear-gradient(90deg, rgba(21,145,22, 0.1),rgba(39,248,84, 0.14));
+}
+
+
+
+
+/* MEDIA QUERYS */
+@media screen and (max-width: 524px) {
+    .menu-secciones{
+        font-size: 3.2vw;
+        margin-left: 1rem;
+    }
+
+    .dropdown-menu[data-bs-popper]{
+        font-size: 3vw;
+        margin-left: 1rem;
+    }
+}
+/* FIN MENU SECCIONES */

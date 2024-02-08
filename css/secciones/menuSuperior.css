@@ -2,9 +2,13 @@
 .menu {
     display: flex;
     justify-content: space-around;
-    margin: 5vh 0rem 1rem 2rem;
+    margin: 7vh 0rem 1rem 2rem;
     align-items: center;
   }
+
+.disminuir-margin-top{
+  margin-top: 1rem!important;
+}
   
   .menu button {
     font-size: 2vw;
@@ -78,7 +82,7 @@
     /* MEDIA QUERYS */
   @media screen and (max-width: 524px) {
     .menu{
-      margin: 3rem 0rem 1rem 1rem;
+      margin: 4rem 0rem 1rem 1rem;
     }
   
     .menu button{

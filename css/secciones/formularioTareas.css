@@ -52,7 +52,14 @@
     font-size: 1vw;
     color: rgba(0, 0, 0, 0.632);
   }
-  
+/*   
+  .opcion-formulario-select{
+    color: red!important;
+    background-color: red!important;
+    font-size: 22vw!important;
+  } */
+
+
   .recuadros_formulario_detalle{
       padding-bottom: 10vh;
       height: 15vh;
@@ -79,6 +86,12 @@
 
     /* MEDIA QUERYS */
   @media screen and (max-width: 524px) {
+
+    .section_formulario {
+      height: 95vh;
+    }
+
+
     .h2_nuevaTarea{
       -webkit-text-stroke: white;
       font-size: 7vw;

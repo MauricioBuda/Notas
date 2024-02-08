@@ -24,6 +24,7 @@ let unaCard = [];
 // Variables menú ↓
 let botonMas = document.getElementById("botonMas_id");
 let menu = document.getElementById("id_menu");
+let divDeEstados = document.getElementById("divDeEstadosID");
 
 
 // Variables formulario para agregar tarea ↓
@@ -39,24 +40,27 @@ botonAgregarTarea.addEventListener("click", agregarTarea);
 const modalCarga = document.getElementById('modalCarga');
 
 
-// // Variables del menú de secciones ↓
+// Variables del menú de secciones ↓
+let botonMenuSecciones = document.getElementById("boton-para-secciones");
 let botonSeccionesTodas = document.getElementById("boton-secciones-todas");
 let botonSeccionesCompras = document.getElementById("boton-secciones-compras");
 let botonSeccionesTrabajo = document.getElementById("boton-secciones-trabajo");
 let botonSeccionesCasa = document.getElementById("boton-secciones-casa");
 let botonSeccionesOtras = document.getElementById("boton-secciones-otras");
-let seccionQueSeMuestraEnPantalla = ""
-let muestraSeccionPantalla = "Todas"
+let seccionQueSeMuestraEnPantalla = "";
+let muestraSeccionPantalla = "Todas";
 
 
 
 
 // Eventos menú secciones
-botonSeccionesTodas.addEventListener("click", () => {muestraSeccionPantalla="Todas", cardsEnPantalla(pantallaActual)});
-botonSeccionesCompras.addEventListener("click", () => {muestraSeccionPantalla="Compras", cardsEnPantalla(pantallaActual)});
-botonSeccionesTrabajo.addEventListener("click", () => {muestraSeccionPantalla="Trabajo", cardsEnPantalla(pantallaActual)});
-botonSeccionesCasa.addEventListener("click", () => {muestraSeccionPantalla="Casa", cardsEnPantalla(pantallaActual)});
-botonSeccionesOtras.addEventListener("click", () => {muestraSeccionPantalla="Otras", cardsEnPantalla(pantallaActual)});
+botonSeccionesTodas.addEventListener("click", () => {muestraSeccionPantalla="Todas", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonSeccionesCompras.addEventListener("click", () => {muestraSeccionPantalla="Compras", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonSeccionesTrabajo.addEventListener("click", () => {muestraSeccionPantalla="Trabajo", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonSeccionesCasa.addEventListener("click", () => {muestraSeccionPantalla="Casa", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonSeccionesOtras.addEventListener("click", () => {muestraSeccionPantalla="Otras", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonMenuSecciones.innerText = `Sección:    ${muestraSeccionPantalla.toUpperCase()}     `;
+
 
 
 
@@ -575,9 +579,9 @@ class Tarjetas {
 
 
 // Funcion que define que se va a ver en pantalla
-async function cardsEnPantalla(estadoOSeccionDeLaTarjetaSeleccionada) {
+async function cardsEnPantalla(estadoDeLaTarjetaSeleccionada) {
   mostrarCarga();
-switch (estadoOSeccionDeLaTarjetaSeleccionada) {
+switch (estadoDeLaTarjetaSeleccionada) {
     case "Todas":
       mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
       mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
@@ -632,8 +636,66 @@ ocultarCarga();
 
 
 // función para filtrar por secciones
-function filtroDeSecciones () {
+function filtroDeSecciones (seccionElegida) {
+  let botonSeccionTodas = document.getElementById("boton-secciones-todas");
+  let botonSeccionCompras = document.getElementById("boton-secciones-compras");
+  let botonSeccionTrabajo = document.getElementById("boton-secciones-trabajo");
+  let botonSeccionCasa = document.getElementById("boton-secciones-casa");
+  let botonSeccionOtras = document.getElementById("boton-secciones-otras");
+
+
+  botonMenuSecciones.innerText = `Sección:    ${seccionElegida.toUpperCase()}     `;
+
   
+  switch (seccionElegida) {
+      case "Todas":
+      botonSeccionTodas.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+      botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+
+      case "Compras":
+        botonSeccionCompras.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+        botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+
+      case "Trabajo":
+        botonSeccionTrabajo.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+        botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+
+      case "Casa":
+        botonSeccionCasa.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+        botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+
+      case "Otras":
+        botonSeccionOtras.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+        botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+  
+    default:
+      break;
+  }
 }
 
 
@@ -653,9 +715,20 @@ async function obtenerCardsDesdeFirestore(estado) {
   // Iterar sobre las tareas y agregarlas al array y al contenedor
   querySnapshot.forEach((doc) => {
     const tarjetaFirestore = doc.data();
-    if ((tarjetaFirestore.estado === estado && tarjetaFirestore.seccion === muestraSeccionPantalla) || pantallaActual === "Todas") {
-      tarjetaFirestore.id = doc.id;
-      unaCard.push(tarjetaFirestore);
+    tarjetaFirestore.seccion = tarjetaFirestore.seccion? tarjetaFirestore.seccion: "Otras";
+
+    if (tarjetaFirestore.estado === estado || pantallaActual === "Todas") {
+
+      if (tarjetaFirestore.seccion === muestraSeccionPantalla) {
+        
+        tarjetaFirestore.id = doc.id;
+        unaCard.push(tarjetaFirestore);
+        
+      } else if (muestraSeccionPantalla === "Todas"){
+
+        tarjetaFirestore.id = doc.id;
+        unaCard.push(tarjetaFirestore);
+      }
     }
   });
 
@@ -673,66 +746,64 @@ async function obtenerCardsDesdeFirestore(estado) {
 
 
 // Función para generar menú de filtro de secciones
-function menuSecciones(){
-  console.log("ingreso a funciion")
+// function menuSecciones(){
+//   console.log("ingreso a funciion")
 
-  let menuSeccionesDivHTML = document.createElement('div');
-  menuSeccionesDivHTML.id = "div-dentro-contenedor-secciones";
-  menuSeccionesDivHTML.classList.add("div-general-menu-secciones");
+//   let menuSeccionesDivHTML = document.createElement('div');
+//   menuSeccionesDivHTML.id = "div-dentro-contenedor-secciones";
+//   menuSeccionesDivHTML.classList.add("div-general-menu-secciones");
 
-let menuSeccionesTodasHTML = `
-        <div class="div-menu-secciones">
-        <li><button class="dropdown-item li-secciones" type="button">Todas las secciones</button></li>
-        </div>
-        `
+// let menuSeccionesTodasHTML = `
+//         <div class="div-menu-secciones">
+//         <li><button class="dropdown-item li-secciones" type="button">Todas las secciones</button></li>
+//         </div>
+//         `
 
-  let menuSeccionesDelUsuarioHTML = `
-          <div class="div-menu-secciones">
-            <li><button class="dropdown-item li-secciones" type="button">Compras</button></li>
-            <img src="img/pencil.svg" alt="lapiz-editar">
-            <img src="img/trash.svg" alt="tachito-eliminar">
-          </div>
+//   let menuSeccionesDelUsuarioHTML = `
+//           <div class="div-menu-secciones">
+//             <li><button class="dropdown-item li-secciones" type="button">Compras</button></li>
+//             <img src="img/pencil.svg" alt="lapiz-editar">
+//             <img src="img/trash.svg" alt="tachito-eliminar">
+//           </div>
 
-          <div class="div-menu-secciones">
-            <li><button class="dropdown-item li-secciones" type="button">Trabajo</button></li>
-            <img src="img/pencil.svg" alt="lapiz-editar">
-            <img src="img/trash.svg" alt="tachito-eliminar">
-          </div>
+//           <div class="div-menu-secciones">
+//             <li><button class="dropdown-item li-secciones" type="button">Trabajo</button></li>
+//             <img src="img/pencil.svg" alt="lapiz-editar">
+//             <img src="img/trash.svg" alt="tachito-eliminar">
+//           </div>
 
-          <div class="div-menu-secciones">
-            <li><button class="dropdown-item li-secciones" type="button">Otras</button></li>
-            <img src="img/pencil.svg" alt="lapiz-editar">
-            <img src="img/trash.svg" alt="tachito-eliminar">
-          </div>
-          `
-
-
+//           <div class="div-menu-secciones">
+//             <li><button class="dropdown-item li-secciones" type="button">Otras</button></li>
+//             <img src="img/pencil.svg" alt="lapiz-editar">
+//             <img src="img/trash.svg" alt="tachito-eliminar">
+//           </div>
+//           `
 
 
-let menuSeccionesAgregarNuevaHTML = `
-        <div class="div-menu-secciones div-seccion-nueva">
-        <li><button class="dropdown-item li-secciones li-seccion-nueva" type="button">Agregar nueva</button></li>
-        <img src="img/file-earmark-plus.svg" alt="add">
-        </div>
-        `
 
-// contenedorMenuSecciones.innerHTML = menuSeccionesDivHTML;
-// menuSeccionesDivHTML.innerHTML = menuSeccionesTodasHTML + menuSeccionesDelUsuarioHTML + menuSeccionesAgregarNuevaHTML;
 
-  // Agregar los elementos HTML al menú de secciones
-  menuSeccionesDivHTML.innerHTML = `
-    ${menuSeccionesTodasHTML}
-    ${menuSeccionesDelUsuarioHTML}
-    ${menuSeccionesAgregarNuevaHTML}
-  `;
+// let menuSeccionesAgregarNuevaHTML = `
+//         <div class="div-menu-secciones div-seccion-nueva">
+//         <li><button class="dropdown-item li-secciones li-seccion-nueva" type="button">Agregar nueva</button></li>
+//         <img src="img/file-earmark-plus.svg" alt="add">
+//         </div>
+//         `
 
-  // Limpiar el contenido actual del contenedor
-  contenedorMenuSecciones.innerHTML = '';
 
-  // Agregar el menú de secciones al contenedor
-  contenedorMenuSecciones.appendChild(menuSeccionesDivHTML);
+//   // Agregar los elementos HTML al menú de secciones
+//   menuSeccionesDivHTML.innerHTML = `
+//     ${menuSeccionesTodasHTML}
+//     ${menuSeccionesDelUsuarioHTML}
+//     ${menuSeccionesAgregarNuevaHTML}
+//   `;
 
-}
+//   // Limpiar el contenido actual del contenedor
+//   contenedorMenuSecciones.innerHTML = '';
+
+//   // Agregar el menú de secciones al contenedor
+//   contenedorMenuSecciones.appendChild(menuSeccionesDivHTML);
+
+// }
 
 
 
@@ -740,6 +811,11 @@ let menuSeccionesAgregarNuevaHTML = `
 
 
 // Mostrar el modal de carga
+
+
+
+
+
 function mostrarCarga() {
   modalCarga.style.display = 'flex';
 }
@@ -760,12 +836,21 @@ function mostrarFormulario() {
     botonMas.textContent = "+";
     botonMas.classList.add("botonMas_class");
     botonMas.classList.remove("boton_x");
+    divDeEstados.classList.remove("aplicar-display-none");
+    navbar_general.classList.remove("aplicar-display-none");
+    menu.classList.remove("disminuir-margin-top");
+
 
     menuBorroso ();
   } else {
     botonMas.textContent = "x";
     botonMas.classList.remove("botonMas_class");
     botonMas.classList.add("boton_x");
+    divDeEstados.classList.add("aplicar-display-none")
+    navbar_general.classList.add("aplicar-display-none");
+    menu.classList.add("disminuir-margin-top");
+
+
 
     menuBorroso ();
   }
@@ -804,6 +889,9 @@ function ocultarFormulario() {
   botonMas.textContent = "+";
   botonMas.classList.add("botonMas_class");
   botonMas.classList.remove("boton_x");
+  divDeEstados.classList.remove("aplicar-display-none");
+  navbar_general.classList.remove("aplicar-display-none");
+  menu.classList.remove("disminuir-margin-top");
 
   for (var i = 0; i < menu.children.length; i++) {
     var hijo = menu.children[i];
@@ -824,9 +912,12 @@ function vaciarCampos() {
   let tituloInput = document.getElementById("tareaTitulo");
   let detalleInput = document.getElementById("tareaDetalle");
   let urgenciaInput = document.getElementById("tareaUrgencia");
+  let seccionInput = document.getElementById("secciones-id");
+
   tituloInput.value = "";
   detalleInput.value = "";
   urgenciaInput.value = "";
+  seccionInput.value = "";
 }
 
 

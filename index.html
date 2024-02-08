@@ -24,9 +24,12 @@
 
     <!-- INICIO MENÚ DE SECCIONES -->
     <div class="dropdown">
-      <button id="boton-para-secciones" class="btn btn-secondary dropdown-toggle menu-secciones" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        SECCIONES
-      </button>
+
+        <button id="boton-para-secciones" class="btn btn-secondary dropdown-toggle menu-secciones" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          
+        </button>
+  
+
       <div>
         <ul id="contenedor-secciones" class="dropdown-menu">
           
@@ -45,6 +48,7 @@
     </div>
     <!-- FIN MENÚ DE SECCIONES -->
 
+    <p class="p-seccion" id="p-secciones">  </p>
 
 
 
@@ -202,18 +206,20 @@
         name="tareaTitulo" required>
 
       <label for="tareaDetalle">Detalle: </label>
-      <textarea class="recuadros_formulario recuadros_formulario_detalle" name="tareaDetalle" id="tareaDetalle" cols="30" rows="10"></textarea>
+      <textarea class="recuadros_formulario recuadros_formulario_detalle" name="tareaDetalle" id="tareaDetalle" cols="30" rows="10" placeholder="Aclaraciones"></textarea>
 
       <label for="secciones">Sección: </label>
       <select class="recuadros_formulario" id="secciones-id" name="secciones" required>
+        <option class="opcion-formulario-select" selected disabled value="">Sección de la tarea</option>
         <option value="Compras">Compras</option>
         <option value="Trabajo">Trabajo</option>
         <option value="Casa">Casa</option>
-        <option value="Otros">Otros</option>
+        <option value="Otros">Otras</option>
       </select>
 
       <label for="tareaUrgencia">Urgencia: </label>
       <select class="recuadros_formulario" id="tareaUrgencia" name="tareaUrgencia" required>
+        <option selected disabled value="">Urgencia de la tarea</option>
         <option value="Alta">Alta</option>
         <option value="Media">Media</option>
         <option value="Baja">Baja</option>
@@ -223,7 +229,7 @@
         Tarea</button>
     </form>
   </section>
-  <div class="divDeSecciones">
+  <div id="divDeEstadosID" class="divDeEstados">
     <section class="section_cards section_todas" id="todas-cards"></section>
     <section class="section_cards section_pendientes" id="pendientes-cards"></section>
     <section class="section_cards section_finalizadas" id="finalizadas-cards"></section>
