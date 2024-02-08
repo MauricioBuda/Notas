@@ -14,9 +14,12 @@
 
 
 .dropdown-menu[data-bs-popper]{
+    display: flex;
+    flex-direction: column;
     font-size: 2vw;
     margin-left: 2rem;
     border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.895);
 }
 
 .desplegable-seciones{
@@ -39,6 +42,10 @@
 
 
 
+.dropdown-menu{
+    gap: 1rem;
+}
+
 
 /* MEDIA QUERYS */
 @media screen and (max-width: 524px) {
@@ -52,8 +59,6 @@
         margin-left: 1rem;
     }
 
-    .li-secciones{
-        margin-top: 2vh;
-    }
+
 }
 /* FIN MENU SECCIONES */
