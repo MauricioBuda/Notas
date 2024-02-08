@@ -43,13 +43,17 @@
 /* MEDIA QUERYS */
 @media screen and (max-width: 524px) {
     .menu-secciones{
-        font-size: 3.2vw;
+        font-size: 4.5vw;
         margin-left: 1rem;
     }
 
     .dropdown-menu[data-bs-popper]{
-        font-size: 3vw;
+        font-size: 4vw;
         margin-left: 1rem;
+    }
+
+    .li-secciones{
+        margin-top: 2vh;
     }
 }
 /* FIN MENU SECCIONES */

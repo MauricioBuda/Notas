@@ -1108,7 +1108,7 @@ function agregarCardAlContenedor(tarea) {
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
       <p class="p_detalle">${textoCortado}</p>
-      <p>URGENCIA: <br> ${tarea.urgencia}</p>
+      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
       <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
@@ -1120,7 +1120,7 @@ function agregarCardAlContenedor(tarea) {
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
       <p class="p_detalle">${textoCortado}</p>
-      <p>URGENCIA: <br> ${tarea.urgencia}</p>
+      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
       <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
