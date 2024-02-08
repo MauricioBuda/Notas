@@ -24,6 +24,7 @@ let unaCard = [];
 // Variables menú ↓
 let botonMas = document.getElementById("botonMas_id");
 let menu = document.getElementById("id_menu");
+let divDeEstados = document.getElementById("divDeEstadosID");
 
 
 // Variables formulario para agregar tarea ↓
@@ -37,6 +38,30 @@ botonAgregarTarea.addEventListener("click", agregarTarea);
 
 // Variable del modal de cargando ↓
 const modalCarga = document.getElementById('modalCarga');
+
+
+// Variables del menú de secciones ↓
+let botonMenuSecciones = document.getElementById("boton-para-secciones");
+let botonSeccionesTodas = document.getElementById("boton-secciones-todas");
+let botonSeccionesCompras = document.getElementById("boton-secciones-compras");
+let botonSeccionesTrabajo = document.getElementById("boton-secciones-trabajo");
+let botonSeccionesCasa = document.getElementById("boton-secciones-casa");
+let botonSeccionesOtras = document.getElementById("boton-secciones-otras");
+let seccionQueSeMuestraEnPantalla = "";
+let muestraSeccionPantalla = "Todas";
+
+
+
+
+// Eventos menú secciones
+botonSeccionesTodas.addEventListener("click", () => {muestraSeccionPantalla="Todas", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonSeccionesCompras.addEventListener("click", () => {muestraSeccionPantalla="Compras", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonSeccionesTrabajo.addEventListener("click", () => {muestraSeccionPantalla="Trabajo", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonSeccionesCasa.addEventListener("click", () => {muestraSeccionPantalla="Casa", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonSeccionesOtras.addEventListener("click", () => {muestraSeccionPantalla="Otras", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonMenuSecciones.innerText = `Sección:    ${muestraSeccionPantalla.toUpperCase()}     `;
+
+
 
 
 // Variables para definir que se muestra en pantalla con los botones del menú superior ↓
@@ -115,7 +140,7 @@ boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
 salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
-// TERMINO DE DECLARAR VARIABLES Y LES ASIGNO EVENTOS ↑
+// TERMINO DE DECLARAR VARIABLES Y ASIGNAR EVENTOS ↑
 
 
 
@@ -375,7 +400,8 @@ async function olvideClave(event){
           Swal.fire({
             title: "Mail enviado",
             timer: 1500,
-            icon: "success"
+            icon: "success",
+          showConfirmButton: false
           });
       }, 1000);
   }
@@ -394,6 +420,7 @@ async function elimnarLaCuenta(){
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: "Borrar",
+    footer:"NO SE PUEDEN RECUPERAR LAS TAREAS",
     cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
@@ -401,12 +428,13 @@ async function elimnarLaCuenta(){
       eliminarCuenta();
       Swal.fire({
         title: "Cuenta eliminada!",
-        timer: 1500,
-        icon: "success"
+        timer: 2000,
+        icon: "success",
+        showConfirmButton: false,
       });
       setTimeout(() => {
         location.reload();
-      }, 1200);
+      }, 2200);
     }
   }); 
 }
@@ -516,6 +544,7 @@ if(verSiGuardoOEditoNombre){
   Swal.fire({
     title: "Nombre modificado",
     timer: 800,
+    showConfirmButton: false,
     icon: "success"
   });
  }
@@ -529,8 +558,9 @@ if(verSiGuardoOEditoNombre){
 
 // Clase para generar cada card (tarea)
 class Tarjetas {
-  constructor(nombre, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado) {
+  constructor(nombre, seccion, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado) {
     this.nombre = nombre;
+    this.seccion = seccion;
     this.mail = mail;
     this.titulo = titulo;
     this.detalle = detalle;
@@ -553,9 +583,9 @@ class Tarjetas {
 
 
 // Funcion que define que se va a ver en pantalla
-async function cardsEnPantalla(loQueQuieroQueMuestre) {
+async function cardsEnPantalla(estadoDeLaTarjetaSeleccionada) {
   mostrarCarga();
-switch (loQueQuieroQueMuestre) {
+switch (estadoDeLaTarjetaSeleccionada) {
     case "Todas":
       mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
       mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
@@ -609,10 +639,76 @@ ocultarCarga();
 
 
 
+// función para filtrar por secciones
+function filtroDeSecciones (seccionElegida) {
+  let botonSeccionTodas = document.getElementById("boton-secciones-todas");
+  let botonSeccionCompras = document.getElementById("boton-secciones-compras");
+  let botonSeccionTrabajo = document.getElementById("boton-secciones-trabajo");
+  let botonSeccionCasa = document.getElementById("boton-secciones-casa");
+  let botonSeccionOtras = document.getElementById("boton-secciones-otras");
+
+
+  botonMenuSecciones.innerText = `Sección:    ${seccionElegida.toUpperCase()}     `;
+
+  
+  switch (seccionElegida) {
+      case "Todas":
+      botonSeccionTodas.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+      botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+
+      case "Compras":
+        botonSeccionCompras.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+        botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+
+      case "Trabajo":
+        botonSeccionTrabajo.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+        botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+
+      case "Casa":
+        botonSeccionCasa.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+        botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+
+      case "Otras":
+        botonSeccionOtras.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+        botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+  
+    default:
+      break;
+  }
+}
+
+
+
+
+
 
 // Función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
-  // mostrarCarga();
   // Limpiar el array de cards antes de obtener las nuevas desde Firestore
   actualizarCards();
   unaCard = [];
@@ -623,9 +719,20 @@ async function obtenerCardsDesdeFirestore(estado) {
   // Iterar sobre las tareas y agregarlas al array y al contenedor
   querySnapshot.forEach((doc) => {
     const tarjetaFirestore = doc.data();
+    tarjetaFirestore.seccion = tarjetaFirestore.seccion? tarjetaFirestore.seccion: "Otras";
+
     if (tarjetaFirestore.estado === estado || pantallaActual === "Todas") {
-      tarjetaFirestore.id = doc.id;
-      unaCard.push(tarjetaFirestore);
+
+      if (tarjetaFirestore.seccion === muestraSeccionPantalla) {
+        
+        tarjetaFirestore.id = doc.id;
+        unaCard.push(tarjetaFirestore);
+        
+      } else if (muestraSeccionPantalla === "Todas"){
+
+        tarjetaFirestore.id = doc.id;
+        unaCard.push(tarjetaFirestore);
+      }
     }
   });
 
@@ -642,8 +749,77 @@ async function obtenerCardsDesdeFirestore(estado) {
 
 
 
+// Función para generar menú de filtro de secciones
+// function menuSecciones(){
+//   console.log("ingreso a funciion")
+
+//   let menuSeccionesDivHTML = document.createElement('div');
+//   menuSeccionesDivHTML.id = "div-dentro-contenedor-secciones";
+//   menuSeccionesDivHTML.classList.add("div-general-menu-secciones");
+
+// let menuSeccionesTodasHTML = `
+//         <div class="div-menu-secciones">
+//         <li><button class="dropdown-item li-secciones" type="button">Todas las secciones</button></li>
+//         </div>
+//         `
+
+//   let menuSeccionesDelUsuarioHTML = `
+//           <div class="div-menu-secciones">
+//             <li><button class="dropdown-item li-secciones" type="button">Compras</button></li>
+//             <img src="img/pencil.svg" alt="lapiz-editar">
+//             <img src="img/trash.svg" alt="tachito-eliminar">
+//           </div>
+
+//           <div class="div-menu-secciones">
+//             <li><button class="dropdown-item li-secciones" type="button">Trabajo</button></li>
+//             <img src="img/pencil.svg" alt="lapiz-editar">
+//             <img src="img/trash.svg" alt="tachito-eliminar">
+//           </div>
+
+//           <div class="div-menu-secciones">
+//             <li><button class="dropdown-item li-secciones" type="button">Otras</button></li>
+//             <img src="img/pencil.svg" alt="lapiz-editar">
+//             <img src="img/trash.svg" alt="tachito-eliminar">
+//           </div>
+//           `
+
+
+
+
+// let menuSeccionesAgregarNuevaHTML = `
+//         <div class="div-menu-secciones div-seccion-nueva">
+//         <li><button class="dropdown-item li-secciones li-seccion-nueva" type="button">Agregar nueva</button></li>
+//         <img src="img/file-earmark-plus.svg" alt="add">
+//         </div>
+//         `
+
+
+//   // Agregar los elementos HTML al menú de secciones
+//   menuSeccionesDivHTML.innerHTML = `
+//     ${menuSeccionesTodasHTML}
+//     ${menuSeccionesDelUsuarioHTML}
+//     ${menuSeccionesAgregarNuevaHTML}
+//   `;
+
+//   // Limpiar el contenido actual del contenedor
+//   contenedorMenuSecciones.innerHTML = '';
+
+//   // Agregar el menú de secciones al contenedor
+//   contenedorMenuSecciones.appendChild(menuSeccionesDivHTML);
+
+// }
+
+
+
+
+
 
 // Mostrar el modal de carga
+
+
+
+
+
 function mostrarCarga() {
   modalCarga.style.display = 'flex';
 }
@@ -664,12 +840,21 @@ function mostrarFormulario() {
     botonMas.textContent = "+";
     botonMas.classList.add("botonMas_class");
     botonMas.classList.remove("boton_x");
+    divDeEstados.classList.remove("aplicar-display-none");
+    navbar_general.classList.remove("aplicar-display-none");
+    menu.classList.remove("disminuir-margin-top");
+
 
     menuBorroso ();
   } else {
     botonMas.textContent = "x";
     botonMas.classList.remove("botonMas_class");
     botonMas.classList.add("boton_x");
+    divDeEstados.classList.add("aplicar-display-none")
+    navbar_general.classList.add("aplicar-display-none");
+    menu.classList.add("disminuir-margin-top");
+
+
 
     menuBorroso ();
   }
@@ -708,6 +893,9 @@ function ocultarFormulario() {
   botonMas.textContent = "+";
   botonMas.classList.add("botonMas_class");
   botonMas.classList.remove("boton_x");
+  divDeEstados.classList.remove("aplicar-display-none");
+  navbar_general.classList.remove("aplicar-display-none");
+  menu.classList.remove("disminuir-margin-top");
 
   for (var i = 0; i < menu.children.length; i++) {
     var hijo = menu.children[i];
@@ -728,9 +916,12 @@ function vaciarCampos() {
   let tituloInput = document.getElementById("tareaTitulo");
   let detalleInput = document.getElementById("tareaDetalle");
   let urgenciaInput = document.getElementById("tareaUrgencia");
+  let seccionInput = document.getElementById("secciones-id");
+
   tituloInput.value = "";
   detalleInput.value = "";
   urgenciaInput.value = "";
+  seccionInput.value = "";
 }
 
 
@@ -751,8 +942,10 @@ async function agregarTarea(event) {
   let fechaCierre = "-";
   let ultimaEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
   let estado = "Pendientes";
+  seccionQueSeMuestraEnPantalla = document.getElementById("secciones-id").value
 
-  if (!titulo || !detalle || !urgencia ) {
+
+  if (!titulo || !detalle || !urgencia || !seccionQueSeMuestraEnPantalla) {
     Swal.fire({
       position: "center",
       icon: "warning",
@@ -763,12 +956,13 @@ async function agregarTarea(event) {
     ocultarCarga();
     return;
   } else {
-    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
+    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, seccionQueSeMuestraEnPantalla, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
     unaCard.push(nuevaCard);
 
     try {
       let docRef = await addDoc(collection(db, nombreDeColeccion), {
         nombre: nuevaCard.nombre,
+        seccion: nuevaCard.seccion,
         mail: nuevaCard.mail,
         titulo: nuevaCard.titulo,
         detalle: nuevaCard.detalle,
@@ -792,6 +986,7 @@ async function agregarTarea(event) {
           Swal.fire({
               title: "Tarea agregada!",
               timer: 1200,
+              showConfirmButton: false,
               icon: "success"
           });
     } catch (error) {
@@ -869,7 +1064,7 @@ function agregarCardAlContenedor(tarea) {
             <p class="p_detalle">${textoCortado}</p>
             <p>URGENCIA: <br> ${tarea.urgencia}</p>
             <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
-            <p>FIN: <br> ${tarea.fechaCierre}</p>
+            <p>SECCIÓN: <br> ${tarea.seccion}</p>
             <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
             <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
           </div>
@@ -882,7 +1077,7 @@ function agregarCardAlContenedor(tarea) {
           <p class="p_detalle">${textoCortado}</p>
           <p>URGENCIA: <br> ${tarea.urgencia}</p>
           <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
-          <p>FIN: <br> ${tarea.fechaCierre}</p>
+          <p>SECCIÓN: <br> ${tarea.seccion}</p>
           <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
           <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
         </div>
@@ -895,7 +1090,7 @@ function agregarCardAlContenedor(tarea) {
           <p class="p_detalle">${textoCortado}</p>
           <p>URGENCIA: <br> ${tarea.urgencia}</p>
           <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
-          <p>FIN: <br> ${tarea.fechaCierre}</p>
+          <p>SECCIÓN: <br> ${tarea.seccion}</p>
           <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
           <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
         </div>
@@ -945,6 +1140,7 @@ function masOpciones(id){
     let tituloID = `titulo-${tarea.id}`;
     let detalleID = `detalle-${tarea.id}`;
     let urgenciaID = `urgencia-${tarea.id}`;
+    let seccionID = `seccion-${tarea.id}`
     let botonEditarID = `editar-${tarea.id}`;
     let botonFinalizarID = `modal-finalizar-${tarea.id}`;
     let botonCancelarID = `cancelar-${tarea.id}`;
@@ -957,6 +1153,10 @@ function masOpciones(id){
         <div class="div_modales">
         <strong>URGENCIA → </strong>
         <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
+        </div>
+        <div class="div_modales">
+        <strong>SECCIÓN → </strong>
+        <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otros"}</p>
         </div>
         <div class="div_modales">
         <strong>CREACIÓN → </strong>
@@ -1030,6 +1230,7 @@ async function finalizarTarea(id) {
       Swal.fire({
         title: "Tarea finalizada!",
         timer: 1000,
+        showConfirmButton: false,
         icon: "success"
       });
       setTimeout(() => {
@@ -1041,6 +1242,7 @@ async function finalizarTarea(id) {
       Swal.fire({
         title: "Tarea inexistente o modificada. Cierre la ventana",
         timer: 1200,
+        showConfirmButton: false,
         icon: "error"
       });
     }
@@ -1070,6 +1272,7 @@ async function eliminar(id){
       Swal.fire({
         title: "Tarea eliminada!",
         timer: 1000,
+        showConfirmButton: false,
         icon: "success"
       });
       setTimeout(() => {
@@ -1082,6 +1285,7 @@ async function eliminar(id){
   Swal.fire({
     title: "Tarea inexistente o modificada. Cierre la ventana",
     timer: 1200,
+    showConfirmButton: false,
     icon: "error"
   });
  }
@@ -1124,6 +1328,7 @@ if (tarea) {
       Swal.fire({
         title: "Tarea cancelada!",
         timer: 1000,
+        showConfirmButton: false,
         icon: "success"
       });
       setTimeout(() => {
@@ -1137,6 +1342,7 @@ if (tarea) {
   Swal.fire({
     title: "Tarea inexistente o modificada. Cierre la ventana",
     timer: 1200,
+    showConfirmButton: false,
     icon: "error"
   });
  }
@@ -1165,10 +1371,11 @@ async function editarTarea(id) {
   let tareaRef = doc(db, nombreDeColeccion, id);
 
 
-  // Obtener los elementos HTML correspondientes a los campos de título, detalle y urgencia; y el botón editar
+  // Obtener los elementos HTML correspondientes a los campos de título, detalle,sección y urgencia; y el botón editar
   let tituloParaEditar = document.getElementById(`titulo-${tarea.id}`);
   let detalleParaEditar = document.getElementById(`detalle-${tarea.id}`);
   let urgenciaParaEditar = document.getElementById(`urgencia-${tarea.id}`);
+  let seccionParaEditar = document.getElementById(`seccion-${tarea.id}`);
   let botonEditar = document.getElementById(`editar-${tarea.id}`);
 
   // Obtener los demás botones, para anularlos
@@ -1188,13 +1395,16 @@ async function editarTarea(id) {
     let nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
     let nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
     let nuevaUrgencia = document.getElementById("tareaUrgencia-editar").value;
+    let nuevaSeccion = document.getElementById("tareaSeccion-editar").value;
+
 
 
     // Me aseguro de que no hayan campos vacíos
-    if (nuevoDetalle === "" || nuevaUrgencia === "" || nuevoTitulo === "") {
+    if (nuevoDetalle === "" || nuevaUrgencia === "" || nuevaSeccion === "" || nuevoTitulo === "") {
       Swal.fire({
         title: "Complete todos los campos",
         timer: 1200,
+        showConfirmButton: false,
         icon: "warning"
       });
       return;
@@ -1209,9 +1419,11 @@ async function editarTarea(id) {
 
     // Guardo los nuevos valores
     urgenciaParaEditar.innerHTML = nuevaUrgencia;
+    seccionParaEditar.innerHTML = nuevaSeccion;
     tarea.titulo = nuevoTitulo;
     tarea.detalle = nuevoDetalle;
     tarea.urgencia = nuevaUrgencia;
+    tarea.seccion = nuevaSeccion;
 
 
     // Deshabilitar la edición en el DOM y borro las clases
@@ -1232,11 +1444,13 @@ async function editarTarea(id) {
         titulo: nuevoTitulo,
         detalle: nuevoDetalle,
         urgencia: nuevaUrgencia,
+        seccion: nuevaSeccion,
         ultimaEdicion: fecha.toLocaleTimeString('es-AR', formatoFechaEdicion)// Actualizar la fecha de última edición
       });
       Swal.fire({
         title: "Modificado!",
         timer: 800,
+        showConfirmButton: false,
         icon: "success"
       });
       cardsEnPantalla(pantallaActual);
@@ -1244,6 +1458,7 @@ async function editarTarea(id) {
       Swal.fire({
         title: "Ocurrió un error. Revise su conexión",
         timer: 1200,
+        showConfirmButton: false,
         icon: "error"
       });
       console.error("Error al actualizar el documento en Firestore", error);
@@ -1252,8 +1467,8 @@ async function editarTarea(id) {
     // Entrar en modo de edición
 
     // Cambio estilos de los campos a editar, y habilito su edición
-    detalleParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.classList.add("fondo_input_editable");
+    detalleParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.contentEditable = true;
     detalleParaEditar.contentEditable = true;
 
@@ -1261,6 +1476,20 @@ async function editarTarea(id) {
     botonDeFinalizarID.disabled = true;
     botonDeCancelarID.disabled = true;
     botonDeEliminarID.disabled = true;
+
+
+    let seccionSeleccionada = tarea.seccion?tarea.seccion: "Otros";
+    // Genero el desplegable para elegir sección
+    seccionParaEditar.innerHTML = `
+    <select class="select-urgencia-editar" id="tareaSeccion-editar" name="tareaSeccion" required>
+        <option value="Compras" ${seccionSeleccionada === "Compras" ? "selected" : ""}>Compras</option>
+        <option value="Trabajo" ${seccionSeleccionada === "Trabajo" ? "selected" : ""}>Trabajo</option>
+        <option value="Casa" ${seccionSeleccionada === "Casa" ? "selected" : ""}>Casa</option>
+        <option value="Otros" ${seccionSeleccionada === "Otros" ? "selected" : ""}>Otros</option>
+    </select>
+    `;
+
+
   
 
     let urgenciaSeleccionada = tarea.urgencia;
@@ -1272,6 +1501,8 @@ async function editarTarea(id) {
         <option value="Baja" ${urgenciaSeleccionada === "Baja" ? "selected" : ""}>Baja</option>
     </select>
     `;
+
+
 
     // Pongo el cursor en el detalle, que es el más factible que se quiera editar
     detalleParaEditar.focus();
@@ -1285,6 +1516,7 @@ async function editarTarea(id) {
     Swal.fire({
       title: "Tarea inexistente o modificada. Cierre la ventana",
       timer: 1200,
+      showConfirmButton: false,
       icon: "error"
     });
   }

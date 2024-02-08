@@ -14,11 +14,47 @@
 
 <body>
 
-  <!-- INICIO SECCIÓN DE MENÚ DESPLEGABLE LATERAL -->
+
+
+  <!-- INICIO SECCIÓN DE MENÚ DESPLEGABLE LATERAL // Y TAMBIÉN EL MENÚ DE SECCIONES -->
   <nav id="navbar_general" class="  aplicar-display-none navbar fixed-top">
+
+
+
+
+    <!-- INICIO MENÚ DE SECCIONES -->
+    <div class="dropdown">
+
+        <button id="boton-para-secciones" class="btn btn-secondary dropdown-toggle menu-secciones" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          
+        </button>
+  
+
+      <div>
+        <ul id="contenedor-secciones" class="dropdown-menu">
+          
+            <li><button id="boton-secciones-todas" class="dropdown-item li-secciones" type="button">Todas las secciones</button></li>
+          
+            <li><button id="boton-secciones-compras" class="dropdown-item li-secciones" type="button">Compras</button></li>
+          
+            <li><button id="boton-secciones-trabajo" class="dropdown-item li-secciones" type="button">Trabajo</button></li>
+
+            <li><button id="boton-secciones-casa" class="dropdown-item li-secciones" type="button">Casa</button></li>
+          
+            <li><button id="boton-secciones-otras" class="dropdown-item li-secciones" type="button">Otras</button></li>
+
+        </ul>
+      </div>
+    </div>
+    <!-- FIN MENÚ DE SECCIONES -->
+
+    <p class="p-seccion" id="p-secciones">  </p>
+
+
+
     <div class="container-fluid">
       <a class="navbar-brand" href="#"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+      <button class="navbar-toggler boton-menu-lateral" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
         aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -60,7 +96,7 @@
       </div>
     </div>
   </nav>
-  <!-- FIN SECCIÓN DE MENÚ DESPLEGABLE LATERAL-->
+  <!-- FIN SECCIÓN DE MENÚ DESPLEGABLE LATERAL, Y TAMBIÉN DE SECCIONES-->
 
 
 
@@ -170,12 +206,20 @@
         name="tareaTitulo" required>
 
       <label for="tareaDetalle">Detalle: </label>
-      <textarea class="recuadros_formulario recuadros_formulario_detalle" name="tareaDetalle" id="tareaDetalle" cols="30" rows="10"></textarea>
-      <!-- <input placeholder="Aclaraciones" class="recuadros_formulario recuadros_formulario_detalle" type="text"
-        id="tareaDetalle" name="tareaDetalle" required> -->
+      <textarea class="recuadros_formulario recuadros_formulario_detalle" name="tareaDetalle" id="tareaDetalle" cols="30" rows="10" placeholder="Aclaraciones"></textarea>
+
+      <label for="secciones">Sección: </label>
+      <select class="recuadros_formulario" id="secciones-id" name="secciones" required>
+        <option class="opcion-formulario-select" selected disabled value="">Sección de la tarea</option>
+        <option value="Compras">Compras</option>
+        <option value="Trabajo">Trabajo</option>
+        <option value="Casa">Casa</option>
+        <option value="Otros">Otras</option>
+      </select>
 
       <label for="tareaUrgencia">Urgencia: </label>
       <select class="recuadros_formulario" id="tareaUrgencia" name="tareaUrgencia" required>
+        <option selected disabled value="">Urgencia de la tarea</option>
         <option value="Alta">Alta</option>
         <option value="Media">Media</option>
         <option value="Baja">Baja</option>
@@ -185,7 +229,7 @@
         Tarea</button>
     </form>
   </section>
-  <div class="divDeSecciones">
+  <div id="divDeEstadosID" class="divDeEstados">
     <section class="section_cards section_todas" id="todas-cards"></section>
     <section class="section_cards section_pendientes" id="pendientes-cards"></section>
     <section class="section_cards section_finalizadas" id="finalizadas-cards"></section>
