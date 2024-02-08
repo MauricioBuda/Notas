@@ -16,7 +16,7 @@
     flex-direction: column;
   }
   
-  .ocultarRegistroModal{
+  .aplicar-display-none{
     display: none!important;
   }
   

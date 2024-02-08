@@ -107,6 +107,7 @@ let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
 let salir_navbar =  document.getElementById("navbar_salir");
 let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre");
 let boton_eliminar_cuenta = document.getElementById("button_eliminar_cuenta");
+let usuarioConSesionIniciada = null;
 
 
 // Eventos del menú desplegable
@@ -135,6 +136,7 @@ corroborarSesionIniciada();
 asignarEventosSegunDondeHagaClick();
 
 
+
 // TERMINO CON EJECUCIÓN DE FUNCIONES NECESARIAS ↑
 
 
@@ -154,21 +156,37 @@ asignarEventosSegunDondeHagaClick();
 // Funcion con la que compruebo si hay una sesión iniciada
 async function corroborarSesionIniciada (){
   mostrarCarga();
+
+  // Me fijo si hay sesión iniciada
   auth.onAuthStateChanged(async (usuario) => {
+
+    // Si entro al IF es que hay una sesión iniciada
     if (usuario) {
-      // Hay una sesión iniciada
-      pantallaInicioSesion.classList.add("ocultarRegistroModal");
-      navbar_general.classList.remove("ocultarRegistroModal")
-      console.log('El usuario está autenticado:', usuario.displayName);
+      console.log('Usuario autenticado:  ', usuario.displayName);
+      // Creo esta variable como bandera para poder cambiar nombre en cambiarNombre();
+      usuarioConSesionIniciada=usuario; 
+
+      // Oculo/muestro las pantallas necesarias
+      pantallaInicioSesion.classList.add("aplicar-display-none");
+      menu.classList.remove("aplicar-display-none");
+      navbar_general.classList.remove("aplicar-display-none")
+
+      // Cargo en la DB nombre, mail y genero una nueva colección (o ingreso a la existente)
       let nombreDeLaColeccion = await asignarNombreAColeccion (usuario.uid);
       let nombreDeUsuario = await asignarNombreDeUsuarioDB (usuario.displayName);
       let mailDeUsuario = await asignarMailDeUsuarioDB (usuario.email);
       nombreDeUsuarioDB=nombreDeUsuario;
       mailDeUsuarioDB=mailDeUsuario;
       nombreDeColeccion = nombreDeLaColeccion;
+
+      // Renderizo el nombre del usuario en el menú desplegable
       nombreUsuarioIniciado.innerHTML= usuario.displayName ;
+
+      // Cuando entra a la cuenta, se muestran todas las cards existentes
       cardsEnPantalla(pantallaActual);
     } else {
+      // Si no hay nadie ingresado, solo muestro pantalla de loguin
+      pantallaInicioSesion.classList.remove("aplicar-display-none");
       console.log('No hay usuario autenticado');
     }
   });
@@ -204,8 +222,8 @@ async function salir (){
   }).then((result) => {
     if (result.isConfirmed) {
       contraseñaIngresada.value = "";
-      pantallaInicioSesion.classList.remove("ocultarRegistroModal")
-      navbar_general.classList.add("ocultarRegistroModal");
+      pantallaInicioSesion.classList.remove("aplicar-display-none")
+      navbar_general.classList.add("aplicar-display-none");
       const sesionCerrada =   cerrarSesion();
       Swal.fire({
         title: "Sesión cerrada",
@@ -229,7 +247,7 @@ async function datosDeIngreso(event){
   await  iniciarSesion(mailIngresado,contraseñaIngresada);
   auth.onAuthStateChanged(async (usuario) => {
   if (usuario && usuario.displayName) {
-    pantallaInicioSesion.classList.add("ocultarRegistroModal");
+    pantallaInicioSesion.classList.add("aplicar-display-none");
       Swal.fire({
       position: "center",
       icon: "success",
@@ -278,7 +296,17 @@ async function datosDeRegistro(event){
   let contraseñaIngresada1 = document.getElementById("ContraseñaRegistro1").value;
   let contraseñaIngresada2 = document.getElementById("ContraseñaRegistro2").value;
 
-  if (nombreRegistro.length > 18) {
+  if (!nombreRegistro || !mailIngresado || !contraseñaIngresada1 || !contraseñaIngresada2) {
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title: "Complete todos los campos",
+      showConfirmButton: false,
+      timer: 1200,
+    });
+    return;
+  }
+  if (nombreRegistro.length > 16) {
     Swal.fire({
       position: "center",
       icon: "warning",
@@ -300,7 +328,7 @@ async function datosDeRegistro(event){
       });
       return;
     }
-    const registro = await registrarUsuario(nombreRegistro, mailIngresado, contraseñaIngresada1);
+    const registro = await registrarUsuario(nombreRegistro.trim(), mailIngresado, contraseñaIngresada1);
     if (registro === "ok") {
         Swal.fire({
         position: "center",
@@ -390,11 +418,14 @@ async function elimnarLaCuenta(){
 
 // Mostrar y ocultar el modal del registro
 function ocultarModalRegistro(){
-  modalRegistrarse.classList.add("ocultarRegistroModal")
+  modalRegistrarse.classList.add("aplicar-display-none")
 }
 function mostrarModalRegistro(){
-  modalRegistrarse.classList.remove("ocultarRegistroModal")
+  modalRegistrarse.classList.remove("aplicar-display-none")
 }
+
+
+
 
 
 
@@ -402,23 +433,61 @@ function mostrarModalRegistro(){
 
 // Función para cambiar el nombre de la cuenta
 async function cambiarNombre(){
-  auth.onAuthStateChanged(async (usuario) => {
 let nombreParaEditar = document.getElementById("offcanvasNavbarLabel");
 let verSiGuardoOEditoNombre = boton_cambiar_nombre.textContent === "Cambiar nombre";
 let nuevoNombre = "";
 
+// Si entra al IF es porque apretó "cambiar nombre"
 if(verSiGuardoOEditoNombre){
+
+  // Habilito edición, pongo ahí el cursor; y cambio el texto del botón a GUARDAR
   nombreParaEditar.contentEditable = true;
   nombreParaEditar.focus();
   boton_cambiar_nombre.textContent="GUARDAR"
+
+
+
+    // Con este evento prevengo que aprieten Enter. El 13 representa al ENTER en keycode
+    document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
+
+      switch (true) {
+        case event.keyCode === 13 || nombreParaEditar.textContent.length >= 15:
+          // Si entra acá es porque pusieron ENTER o llegó a 15 dígitos
+          event.preventDefault();
+          break;
+        case event.keyCode > 47 && event.keyCode < 59:
+            // Si entra acá es porque ingresaron un número
+          break;
+      
+        case event.keyCode >= 65 && event.keyCode <= 90:
+           // Si entra acá es porque ingresaron una mayúscula
+  
+          break;
+  
+        case (event.keyCode >= 97 && event.keyCode <= 122) ||  event.keyCode === 32:
+           // Si entra acá es porque ingresaron una minúscula
+          break;
+  
+        default:
+          // Si ingresaron otra cosa, lo rechaza
+          event.preventDefault();
+          break;
+      }
+    });
+  
+  
+
+
+  // Cambio estilos del botón
   nombreParaEditar.classList.add("bordeParaNombre");
   boton_cambiar_nombre.classList.add("guardar_red");
  } else {
-  nuevoNombre = nombreParaEditar.textContent;
-  console.log(nuevoNombre.length)
-  console.log(nuevoNombre)
+  // Si entra acá es porque ya puso guardar
+  let nombreNuevoIngresado = nombreParaEditar.textContent.trim();
+  nuevoNombre = nombreNuevoIngresado;
+  nombreParaEditar.textContent = nuevoNombre;
 
-  if (nuevoNombre.length > 18) {
+  if (nuevoNombre.length > 16) {
     Swal.fire({
       position: "center",
       icon: "warning",
@@ -428,8 +497,19 @@ if(verSiGuardoOEditoNombre){
     });
     return;
   }
+
+  if (nuevoNombre === "") {
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title: "No puede estar vacío",
+      showConfirmButton: false,
+      timer: 1200,
+    });
+    return;
+  }
   nombreParaEditar.contentEditable = false;
-  await updateProfile(usuario, { displayName: nuevoNombre });
+  await updateProfile(usuarioConSesionIniciada, { displayName: nuevoNombre });
   nombreParaEditar.classList.remove("bordeParaNombre");
   boton_cambiar_nombre.classList.remove("guardar_red");
   boton_cambiar_nombre.textContent = "Cambiar nombre";
@@ -439,8 +519,8 @@ if(verSiGuardoOEditoNombre){
     icon: "success"
   });
  }
- });
 }
+
 
 
 
@@ -740,7 +820,12 @@ function asignarEventosSegunDondeHagaClick() {
           // Extraer el ID de la tarea de la identificación del botón
           finalizarTarea(event.target.id.split("-")[1]);
       } 
+      // Verificar si el clic ocurrió en un botón de finalizar
+      else if (event.target.id.startsWith("modal-finalizar-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        finalizarTarea(event.target.id.split("-")[2]);
       // Verificar si el clic ocurrió en un botón de cancelar
+      }
       else if (event.target.id.startsWith("cancelar-")) {
           // Extraer el ID de la tarea de la identificación del botón
           cancelarTarea(event.target.id.split("-")[1]);
@@ -861,7 +946,7 @@ function masOpciones(id){
     let detalleID = `detalle-${tarea.id}`;
     let urgenciaID = `urgencia-${tarea.id}`;
     let botonEditarID = `editar-${tarea.id}`;
-    let botonFinalizarID = `finalizar-${tarea.id}`;
+    let botonFinalizarID = `modal-finalizar-${tarea.id}`;
     let botonCancelarID = `cancelar-${tarea.id}`;
     let botonEliminarID = `eliminar-${tarea.id}`;
   
@@ -948,7 +1033,6 @@ async function finalizarTarea(id) {
         icon: "success"
       });
       setTimeout(() => {
-        console.log(pantallaActual)
         cardsEnPantalla(pantallaActual);
       }, 1000);
     }
@@ -1062,114 +1146,136 @@ if (tarea) {
 
 
 
+
+
+
 // Función para editar una tarea
 async function editarTarea(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
 
+  
   if (tarea) {
      //Me fijo fecha para después guardarla
-  let fecha = new Date();
+  let fecha = new Date();         
   let formatoFechaEdicion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
   
+
   // Obtener la referencia al documento en Firestore
   let tareaRef = doc(db, nombreDeColeccion, id);
 
-  // Obtener los nuevos valores de los campos editados
-  let nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
-  let nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
-  let nuevaUrgencia = document.getElementById(`urgencia-${tarea.id}`).textContent;
 
-
-
-  // Obtener los elementos HTML correspondientes a los campos de título, detalle y urgencia
+  // Obtener los elementos HTML correspondientes a los campos de título, detalle y urgencia; y el botón editar
   let tituloParaEditar = document.getElementById(`titulo-${tarea.id}`);
   let detalleParaEditar = document.getElementById(`detalle-${tarea.id}`);
   let urgenciaParaEditar = document.getElementById(`urgencia-${tarea.id}`);
   let botonEditar = document.getElementById(`editar-${tarea.id}`);
 
+  // Obtener los demás botones, para anularlos
+  let botonDeFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
+  let botonDeCancelarID = document.getElementById(`cancelar-${tarea.id}`);
+  let botonDeEliminarID = document.getElementById(`eliminar-${tarea.id}`);
+
+
   // Verificar si estamos en modo de edición o no
   let verSiGuardoOEdito = botonEditar.textContent === "Guardar";
 
+
   if (verSiGuardoOEdito) {
     // Guardar cambios
-    switch (nuevaUrgencia) {
-      case "alta":
-      case "Alta":
-      case "ALta":
-      case "ALTa":
-      case "ALTA":
-      nuevaUrgencia="Alta";
-          break;
-      case "media":
-      case "Media":
-      case "MEdia":
-      case "MEDIa":
-      case "MEDia":
-      case "MEDIA":
-        nuevaUrgencia="Media";
-          break;
-      case "baja":
-      case "Baja":
-      case "BAja":
-      case "BAJa":
-      case "BAJA":
-        nuevaUrgencia="Baja";
-          break;
-      default:
-        Swal.fire({
-          icon: "error",
-          title: "Ingrese un valor de urgencia válido",
-          text: "Alta / Media / Baja",
-          timer: 1500
-        });
-        return;
-        // break;
+
+    // Obtener los nuevos valores de los campos editados
+    let nuevoTitulo = document.getElementById(`titulo-${tarea.id}`).textContent;
+    let nuevoDetalle = document.getElementById(`detalle-${tarea.id}`).textContent;
+    let nuevaUrgencia = document.getElementById("tareaUrgencia-editar").value;
+
+
+    // Me aseguro de que no hayan campos vacíos
+    if (nuevoDetalle === "" || nuevaUrgencia === "" || nuevoTitulo === "") {
+      Swal.fire({
+        title: "Complete todos los campos",
+        timer: 1200,
+        icon: "warning"
+      });
+      return;
     }
+
+    // Habilito los demás botones
+    botonDeFinalizarID.disabled = false;
+    botonDeCancelarID.disabled = false;
+    botonDeEliminarID.disabled = false;
+ 
+
+
+    // Guardo los nuevos valores
+    urgenciaParaEditar.innerHTML = nuevaUrgencia;
     tarea.titulo = nuevoTitulo;
     tarea.detalle = nuevoDetalle;
     tarea.urgencia = nuevaUrgencia;
 
-    // Deshabilitar la edición en el DOM
+
+    // Deshabilitar la edición en el DOM y borro las clases
     detalleParaEditar.classList.remove("fondo_input_editable");
     tituloParaEditar.classList.remove("fondo_input_editable");
-    urgenciaParaEditar.classList.remove("fondo_input_editable");
     tituloParaEditar.contentEditable = false;
     detalleParaEditar.contentEditable = false;
-    urgenciaParaEditar.contentEditable = false;
+
 
     // Restaurar el botón de editar
     botonEditar.classList.remove("boton-guardar");
     botonEditar.textContent = "Editar";
 
+
+    // Realizar la actualización en Firestore
     try {
-      // Realizar la actualización en Firestore
       await updateDoc(tareaRef, {
         titulo: nuevoTitulo,
         detalle: nuevoDetalle,
         urgencia: nuevaUrgencia,
         ultimaEdicion: fecha.toLocaleTimeString('es-AR', formatoFechaEdicion)// Actualizar la fecha de última edición
       });
-
       Swal.fire({
         title: "Modificado!",
         timer: 800,
         icon: "success"
       });
       cardsEnPantalla(pantallaActual);
-
     } catch (error) {
+      Swal.fire({
+        title: "Ocurrió un error. Revise su conexión",
+        timer: 1200,
+        icon: "error"
+      });
       console.error("Error al actualizar el documento en Firestore", error);
     }
   } else {
     // Entrar en modo de edición
-    detalleParaEditar.classList.add("fondo_input_editable"); //Pongo fondo de input blanco
+
+    // Cambio estilos de los campos a editar, y habilito su edición
+    detalleParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.classList.add("fondo_input_editable");
-    urgenciaParaEditar.classList.add("fondo_input_editable");
     tituloParaEditar.contentEditable = true;
     detalleParaEditar.contentEditable = true;
-    urgenciaParaEditar.contentEditable = true;
+
+    // Anulo los demás botones
+    botonDeFinalizarID.disabled = true;
+    botonDeCancelarID.disabled = true;
+    botonDeEliminarID.disabled = true;
+  
+
+    let urgenciaSeleccionada = tarea.urgencia;
+    // Genero el desplegable para elegir urgencia
+    urgenciaParaEditar.innerHTML = `
+    <select class="select-urgencia-editar" id="tareaUrgencia-editar" name="tareaUrgencia" required>
+        <option value="Alta" ${urgenciaSeleccionada === "Alta" ? "selected" : ""}>Alta</option>
+        <option value="Media" ${urgenciaSeleccionada === "Media" ? "selected" : ""}>Media</option>
+        <option value="Baja" ${urgenciaSeleccionada === "Baja" ? "selected" : ""}>Baja</option>
+    </select>
+    `;
+
+    // Pongo el cursor en el detalle, que es el más factible que se quiera editar
     detalleParaEditar.focus();
+
 
     // Cambiar el texto al botón editar y la función
     botonEditar.textContent = "Guardar";
