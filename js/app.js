@@ -672,8 +672,7 @@ async function agregarTarea(event) {
   let ultimaEdicion = fecha.toLocaleTimeString('es-AR', formatoFechaCreacion);
   let estado = "Pendientes";
 
-
-  if (!titulo || !detalle || !urgencia || !fechaCreacion || !ultimaEdicion) {
+  if (!titulo || !detalle || !urgencia ) {
     Swal.fire({
       position: "center",
       icon: "warning",
@@ -734,7 +733,7 @@ function asignarEventosSegunDondeHagaClick() {
       // Verificar si el clic ocurrió en un botón de editar
       if (event.target.id.startsWith("editar-")) {
           // Extraer el ID de la tarea de la identificación del botón
-          botonParaEditar(event.target.id.split("-")[1]);
+          editarTarea(event.target.id.split("-")[1]);
       } 
       // Verificar si el clic ocurrió en un botón de finalizar
       else if (event.target.id.startsWith("finalizar-")) {
@@ -1064,7 +1063,7 @@ if (tarea) {
 
 
 // Función para editar una tarea
-async function botonParaEditar(id) {
+async function editarTarea(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
 
@@ -1184,6 +1183,7 @@ async function botonParaEditar(id) {
     });
   }
 }
+
 
 
 
