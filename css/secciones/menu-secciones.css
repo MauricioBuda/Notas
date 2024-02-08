@@ -4,7 +4,9 @@
     font-weight: 700;
     margin-left: 2rem;
     color: black;
-    background-color: white;
+    background-color: rgba(129, 129, 129, 0.158);
+    border: none;
+    border-radius: 10px;
 }
 
 .li-secciones:hover{
