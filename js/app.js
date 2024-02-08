@@ -1015,6 +1015,11 @@ function asignarEventosSegunDondeHagaClick() {
           // Extraer el ID de la tarea de la identificación del botón
           finalizarTarea(event.target.id.split("-")[1]);
       } 
+            // Verificar si el clic ocurrió en un botón de finalizar
+            else if (event.target.id.startsWith("restaurar-")) {
+              // Extraer el ID de la tarea de la identificación del botón
+              restaurarTarea(event.target.id.split("-")[1]);
+          }
       // Verificar si el clic ocurrió en un botón de finalizar
       else if (event.target.id.startsWith("modal-finalizar-")) {
         // Extraer el ID de la tarea de la identificación del botón
@@ -1106,8 +1111,7 @@ function agregarCardAlContenedor(tarea) {
       <p>URGENCIA: <br> ${tarea.urgencia}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
-      <button id="${botonEliminarID}" class="btn botonesCards" >Eliminar</button>
-      <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Agrandar</button>
+      <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
     </div>
   `;
     finalizadasCards.innerHTML += nuevaCardHTML;
@@ -1119,8 +1123,7 @@ function agregarCardAlContenedor(tarea) {
       <p>URGENCIA: <br> ${tarea.urgencia}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
-      <button id="${botonEliminarID}" class="btn botonesCards" >Eliminar</button>
-      <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Agrandar</button>
+      <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
     </div>
   `;
     canceladasCards.innerHTML += nuevaCardHTML;
@@ -1145,6 +1148,7 @@ function masOpciones(id){
     let botonFinalizarID = `modal-finalizar-${tarea.id}`;
     let botonCancelarID = `cancelar-${tarea.id}`;
     let botonEliminarID = `eliminar-${tarea.id}`;
+    let botonRestaurarID = `restaurar-${tarea.id}`;
   
     let nuevaCardHTML = `
     <div id="${cardModalID}" class="cards_modal">
@@ -1156,7 +1160,7 @@ function masOpciones(id){
         </div>
         <div class="div_modales">
         <strong>SECCIÓN → </strong>
-        <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otros"}</p>
+        <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otras"}</p>
         </div>
         <div class="div_modales">
         <strong>CREACIÓN → </strong>
@@ -1186,7 +1190,9 @@ if (tarea.estado === "Pendientes") {
 modalFooter.innerHTML = botonesCard;
   }  else if (tarea.estado === "Finalizadas" || tarea.estado === "Canceladas") {
     let botonesCard = `
+    <button id="${botonRestaurarID}" class="btn botonesCards_modal" >Restaurar</button>
     <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
+
     `
     modalFooter.innerHTML = botonesCard;
   }
@@ -1263,12 +1269,12 @@ async function eliminar(id){
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: "Eliminar",
-    cancelButtonText: 'Cancelar'
+    cancelButtonText: 'Cancelar',
+    footer: "NO SE PUEDE RECUPERAR"
   }).then((result) => {
     if (result.isConfirmed) {
       mostrarCarga();
       deleteDoc(doc(db, nombreDeColeccion, tarea.id));
-      // location.reload();
       Swal.fire({
         title: "Tarea eliminada!",
         timer: 1000,
@@ -1290,6 +1296,60 @@ async function eliminar(id){
   });
  }
 }
+
+
+
+
+
+// Función restaurar tarea:
+async function restaurarTarea(id){
+  let tarea = unaCard.find((t) => t.id === id);
+
+
+  if (tarea) {
+    Swal.fire({
+      title: "¿Restaurar tarea?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirmar",
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+    
+      // Cambiar el estado
+      tarea.estado = "Pendientes";
+      muestraPantalla = tarea.estado;
+  
+          // Actualiza la tarea en Firestore
+          const tareaRef = doc(db, nombreDeColeccion, id);
+          updateDoc(tareaRef, {
+            estado: tarea.estado,
+        });
+        Swal.fire({
+          title: "Tarea restaurada!",
+          timer: 1000,
+          showConfirmButton: false,
+          icon: "success"
+        });
+        setTimeout(() => {
+          cardsEnPantalla(pantallaActual);
+          ocultarCarga();
+        }, 1000);
+  
+      }
+    });
+  } else {
+    Swal.fire({
+      title: "Tarea inexistente o modificada. Cierre la ventana",
+      timer: 1200,
+      showConfirmButton: false,
+      icon: "error"
+    });
+   }
+  }
+
 
 
 
@@ -1478,14 +1538,14 @@ async function editarTarea(id) {
     botonDeEliminarID.disabled = true;
 
 
-    let seccionSeleccionada = tarea.seccion?tarea.seccion: "Otros";
+    let seccionSeleccionada = tarea.seccion?tarea.seccion: "Otras";
     // Genero el desplegable para elegir sección
     seccionParaEditar.innerHTML = `
     <select class="select-urgencia-editar" id="tareaSeccion-editar" name="tareaSeccion" required>
         <option value="Compras" ${seccionSeleccionada === "Compras" ? "selected" : ""}>Compras</option>
         <option value="Trabajo" ${seccionSeleccionada === "Trabajo" ? "selected" : ""}>Trabajo</option>
         <option value="Casa" ${seccionSeleccionada === "Casa" ? "selected" : ""}>Casa</option>
-        <option value="Otros" ${seccionSeleccionada === "Otros" ? "selected" : ""}>Otros</option>
+        <option value="Otras" ${seccionSeleccionada === "Otras" ? "selected" : ""}>Otras</option>
     </select>
     `;
 
