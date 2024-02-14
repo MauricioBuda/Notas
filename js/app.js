@@ -1563,6 +1563,7 @@ async function editarTarea(id) {
         <option value="Compras" ${seccionSeleccionada === "Compras" ? "selected" : ""}>Compras</option>
         <option value="Trabajo" ${seccionSeleccionada === "Trabajo" ? "selected" : ""}>Trabajo</option>
         <option value="Casa" ${seccionSeleccionada === "Casa" ? "selected" : ""}>Casa</option>
+        <option value="Turnos" ${seccionSeleccionada === "Turnos" ? "selected" : ""}>Turnos</option>
         <option value="Otras" ${seccionSeleccionada === "Otras" ? "selected" : ""}>Otras</option>
     </select>
     `;
