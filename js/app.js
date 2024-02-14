@@ -46,6 +46,7 @@ let botonSeccionesTodas = document.getElementById("boton-secciones-todas");
 let botonSeccionesCompras = document.getElementById("boton-secciones-compras");
 let botonSeccionesTrabajo = document.getElementById("boton-secciones-trabajo");
 let botonSeccionesCasa = document.getElementById("boton-secciones-casa");
+let botonSeccionesTurnos = document.getElementById("boton-secciones-turnos");
 let botonSeccionesOtras = document.getElementById("boton-secciones-otras");
 let seccionQueSeMuestraEnPantalla = "";
 let muestraSeccionPantalla = "Todas";
@@ -58,6 +59,7 @@ botonSeccionesTodas.addEventListener("click", () => {muestraSeccionPantalla="Tod
 botonSeccionesCompras.addEventListener("click", () => {muestraSeccionPantalla="Compras", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
 botonSeccionesTrabajo.addEventListener("click", () => {muestraSeccionPantalla="Trabajo", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
 botonSeccionesCasa.addEventListener("click", () => {muestraSeccionPantalla="Casa", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
+botonSeccionesTurnos.addEventListener("click", () => {muestraSeccionPantalla="Turnos", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
 botonSeccionesOtras.addEventListener("click", () => {muestraSeccionPantalla="Otras", filtroDeSecciones(muestraSeccionPantalla), cardsEnPantalla(pantallaActual);});
 botonMenuSecciones.innerText = `Sección:    ${muestraSeccionPantalla.toUpperCase()}     `;
 
@@ -461,47 +463,47 @@ function mostrarModalRegistro(){
 
 // Función para cambiar el nombre de la cuenta
 async function cambiarNombre(){
-let nombreParaEditar = document.getElementById("offcanvasNavbarLabel");
-let verSiGuardoOEditoNombre = boton_cambiar_nombre.textContent === "Cambiar nombre";
-let nuevoNombre = "";
+    let nombreParaEditar = document.getElementById("offcanvasNavbarLabel");
+    let verSiGuardoOEditoNombre = boton_cambiar_nombre.textContent === "Cambiar nombre";
+    let nuevoNombre = "";
 
-// Si entra al IF es porque apretó "cambiar nombre"
-if(verSiGuardoOEditoNombre){
+    // Si entra al IF es porque apretó "cambiar nombre"
+    if(verSiGuardoOEditoNombre){
 
-  // Habilito edición, pongo ahí el cursor; y cambio el texto del botón a GUARDAR
-  nombreParaEditar.contentEditable = true;
-  nombreParaEditar.focus();
-  boton_cambiar_nombre.textContent="GUARDAR"
+      // Habilito edición, pongo ahí el cursor; y cambio el texto del botón a GUARDAR
+      nombreParaEditar.contentEditable = true;
+      nombreParaEditar.focus();
+      boton_cambiar_nombre.textContent="GUARDAR"
 
 
 
-    // Con este evento prevengo que aprieten Enter. El 13 representa al ENTER en keycode
-    document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
+        // Con este evento prevengo que aprieten Enter. El 13 representa al ENTER en keycode
+        document.getElementById('offcanvasNavbarLabel').addEventListener('keypress', function(event) {
 
-      switch (true) {
-        case event.keyCode === 13 || nombreParaEditar.textContent.length >= 15:
-          // Si entra acá es porque pusieron ENTER o llegó a 15 dígitos
-          event.preventDefault();
-          break;
-        case event.keyCode > 47 && event.keyCode < 59:
-            // Si entra acá es porque ingresaron un número
-          break;
+          switch (true) {
+            case event.keyCode === 13 || nombreParaEditar.textContent.length >= 15:
+              // Si entra acá es porque pusieron ENTER o llegó a 15 dígitos
+              event.preventDefault();
+              break;
+            case event.keyCode > 47 && event.keyCode < 59:
+                // Si entra acá es porque ingresaron un número
+              break;
+          
+            case event.keyCode >= 65 && event.keyCode <= 90:
+              // Si entra acá es porque ingresaron una mayúscula
       
-        case event.keyCode >= 65 && event.keyCode <= 90:
-           // Si entra acá es porque ingresaron una mayúscula
-  
-          break;
-  
-        case (event.keyCode >= 97 && event.keyCode <= 122) ||  event.keyCode === 32:
-           // Si entra acá es porque ingresaron una minúscula
-          break;
-  
-        default:
-          // Si ingresaron otra cosa, lo rechaza
-          event.preventDefault();
-          break;
-      }
-    });
+              break;
+      
+            case (event.keyCode >= 97 && event.keyCode <= 122) ||  event.keyCode === 32:
+              // Si entra acá es porque ingresaron una minúscula
+              break;
+      
+            default:
+              // Si ingresaron otra cosa, lo rechaza
+              event.preventDefault();
+              break;
+          }
+        });
   
   
 
@@ -585,66 +587,67 @@ class Tarjetas {
 // Funcion que define que se va a ver en pantalla
 async function cardsEnPantalla(estadoDeLaTarjetaSeleccionada) {
   mostrarCarga();
-switch (estadoDeLaTarjetaSeleccionada) {
-    case "Todas":
-      mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
-      mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
-      mostrarPendientes.classList.remove("opcionElegidaDelMenu");
-      mostrarTodas.classList.add("opcionElegidaDelMenu");
+  switch (estadoDeLaTarjetaSeleccionada) {
+      case "Todas":
+        mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
+        mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
+        mostrarPendientes.classList.remove("opcionElegidaDelMenu");
+        mostrarTodas.classList.add("opcionElegidaDelMenu");
 
-      pantallaActual = "Todas"; //Para mantenerme en la misma pantalla
-      await obtenerCardsDesdeFirestore(pantallaActual); // Obtener las cards desde Firestore
-      break;
+        pantallaActual = "Todas"; //Para mantenerme en la misma pantalla
+        await obtenerCardsDesdeFirestore(pantallaActual); // Obtener las cards desde Firestore
+        break;
 
-    case "Pendientes":
-      pantallaActual = "Pendientes";
-      mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
-      mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
-      mostrarTodas.classList.remove("opcionElegidaDelMenu");
-      mostrarPendientes.classList.add("opcionElegidaDelMenu");
+      case "Pendientes":
+        pantallaActual = "Pendientes";
+        mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
+        mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
+        mostrarTodas.classList.remove("opcionElegidaDelMenu");
+        mostrarPendientes.classList.add("opcionElegidaDelMenu");
 
-      await obtenerCardsDesdeFirestore(pantallaActual);
-      
-      break;
+        await obtenerCardsDesdeFirestore(pantallaActual);
+        
+        break;
 
-    case "Finalizadas":
-      mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
-      mostrarTodas.classList.remove("opcionElegidaDelMenu");
-      mostrarPendientes.classList.remove("opcionElegidaDelMenu");
-      mostrarFinalizadas.classList.add("opcionElegidaDelMenu");
+      case "Finalizadas":
+        mostrarCanceladas.classList.remove("opcionElegidaDelMenu");
+        mostrarTodas.classList.remove("opcionElegidaDelMenu");
+        mostrarPendientes.classList.remove("opcionElegidaDelMenu");
+        mostrarFinalizadas.classList.add("opcionElegidaDelMenu");
 
-      pantallaActual = "Finalizadas";
-      await obtenerCardsDesdeFirestore(pantallaActual);
-      
-      break;
+        pantallaActual = "Finalizadas";
+        await obtenerCardsDesdeFirestore(pantallaActual);
+        
+        break;
 
-    case "Canceladas":
-      mostrarTodas.classList.remove("opcionElegidaDelMenu");
-      mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
-      mostrarPendientes.classList.remove("opcionElegidaDelMenu");
-      mostrarCanceladas.classList.add("opcionElegidaDelMenu");
+      case "Canceladas":
+        mostrarTodas.classList.remove("opcionElegidaDelMenu");
+        mostrarFinalizadas.classList.remove("opcionElegidaDelMenu");
+        mostrarPendientes.classList.remove("opcionElegidaDelMenu");
+        mostrarCanceladas.classList.add("opcionElegidaDelMenu");
 
-      pantallaActual = "Canceladas";
-      await obtenerCardsDesdeFirestore(pantallaActual);
-      
-      break;
+        pantallaActual = "Canceladas";
+        await obtenerCardsDesdeFirestore(pantallaActual);
+        
+        break;
 
-    default:
-      break;
-}
-ocultarCarga();
-}
-
-
-
-
-
+      default:
+        break;
+  }
+  ocultarCarga();
+  }
+  
+  
+  
+  
+  
 // función para filtrar por secciones
 function filtroDeSecciones (seccionElegida) {
   let botonSeccionTodas = document.getElementById("boton-secciones-todas");
   let botonSeccionCompras = document.getElementById("boton-secciones-compras");
   let botonSeccionTrabajo = document.getElementById("boton-secciones-trabajo");
   let botonSeccionCasa = document.getElementById("boton-secciones-casa");
+  let botonSeccionTurnos = document.getElementById("boton-secciones-turnos");
   let botonSeccionOtras = document.getElementById("boton-secciones-otras");
 
 
@@ -658,6 +661,7 @@ function filtroDeSecciones (seccionElegida) {
       botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
       botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
       botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      botonSeccionTurnos.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
       botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
       break;
 
@@ -667,6 +671,7 @@ function filtroDeSecciones (seccionElegida) {
         botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTurnos.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
       break;
 
@@ -676,6 +681,7 @@ function filtroDeSecciones (seccionElegida) {
         botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTurnos.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
       break;
 
@@ -685,6 +691,17 @@ function filtroDeSecciones (seccionElegida) {
         botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTurnos.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+      break;
+
+      case "Turnos":
+        botonSeccionTurnos.classList.add("fondo-para-seccion-seleccionada-en-desplegable");
+
+        botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionOtras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
       break;
 
@@ -694,6 +711,7 @@ function filtroDeSecciones (seccionElegida) {
         botonSeccionTodas.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionCompras.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionTrabajo.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
+        botonSeccionTurnos.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
         botonSeccionCasa.classList.remove("fondo-para-seccion-seleccionada-en-desplegable");
       break;
   
