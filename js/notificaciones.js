@@ -1,4 +1,4 @@
-import { prueba, horario } from "./app"; 
+// import { prueba, horario } from "./app"; 
 
 
 Notification.requestPermission().then(function(permission) {
@@ -28,11 +28,11 @@ if ('serviceWorker' in navigator) {
 
 
   function programarNotificacion() {
-    const tiempoEspera = horario; // 2 horas en milisegundos
+    const tiempoEspera = 3000; // 2 horas en milisegundos
   
     setTimeout(function() {
       const options = {
-        body: prueba,
+        body: "prueba",
         icon: '/path/to/icon.png', // Cambia esto por la ruta a tu icono de notificación
         // Puedes agregar más opciones como 'badge', 'image', etc., según tus necesidades
       };

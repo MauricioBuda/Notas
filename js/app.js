@@ -9,6 +9,22 @@ export { prueba, horario }
 
 
 
+// Obtener el input del datetimepicker
+const datetimepicker = document.getElementById('datetimepicker');
+
+// Configurar Flatpickr para el datetimepicker
+flatpickr(datetimepicker, {
+    enableTime: true, // Habilitar selección de hora
+    dateFormat: "d-m-Y H:i", // Formato de fecha y hora
+    minDate: "today", // Fecha mínima (hoy)
+    time_24hr: true, // Usar formato de 24 horas
+    locale: "es",
+    onClose: function(selectedDates, dateStr, instance) {
+        // Manejar el evento onClose, aquí puedes agregar código para procesar la fecha seleccionada
+        console.log("Fecha seleccionada:", dateStr);
+    }
+});
+
 
 
 
