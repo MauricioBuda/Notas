@@ -3,6 +3,9 @@ import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2';
+let prueba = "hola";
+let horario = 10000;
+export { prueba, horario }
 
 
 
@@ -145,6 +148,8 @@ boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 // TERMINO DE DECLARAR VARIABLES Y ASIGNAR EVENTOS ↑
 
 
+
+// Llamar a la función para programar la notificación
 
 
 

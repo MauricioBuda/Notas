@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 // import { getToken } from 'firebase/messaging/sw';
 import Swal from 'sweetalert2';
 
@@ -21,47 +20,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const auth = getAuth();
-
-
-
-
-
-
-const messaging = getMessaging();
-
-
-function requestPermission() {
-    console.log('Requesting permission...');
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-      } else{
-        console.log("denegado perro");
-      }
-    })
-} 
-
-requestPermission();
-
-
-
-// Get registration token. Initially this makes a network call, once retrieved
-// subsequent calls to getToken will return from cache.
-getToken(messaging, { vapidKey: 'BKMLDVHGRcehfl-5P0R_NqlCWSv53tTq11izVr2nxOwxZECkuujvAaJ1o7MeaXldJnZrkU1UQ0qg0BEe5oWEZe0' })
-.then((currentToken) => {
-  if (currentToken) {
-    console.log("Permiso OK → " + currentToken)
-    // Send the token to your server and update the UI if necessary
-    // ...
-  } else {
-    // Show permission request UI
-    console.log('Nooooooop');
-    // ...
-  }
-}).catch((err) => {
-  console.log('Errroooooooooooooor →→  ', err);
-  // ...
-});
 
 
 
