@@ -1,4 +1,3 @@
-// import { prueba, horario } from "./app"; 
 
 
 Notification.requestPermission().then(function(permission) {
@@ -27,18 +26,17 @@ if ('serviceWorker' in navigator) {
   }
 
 
-  function programarNotificacion() {
-    const tiempoEspera = 3000; // 2 horas en milisegundos
+  function programarNotificacion(titulo, detalle, tiempoEnMiliSegundos) {
+    const tiempoEspera = tiempoEnMiliSegundos;
   
     setTimeout(function() {
       const options = {
-        body: "prueba",
-        icon: '/path/to/icon.png', // Cambia esto por la ruta a tu icono de notificación
-        // Puedes agregar más opciones como 'badge', 'image', etc., según tus necesidades
+        body: detalle,
+        icon: '../img/agenda.png',
       };
-      new Notification('Recordatorio', options);
+      new Notification(titulo, options);
     }, tiempoEspera);
   }
   
-  programarNotificacion();
+  export {programarNotificacion};
   
