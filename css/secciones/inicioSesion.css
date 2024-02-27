@@ -36,7 +36,7 @@
   .div-ver-clave{
     display: flex!important;
     text-align: center;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     display: flex!important;
   
@@ -109,7 +109,6 @@
       -webkit-text-stroke: 2px #00000063;
       color: #000;
     }
-  
   
 
 
