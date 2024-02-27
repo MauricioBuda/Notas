@@ -38,6 +38,8 @@
   }
   
   .recuadros_formulario{
+    border-radius: 8px;
+    border:none;
     padding: 1vw;
     font-size: 1vw;
     font-weight: 500;
@@ -52,6 +54,7 @@
     font-size: 1vw;
     color: rgba(0, 0, 0, 0.632);
   }
+
 /*   
   .opcion-formulario-select{
     color: red!important;
@@ -68,6 +71,8 @@
   }
   
   .boton_agregarTarea{
+    border-radius: 8px;
+    /* border:none; */
     color: rgb(255, 255, 255);
     font-weight: 600;
     font-size: 2.5vw;
