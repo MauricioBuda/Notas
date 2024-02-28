@@ -2,6 +2,7 @@
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
+import { llamarProgramarNotificacion } from './notificaciones';
 import Swal from 'sweetalert2';
 
 
@@ -141,6 +142,12 @@ let usuarioConSesionIniciada = null;
 boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
 salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
+
+// Variables notificaciones
+let miliSegundosRestantes;
+const datetimepicker = document.getElementById('datetimepicker');
+
+
 
 // TERMINO DE DECLARAR VARIABLES Y ASIGNAR EVENTOS ↑
 
@@ -767,74 +774,6 @@ async function obtenerCardsDesdeFirestore(estado) {
 
 
 
-// Función para generar menú de filtro de secciones
-// function menuSecciones(){
-//   console.log("ingreso a funciion")
-
-//   let menuSeccionesDivHTML = document.createElement('div');
-//   menuSeccionesDivHTML.id = "div-dentro-contenedor-secciones";
-//   menuSeccionesDivHTML.classList.add("div-general-menu-secciones");
-
-// let menuSeccionesTodasHTML = `
-//         <div class="div-menu-secciones">
-//         <li><button class="dropdown-item li-secciones" type="button">Todas las secciones</button></li>
-//         </div>
-//         `
-
-//   let menuSeccionesDelUsuarioHTML = `
-//           <div class="div-menu-secciones">
-//             <li><button class="dropdown-item li-secciones" type="button">Compras</button></li>
-//             <img src="img/pencil.svg" alt="lapiz-editar">
-//             <img src="img/trash.svg" alt="tachito-eliminar">
-//           </div>
-
-//           <div class="div-menu-secciones">
-//             <li><button class="dropdown-item li-secciones" type="button">Trabajo</button></li>
-//             <img src="img/pencil.svg" alt="lapiz-editar">
-//             <img src="img/trash.svg" alt="tachito-eliminar">
-//           </div>
-
-//           <div class="div-menu-secciones">
-//             <li><button class="dropdown-item li-secciones" type="button">Otras</button></li>
-//             <img src="img/pencil.svg" alt="lapiz-editar">
-//             <img src="img/trash.svg" alt="tachito-eliminar">
-//           </div>
-//           `
-
-
-
-
-// let menuSeccionesAgregarNuevaHTML = `
-//         <div class="div-menu-secciones div-seccion-nueva">
-//         <li><button class="dropdown-item li-secciones li-seccion-nueva" type="button">Agregar nueva</button></li>
-//         <img src="img/file-earmark-plus.svg" alt="add">
-//         </div>
-//         `
-
-
-//   // Agregar los elementos HTML al menú de secciones
-//   menuSeccionesDivHTML.innerHTML = `
-//     ${menuSeccionesTodasHTML}
-//     ${menuSeccionesDelUsuarioHTML}
-//     ${menuSeccionesAgregarNuevaHTML}
-//   `;
-
-//   // Limpiar el contenido actual del contenedor
-//   contenedorMenuSecciones.innerHTML = '';
-
-//   // Agregar el menú de secciones al contenedor
-//   contenedorMenuSecciones.appendChild(menuSeccionesDivHTML);
-
-// }
-
-
-
-
-
-
-// Mostrar el modal de carga
-
-
 
 
 
@@ -946,6 +885,53 @@ function vaciarCampos() {
 
 
 
+    // Notificaciones
+
+// Obtener el input del datetimepicker
+
+// Configurar Flatpickr para el datetimepicker
+flatpickr(datetimepicker, {
+  enableTime: true, // Habilitar selección de hora
+  dateFormat: "Y-m-d H:i", // Formato de fecha y hora
+  minDate: "today", // Fecha mínima (hoy)
+  time_24hr: true, // Usar formato de 24 horas
+  locale: "es",
+  onClose: function(selectedDates, dateStr, instance) {
+    // Manejar el evento onClose, aquí puedes agregar código para procesar la fecha seleccionada
+    console.log("Fecha seleccionada:", dateStr);
+
+    // Obtener la fecha seleccionada como objeto Date
+    const fechaSeleccionada = new Date(dateStr);
+
+    // Obtener la fecha y hora actual
+    const fechaActual = new Date();
+
+    // Calcular la diferencia de tiempo entre la fecha seleccionada y la fecha actual
+    miliSegundosRestantes = fechaSeleccionada.getTime() - fechaActual.getTime();
+
+    // Verificar si la fecha seleccionada es en el futuro
+    if (miliSegundosRestantes > 0) {
+        // Calcular días, horas, minutos y segundos restantes
+        const diasRestantes = Math.floor(miliSegundosRestantes / (1000 * 60 * 60 * 24));
+        const horasRestantes = Math.floor((miliSegundosRestantes % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutosRestantes = Math.floor((miliSegundosRestantes % (1000 * 60 * 60)) / (1000 * 60));
+        const segundosRestantes = Math.floor((miliSegundosRestantes % (1000 * 60)) / 1000);
+
+        // Mostrar el tiempo restante
+        console.log("Tiempo restante:", diasRestantes, "días,", horasRestantes, "horas,", minutosRestantes, "minutos,", segundosRestantes, "segundos");
+        console.log(miliSegundosRestantes)
+    } else {
+        console.log("La fecha seleccionada es anterior a la fecha actual");
+    }
+  }
+});
+
+
+
+
+
+
+
 // Función para aagarrar los datos que ingresa el usuario cuando agrega una tarea, y guardarlos en la DB
 async function agregarTarea(event) {
   mostrarCarga();
@@ -1007,13 +993,59 @@ async function agregarTarea(event) {
               showConfirmButton: false,
               icon: "success"
           });
+
+              // Notificaciones
+
+// Obtener el input del datetimepicker
+
+// Configurar Flatpickr para el datetimepicker
+flatpickr(datetimepicker, {
+  enableTime: true, // Habilitar selección de hora
+  dateFormat: "Y-m-d H:i", // Formato de fecha y hora
+  minDate: "today", // Fecha mínima (hoy)
+  time_24hr: true, // Usar formato de 24 horas
+  locale: "es",
+  onClose: function(selectedDates, dateStr, instance) {
+    // Manejar el evento onClose, aquí puedes agregar código para procesar la fecha seleccionada
+    console.log("Fecha seleccionada:", dateStr);
+
+    // Obtener la fecha seleccionada como objeto Date
+    const fechaSeleccionada = new Date(dateStr);
+
+    // Obtener la fecha y hora actual
+    const fechaActual = new Date();
+
+    // Calcular la diferencia de tiempo entre la fecha seleccionada y la fecha actual
+    miliSegundosRestantes = fechaSeleccionada.getTime() - fechaActual.getTime();
+
+    // Verificar si la fecha seleccionada es en el futuro
+    if (miliSegundosRestantes > 0) {
+        // Calcular días, horas, minutos y segundos restantes
+        const diasRestantes = Math.floor(miliSegundosRestantes / (1000 * 60 * 60 * 24));
+        const horasRestantes = Math.floor((miliSegundosRestantes % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutosRestantes = Math.floor((miliSegundosRestantes % (1000 * 60 * 60)) / (1000 * 60));
+        const segundosRestantes = Math.floor((miliSegundosRestantes % (1000 * 60)) / 1000);
+
+        // Mostrar el tiempo restante
+        console.log("Tiempo restante:", diasRestantes, "días,", horasRestantes, "horas,", minutosRestantes, "minutos,", segundosRestantes, "segundos");
+        console.log(miliSegundosRestantes)
+
+    } else {
+        console.log("La fecha seleccionada es anterior a la fecha actual");
+    }
+  }
+});
+
     } catch (error) {
       console.error("Error al agregar la tarea a Firestore", error);
       ocultarCarga();
     }
+    llamarProgramarNotificacion(miliSegundosRestantes, titulo, detalle);
     ocultarCarga();
   }
 }
+
+
 
 
 

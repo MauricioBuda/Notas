@@ -1,5 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
+import { getFirestore, Timestamp } from "firebase/firestore";
+import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
+
+
+
+
+let elToken
 
 
 const firebaseConfig = {
@@ -35,9 +43,11 @@ requestPermission();
 
 
 
+
 getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcOCde6XrxOX4sfm6wxL0QvtkP2PXmrag_PXb9ctsmU' })
 .then((currentToken) => {
     if (currentToken) {
+        elToken = currentToken;
       console.log ("TOKEN OK →     ", currentToken)
     } else {
       // Show permission request UI
@@ -47,27 +57,51 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
     console.log('An error occurred while retrieving token. ', err);
   });
 
-function programarNotificacion (token, tiempo, titulo) {
-    const firestore = firebase.firestore();
+
+
+  function llamarProgramarNotificacion (tiempo, titulo, detalle) {
+    let tokenDelUsuario = elToken;
+    ProgramarNotificacion(tokenDelUsuario, tiempo, titulo, detalle)
+  }
+
+
+
+
+
+
+function ProgramarNotificacion (token, tiempo, titulo, detalle) {
+    const firestore = getFirestore(app);
 
     // Obtener una referencia a la colección "notificaciones"
-    const notificacionesRef = firestore.collection('notificaciones');
-    
+
+    let docRef = addDoc(collection(db, 'notificaciones'), {
+        token: token,
+        mensaje: titulo,
+        tiempoProgramado: Timestamp.fromMillis(Date.now() + tiempo)
+    });
+
+
+
+    // const notificacionesRef = firestore.collection('notificaciones');
     // Crear un nuevo documento para programar una notificación en 48 horas
-    const nuevaNotificacion = {
-      token: "TOKEN_DEL_USUARIO",
-      mensaje: "Este es tu recordatorio de tarea",
-      tiempoProgramado: firebase.firestore.Timestamp.fromMillis(Date.now() + (48 * 60 * 60 * 1000)) // Agregar 48 horas en milisegundos
-    };
+    // const nuevaNotificacion = {
+    //   token: "TOKEN_DEL_USUARIO",
+    //   mensaje: "Este es tu recordatorio de tarea",
+    //   tiempoProgramado: Timestamp.fromMillis(Date.now() + (48 * 60 * 60 * 1000)) // Agregar 48 horas en milisegundos
+    // };
+
+
+
     
-    // Añadir el documento a la colección "notificaciones"
-    notificacionesRef.add(nuevaNotificacion)
-      .then(() => {
-        console.log("Notificación programada correctamente.");
-      })
-      .catch((error) => {
-        console.error("Error al programar la notificación:", error);
-      });
+    // // Añadir el documento a la colección "notificaciones"
+    // notificacionesRef.add(nuevaNotificacion)
+    //   .then(() => {
+    //     console.log("Notificación programada correctamente.");
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error al programar la notificación:", error);
+    //   });
     
 }
 
+export { llamarProgramarNotificacion }
