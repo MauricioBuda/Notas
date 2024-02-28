@@ -1198,14 +1198,14 @@ function masOpciones(id){
 modalCard.innerHTML = nuevaCardHTML;
 modalFooter.innerHTML="";
 
-if (tarea.estado === "Pendientes") {
-  let botonesCard = `
-  <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
-  <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
-  <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
-  <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
-  `
-modalFooter.innerHTML = botonesCard;
+    if (tarea.estado === "Pendientes") {
+      let botonesCard = `
+      <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
+      <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
+      <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
+      <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
+      `
+      modalFooter.innerHTML = botonesCard;
   }  else if (tarea.estado === "Finalizadas" || tarea.estado === "Canceladas") {
     let botonesCard = `
     <button id="${botonRestaurarID}" class="btn botonesCards_modal" >Restaurar</button>
@@ -1223,6 +1223,7 @@ modalFooter.innerHTML = botonesCard;
 
 // Función para finalizar tarea de card
 async function finalizarTarea(id) {
+
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
   
@@ -1253,13 +1254,13 @@ async function finalizarTarea(id) {
       });
       Swal.fire({
         title: "Tarea finalizada!",
-        timer: 1000,
+        timer: 2000,
         showConfirmButton: false,
         icon: "success"
       });
       setTimeout(() => {
-        cardsEnPantalla(pantallaActual);
-      }, 1000);
+        location.reload();
+      }, 2000);
     }
     });
     } else {
@@ -1278,6 +1279,7 @@ async function finalizarTarea(id) {
 
 // Función para eliminar una tarea de la DB
 async function eliminar(id){
+
   let tarea = unaCard.find((t) => t.id === id);
  if (tarea) {
   Swal.fire({
@@ -1295,14 +1297,13 @@ async function eliminar(id){
       deleteDoc(doc(db, nombreDeColeccion, tarea.id));
       Swal.fire({
         title: "Tarea eliminada!",
-        timer: 1000,
+        timer: 2000,
         showConfirmButton: false,
         icon: "success"
       });
       setTimeout(() => {
-        cardsEnPantalla(pantallaActual);
-        ocultarCarga();
-      }, 1000);
+        location.reload();
+      }, 2000);
     }
   }); 
  } else {
@@ -1321,8 +1322,8 @@ async function eliminar(id){
 
 // Función restaurar tarea:
 async function restaurarTarea(id){
-  let tarea = unaCard.find((t) => t.id === id);
 
+  let tarea = unaCard.find((t) => t.id === id);
 
   if (tarea) {
     Swal.fire({
@@ -1347,14 +1348,13 @@ async function restaurarTarea(id){
         });
         Swal.fire({
           title: "Tarea restaurada!",
-          timer: 1000,
+          timer: 2000,
           showConfirmButton: false,
           icon: "success"
         });
         setTimeout(() => {
-          cardsEnPantalla(pantallaActual);
-          ocultarCarga();
-        }, 1000);
+            location.reload();
+        }, 2000);
   
       }
     });
@@ -1367,7 +1367,6 @@ async function restaurarTarea(id){
     });
    }
   }
-
 
 
 
@@ -1405,21 +1404,20 @@ if (tarea) {
       });
       Swal.fire({
         title: "Tarea cancelada!",
-        timer: 1000,
+        timer: 2000,
         showConfirmButton: false,
         icon: "success"
       });
       setTimeout(() => {
-        cardsEnPantalla(pantallaActual);
-        ocultarCarga();
-      }, 1000);
+        location.reload();
+      }, 2000);
 
     }
   });
 } else {
   Swal.fire({
     title: "Tarea inexistente o modificada. Cierre la ventana",
-    timer: 1200,
+    timer: 1000,
     showConfirmButton: false,
     icon: "error"
   });
