@@ -55,19 +55,13 @@
     color: rgba(0, 0, 0, 0.632);
   }
 
-/*   
-  .opcion-formulario-select{
-    color: red!important;
-    background-color: red!important;
-    font-size: 22vw!important;
-  } */
+
 
 
   .recuadros_formulario_detalle{
       padding-bottom: 10vh;
       height: 15vh;
       max-width: 30vw;
-      overflow: hidden;
   }
   
   .boton_agregarTarea{
