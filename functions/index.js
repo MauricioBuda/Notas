@@ -11,7 +11,7 @@ exports.enviarNotificacion = functions.firestore
     const token = notificacion.token;
     const mensaje = {
       notification: {
-        title: `prueba ${notificacion.mensaje}`,
+        title: notificacion.mensaje,
         body: notificacion.body,
       },
       token: token,
