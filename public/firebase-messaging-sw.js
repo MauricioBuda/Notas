@@ -21,11 +21,8 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
     console.log("Mensaje recibido:", payload);
 
-    const notificationOptions = {
-      sound: '/sounds/notifications-sound-127856.mp3',
-      icon: '/img/agenda.png'
-    };
+
 
     // Muestra la notificación al usuario
-    self.registration.showNotification(payload.notification.title, payload.notification, notificationOptions);
+    self.registration.showNotification(payload.notification.title, payload.notification.sound);
 });

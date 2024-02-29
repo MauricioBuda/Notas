@@ -78,7 +78,9 @@ function programarNotificacion (token, titulo, detalle, tiempo) {
         token: token,
         mensaje: titulo,
         body: detalle,
-        tiempoProgramado: tiempo
+        tiempoProgramado: tiempo,
+        icon: '/img/agenda.png',
+        sound: '/sounds/notifications-sound-127856.mp3'
     });
     
 }
