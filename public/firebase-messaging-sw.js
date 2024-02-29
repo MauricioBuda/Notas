@@ -24,5 +24,5 @@ messaging.onBackgroundMessage((payload) => {
 
 
     // Muestra la notificación al usuario
-    self.registration.showNotification(payload.notification.title, payload.notification.sound);
+    self.registration.showNotification(payload.notification.title, payload.notification);
 });

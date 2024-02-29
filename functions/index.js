@@ -13,8 +13,7 @@ exports.enviarNotificacion = functions.firestore
       notification: {
         title: notificacion.mensaje,
         body: notificacion.body,
-        sound: notificacion.sound,
-        icon: notificacion.icon
+        icon: '/img/agenda.png'
       },
       token: token,
     };
