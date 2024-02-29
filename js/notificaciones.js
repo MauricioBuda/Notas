@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
 import { getFirestore, Timestamp } from "firebase/firestore";
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
+import { db } from './firestoreConfig';
 
 
 
@@ -61,7 +61,7 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
   function llamarProgramarNotificacion (tiempo, titulo, detalle) {
     let tokenDelUsuario = elToken;
-    ProgramarNotificacion(tokenDelUsuario, tiempo, titulo, detalle)
+    programarNotificacion(tokenDelUsuario, titulo, detalle, tiempo)
   }
 
 
@@ -69,7 +69,7 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
 
 
-function ProgramarNotificacion (token, tiempo, titulo, detalle) {
+function programarNotificacion (token, titulo, detalle, tiempo) {
     const firestore = getFirestore(app);
 
     // Obtener una referencia a la colección "notificaciones"
@@ -77,30 +77,9 @@ function ProgramarNotificacion (token, tiempo, titulo, detalle) {
     let docRef = addDoc(collection(db, 'notificaciones'), {
         token: token,
         mensaje: titulo,
-        tiempoProgramado: Timestamp.fromMillis(Date.now() + tiempo)
+        body: detalle,
+        tiempoProgramado: tiempo
     });
-
-
-
-    // const notificacionesRef = firestore.collection('notificaciones');
-    // Crear un nuevo documento para programar una notificación en 48 horas
-    // const nuevaNotificacion = {
-    //   token: "TOKEN_DEL_USUARIO",
-    //   mensaje: "Este es tu recordatorio de tarea",
-    //   tiempoProgramado: Timestamp.fromMillis(Date.now() + (48 * 60 * 60 * 1000)) // Agregar 48 horas en milisegundos
-    // };
-
-
-
-    
-    // // Añadir el documento a la colección "notificaciones"
-    // notificacionesRef.add(nuevaNotificacion)
-    //   .then(() => {
-    //     console.log("Notificación programada correctamente.");
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error al programar la notificación:", error);
-    //   });
     
 }
 

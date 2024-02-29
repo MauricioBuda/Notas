@@ -22,5 +22,5 @@ messaging.onBackgroundMessage((payload) => {
     console.log("Mensaje recibido:", payload);
 
     // Muestra la notificación al usuario
-    self.registration.showNotification(payload.notification.title, payload.notification);
+    self.registration.showNotification(payload.notification.title, payload.notification.body);
 });
