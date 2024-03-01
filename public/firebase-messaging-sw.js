@@ -25,7 +25,7 @@ messaging.onBackgroundMessage((payload) => {
     const notificationOptions = {
       body: payload.notification.body,
       icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
-      sound: '/sounds/notifications-sound-127856.mp3'
+      sound: 'https://github.com/MauricioBuda/Notas/raw/rama-fcm-2/sounds/notifications-sound-127856.mp3'
     };
 
 
