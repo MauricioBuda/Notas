@@ -10,7 +10,7 @@ exports.enviarNotificacion = functions.firestore
     const notificacion = snap.data();
     const token = notificacion.token;
     const mensaje = {
-      notification: {
+      "notification": {
         title: notificacion.mensaje,
         body: notificacion.body,
         "sound": "default"
