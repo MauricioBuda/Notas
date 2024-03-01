@@ -13,6 +13,7 @@ exports.enviarNotificacion = functions.firestore
       notification: {
         title: notificacion.mensaje,
         body: notificacion.body,
+        "sound": "default"
       },
       token: token,
     };
