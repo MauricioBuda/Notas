@@ -22,7 +22,16 @@ messaging.onBackgroundMessage((payload) => {
     console.log("Mensaje recibido:", payload);
 
 
+    const notificationOptions = {
+      body: payload.notification.body,
+      icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
+      sound: '/sounds/notifications-sound-127856.mp3'
+    };
+
+
 
     // Muestra la notificación al usuario
-    self.registration.showNotification(payload.notification.title, payload.notification);
-});
+    self.registration.showNotification(payload.notification.title, notificationOptions);
+
+
+}); 

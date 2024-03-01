@@ -11,9 +11,8 @@ exports.enviarNotificacion = functions.firestore
     const token = notificacion.token;
     const mensaje = {
       notification: {
-        title: notificacion.mensaje,
-        body: notificacion.body,
-        icon: '/img/agenda.png'
+        title: "titulo desde index.js" + notificacion.mensaje,
+        body: "body desde index.js" + notificacion.body,
       },
       token: token,
     };
