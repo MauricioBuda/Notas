@@ -3,30 +3,40 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
+exports.verificarNuevasNotificaciones = functions.pubsub.schedule('every day 15:25')
+  .timeZone('America/Argentina/Buenos_Aires')
+  .onRun(async (context) => {
+    try {
+      const snapshot = await admin.firestore().collection('notificaciones').where('procesado', '==', false).get();
+      const promises = []; // Arreglo para almacenar las promesas de actualización
 
-exports.enviarNotificacion = functions.firestore
-  .document('notificaciones/{notificacionId}')
-  .onCreate((snap, context) => {
-    const notificacion = snap.data();
-    const token = notificacion.token;
-    const mensaje = {
-      notification: {
-        title: notificacion.mensaje,
-        body: notificacion.body,
-      },
-      token: token,
-    };
+      snapshot.forEach((doc) => {
+        const notificacion = doc.data();
+        const mensaje = {
+          notification: {
+            title: notificacion.mensaje,
+            body: notificacion.body,
+          },
+          token: notificacion.token,
+        };
 
-    setTimeout(() => {
-        admin.messaging().send(mensaje)
-        .then((response) => {
-          console.log('Notificación enviada exitosamente:', response);
-          return null;
-        })
-        .catch((error) => {
-          console.log('Error al enviar la notificación:', error);
-          return null;
+        // Enviar notificación
+        const sendPromise = admin.messaging().send(mensaje);
+        
+        // Marcar el documento como procesado después de enviar la notificación
+        const updatePromise = sendPromise.then(() => {
+          return doc.ref.update({ procesado: true });
         });
-    }, notificacion.tiempoProgramado);
 
+        promises.push(updatePromise);
+      });
+
+      // Esperar a que todas las promesas de actualización se resuelvan
+      await Promise.all(promises);
+
+      return null;
+    } catch (error) {
+      console.error('Error al verificar nuevas notificaciones:', error);
+      return null;
+    }
   });

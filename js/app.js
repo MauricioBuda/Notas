@@ -144,6 +144,7 @@ salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
 // Variables notificaciones
+let fechaSeleccionadaPorUsuario
 let miliSegundosRestantes;
 const datetimepicker = document.getElementById('datetimepicker');
 
@@ -895,19 +896,21 @@ flatpickr(datetimepicker, {
   dateFormat: "Y-m-d H:i", // Formato de fecha y hora
   minDate: "today", // Fecha mínima (hoy)
   time_24hr: true, // Usar formato de 24 horas
-  locale: "es",
+  // locale: "es",
   onClose: function(selectedDates, dateStr, instance) {
     // Manejar el evento onClose, aquí puedes agregar código para procesar la fecha seleccionada
     console.log("Fecha seleccionada:", dateStr);
 
     // Obtener la fecha seleccionada como objeto Date
-    const fechaSeleccionada = new Date(dateStr);
-
+    fechaSeleccionadaPorUsuario = new Date(dateStr);
+if(fechaSeleccionadaPorUsuario){
     // Obtener la fecha y hora actual
     const fechaActual = new Date();
 
     // Calcular la diferencia de tiempo entre la fecha seleccionada y la fecha actual
-    miliSegundosRestantes = fechaSeleccionada.getTime() - fechaActual.getTime();
+    miliSegundosRestantes = fechaSeleccionadaPorUsuario.getTime() - fechaActual.getTime();
+    console.log(fechaSeleccionadaPorUsuario - new Date().getTime())
+    console.log("tiene que ser mayor que cero: ", miliSegundosRestantes)
 
     // Verificar si la fecha seleccionada es en el futuro
     if (miliSegundosRestantes > 0) {
@@ -923,6 +926,9 @@ flatpickr(datetimepicker, {
     } else {
         console.log("La fecha seleccionada es anterior a la fecha actual");
     }
+  }else{
+    console.log("No seleccionó ninguna fecha")
+  }
   }
 });
 
@@ -1004,19 +1010,19 @@ flatpickr(datetimepicker, {
   dateFormat: "Y-m-d H:i", // Formato de fecha y hora
   minDate: "today", // Fecha mínima (hoy)
   time_24hr: true, // Usar formato de 24 horas
-  locale: "es",
+  // locale: "es",
   onClose: function(selectedDates, dateStr, instance) {
     // Manejar el evento onClose, aquí puedes agregar código para procesar la fecha seleccionada
     console.log("Fecha seleccionada:", dateStr);
 
     // Obtener la fecha seleccionada como objeto Date
-    const fechaSeleccionada = new Date(dateStr);
+    fechaSeleccionadaPorUsuario = new Date(dateStr);
 
     // Obtener la fecha y hora actual
     const fechaActual = new Date();
 
     // Calcular la diferencia de tiempo entre la fecha seleccionada y la fecha actual
-    miliSegundosRestantes = fechaSeleccionada.getTime() - fechaActual.getTime();
+    miliSegundosRestantes = fechaSeleccionadaPorUsuario.getTime() - fechaActual.getTime();
 
     // Verificar si la fecha seleccionada es en el futuro
     if (miliSegundosRestantes > 0) {
@@ -1029,6 +1035,9 @@ flatpickr(datetimepicker, {
         // Mostrar el tiempo restante
         console.log("Tiempo restante:", diasRestantes, "días,", horasRestantes, "horas,", minutosRestantes, "minutos,", segundosRestantes, "segundos");
         console.log(miliSegundosRestantes)
+        console.log(fechaSeleccionadaPorUsuario)
+        console.log(fechaActual)
+
 
     } else {
         console.log("La fecha seleccionada es anterior a la fecha actual");
@@ -1040,7 +1049,8 @@ flatpickr(datetimepicker, {
       console.error("Error al agregar la tarea a Firestore", error);
       ocultarCarga();
     }
-    llamarProgramarNotificacion(miliSegundosRestantes, titulo, detalle);
+    console.log("fecha que mando a firestore: ", fechaSeleccionadaPorUsuario)
+    llamarProgramarNotificacion(fechaSeleccionadaPorUsuario, titulo, detalle);
     ocultarCarga();
   }
 }
