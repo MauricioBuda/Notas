@@ -44,7 +44,7 @@ const messaging = firebase.messaging();
 
 
 
-messaging.onBackgroundMessage(messaging, (payload) => {
+// messaging.onBackgroundMessage(messaging, (payload) => {
   console.log('RECIBIDO ', payload);
   // Customize notification here
   const notificationTitle = payload.notification.title;
@@ -59,7 +59,7 @@ messaging.onBackgroundMessage(messaging, (payload) => {
 
   self.registration.showNotification(notificationTitle,
     notificationOptions);
-});
+// });
 
 
 
