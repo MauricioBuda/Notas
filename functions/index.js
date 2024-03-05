@@ -14,8 +14,8 @@ exports.verificarNuevasNotificaciones = functions.pubsub.schedule('every day 15:
         const notificacion = doc.data();
         const mensaje = {
           notification: {
-            title: notificacion.mensaje,
-            body: notificacion.body,
+            // title: notificacion.mensaje,
+            // body: notificacion.body,
           },
           token: notificacion.token,
         };
