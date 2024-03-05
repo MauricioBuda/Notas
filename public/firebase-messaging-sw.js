@@ -18,26 +18,50 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // Escucha los mensajes entrantes
-messaging.onBackgroundMessage((payload) => {
-    console.log("Mensaje recibido:", payload);
+// messaging.onBackgroundMessage((payload) => {
+//     console.log("Mensaje recibido:", payload);
 
 
-    const notificationOptions = {
-      body: payload.notification.body,
-      icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
-      sound: 'greanpatch-166007.mp3',
+//     const notificationOptions = {
+//       body: payload.notification.body,
+//       icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
+//       sound: 'greanpatch-166007.mp3',
+//       data: {
+//         url: 'https://notas-seven.vercel.app/' // Aquí incluye la URL
+//       }
+//     };
+
+
+
+//     // Muestra la notificación al usuario
+//     self.registration.showNotification(payload.notification.title, notificationOptions);
+
+
+// }); 
+
+
+
+
+
+
+messaging.onBackgroundMessage(messaging, (payload) => {
+  console.log('RECIBIDO ', payload);
+  // Customize notification here
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: 'EL CUERPO' + payload.notification.body,
+    icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
+    sound: 'greanpatch-166007.mp3',
       data: {
-        url: 'https://notas-seven.vercel.app/' // Aquí incluye la URL
-      }
-    };
+         url: 'https://notas-seven.vercel.app/' // Aquí incluye la URL
+    }
+  };
+
+  self.registration.showNotification(notificationTitle,
+    notificationOptions);
+});
 
 
-
-    // Muestra la notificación al usuario
-    self.registration.showNotification(payload.notification.title, notificationOptions);
-
-
-}); 
 
 
 
