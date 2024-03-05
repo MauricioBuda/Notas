@@ -25,7 +25,7 @@ messaging.onBackgroundMessage((payload) => {
     const notificationOptions = {
       body: payload.notification.body,
       icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
-      sound: 'https://github.com/MauricioBuda/Notas/raw/rama-fcm-2/res/raw/notifications-sound-127856.mp3'
+      sound: 'default',
     };
 
 
@@ -37,6 +37,13 @@ messaging.onBackgroundMessage((payload) => {
 }); 
 
 
+
+// Manejar el evento de clic en la notificación
+self.addEventListener('notificationclick', (event) => {
+  const url = event.notification.data.url; // Obtener la URL del objeto de datos
+  event.notification.close(); // Cerrar la notificación
+  event.waitUntil(clients.openWindow('https://notas-seven.vercel.app/')); // Abrir la URL en una nueva ventana
+});
 
 
 
