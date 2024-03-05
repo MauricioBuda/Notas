@@ -25,7 +25,10 @@ messaging.onBackgroundMessage((payload) => {
     const notificationOptions = {
       body: payload.notification.body,
       icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
-      sound: 'default',
+      sound: '/res/raw/notifications-sound-127856.mp3',
+      data: {
+        url: 'https://notas-seven.vercel.app/' // Aquí incluye la URL
+      }
     };
 
 
