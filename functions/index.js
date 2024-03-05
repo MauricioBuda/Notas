@@ -16,6 +16,7 @@ exports.verificarNuevasNotificaciones = functions.pubsub.schedule('every day 15:
           notification: {
             title: notificacion.mensaje,
             body: notificacion.body,
+            icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
           },
           token: notificacion.token,
         };
