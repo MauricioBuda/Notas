@@ -13,9 +13,9 @@ exports.verificarNuevasNotificaciones = functions.pubsub.schedule('every day 15:
       snapshot.forEach((doc) => {
         const notificacion = doc.data();
         const mensaje = {
-          notification: {
-            title: notificacion.mensaje,
-            body: notificacion.body,
+          data: {
+            titulo: notificacion.mensaje,
+            detalle: notificacion.body,
             image: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
           },
           token: notificacion.token,
@@ -41,3 +41,4 @@ exports.verificarNuevasNotificaciones = functions.pubsub.schedule('every day 15:
       return null;
     }
   });
+

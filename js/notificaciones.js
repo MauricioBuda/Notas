@@ -71,10 +71,6 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
 function programarNotificacion (token, titulo, detalle, tiempo) {
     const firestore = getFirestore(app);
-    console.log("se ejecuta PROGRAMAR-NOTIFICACION")
-    console.log("tiempo: ", tiempo)
-    console.log("detalle: ", detalle)
-    console.log("titulo: ", titulo)
 
 
     // Obtener una referencia a la colección "notificaciones"
@@ -86,7 +82,6 @@ function programarNotificacion (token, titulo, detalle, tiempo) {
         tiempoProgramado: tiempo,
         procesado: false,
     });
-    console.log("console desde programarNOT, tiempo: ", tiempo)
     
 }
 

@@ -18,41 +18,69 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 
-
-// messaging.onBackgroundMessage((payload) => {
-//   console.log('RECIBIDO ', payload);
-//   // Customize notification here
-//   const notificationTitle = payload.notification.title;
-//   const notificationOptions = {
-//     body: 'WORKER' + payload.notification.body,
-//     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
-//       data: {
-//          url: 'https://notas-seven.vercel.app/' // Aquí incluye la URL
-//     }
-//   };
-
-//   self.registration.showNotification(notificationTitle,
-//     notificationOptions);
-// });
-
-
-self.addEventListener('push', function(event) {
-  const payload = event.data.json();
-  console.log('Mensaje recibido:', payload);
-
-  const notificationTitle = payload.notification.title;
+// // 1111111111111111111
+messaging.onBackgroundMessage((payload) => {
+  console.log('recibido: ', payload);
+  // Customize notification here
+  const notificationTitle = payload.data.titulo;
   const notificationOptions = {
-    body: payload.notification.body,
+    body: payload.data.detalle,
     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
-    data: {
+        data: {
       url: 'https://notas-seven.vercel.app/'
     }
   };
 
-  event.waitUntil(
-    self.registration.showNotification(notificationTitle, notificationOptions)
-  );
+  self.registration.showNotification(notificationTitle,
+    notificationOptions);
 });
+// // 1111111111111111111
+
+
+
+// // 2222222222222222
+// self.addEventListener('push', function(event) {
+//   const payload = event.data.json();
+//   console.log('Mensaje recibido:', payload);
+
+//   const notificationTitle = payload.data.titulo;
+//   const notificationOptions = {
+//     body: payload.data.detalle,
+//     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
+//     data: {
+//       url: 'https://notas-seven.vercel.app/'
+//     }
+//   };
+
+//   event.waitUntil(
+//     self.registration.showNotification(notificationTitle, notificationOptions)
+//   );
+// });
+// // 2222222222222222
+
+
+
+// Escuchar los mensajes entrantes
+// messaging.onMessage((payload) => {
+//   console.log('Mensaje recibidooooooooooo: ', payload);
+
+  
+//     const notificationTitle = payload.data.titulo;
+//     const notificationOptions = {
+//     body: payload.data.detalle,
+//     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
+//     data: {
+//       url: 'https://notas-seven.vercel.app/'
+//     }
+//   };
+
+
+//     self.registration.showNotification(notificationTitle, notificationOptions)
+
+// console.log("a lo ultimo")
+
+// });
+
 
 
 

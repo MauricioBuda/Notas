@@ -304,5 +304,18 @@
   <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>  -->
 
 
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
+          console.log('Service Worker registrado con éxito:', registration);
+        }).catch(error => {
+          console.error('Error al registrar el Service Worker:', error);
+        });
+      });
+    }
+  </script>
+
 </body>
 </html>

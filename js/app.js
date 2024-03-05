@@ -1049,7 +1049,6 @@ flatpickr(datetimepicker, {
       console.error("Error al agregar la tarea a Firestore", error);
       ocultarCarga();
     }
-    console.log("fecha que mando a firestore: ", fechaSeleccionadaPorUsuario)
     llamarProgramarNotificacion(fechaSeleccionadaPorUsuario, titulo, detalle);
     ocultarCarga();
   }
