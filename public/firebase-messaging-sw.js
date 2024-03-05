@@ -17,50 +17,42 @@ firebase.initializeApp(firebaseConfig);
 // Obtiene una instancia de Firebase Messaging
 const messaging = firebase.messaging();
 
-// Escucha los mensajes entrantes
+
+
 // messaging.onBackgroundMessage((payload) => {
-//     console.log("Mensaje recibido:", payload);
-
-
-//     const notificationOptions = {
-//       body: payload.notification.body,
-//       icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
-//       sound: 'greanpatch-166007.mp3',
+//   console.log('RECIBIDO ', payload);
+//   // Customize notification here
+//   const notificationTitle = payload.notification.title;
+//   const notificationOptions = {
+//     body: 'WORKER' + payload.notification.body,
+//     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
 //       data: {
-//         url: 'https://notas-seven.vercel.app/' // Aquí incluye la URL
-//       }
-//     };
+//          url: 'https://notas-seven.vercel.app/' // Aquí incluye la URL
+//     }
+//   };
+
+//   self.registration.showNotification(notificationTitle,
+//     notificationOptions);
+// });
 
 
+self.addEventListener('push', function(event) {
+  const payload = event.data.json();
+  console.log('Mensaje recibido:', payload);
 
-//     // Muestra la notificación al usuario
-//     self.registration.showNotification(payload.notification.title, notificationOptions);
-
-
-// }); 
-
-
-
-
-
-
-messaging.onBackgroundMessage(messaging, (payload) => {
-  console.log('RECIBIDO ', payload);
-  // Customize notification here
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
-    body: 'EL CUERPO' + payload.notification.body,
+    body: payload.notification.body,
     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
-    sound: 'greanpatch-166007.mp3',
-      data: {
-         url: 'https://notas-seven.vercel.app/' // Aquí incluye la URL
+    data: {
+      url: 'https://notas-seven.vercel.app/'
     }
   };
 
-  self.registration.showNotification(notificationTitle,
-    notificationOptions);
+  event.waitUntil(
+    self.registration.showNotification(notificationTitle, notificationOptions)
+  );
 });
-
 
 
 
