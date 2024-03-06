@@ -1,3 +1,4 @@
+
 /* SECTION_FORMULARIO TAREAS*/
 .section_formulario {
     height: 100vh;
@@ -47,7 +48,7 @@
     width: 30vw;
     display: flex;
     text-align: center;
-    margin: 1rem 0 1rem 0;
+    margin: 1rem 0 2rem 0;
   }
   
   .recuadros_formulario::placeholder{
@@ -56,9 +57,8 @@
   }
 
 
-
-
   .recuadros_formulario_detalle{
+      margin: 1rem 0 2rem 0!important;
       padding-bottom: 10vh;
       height: 15vh;
       max-width: 30vw;
@@ -67,7 +67,6 @@
   
   .boton_agregarTarea{
     border-radius: 8px;
-    /* border:none; */
     color: rgb(255, 255, 255);
     font-weight: 600;
     font-size: 2.5vw;
@@ -79,7 +78,110 @@
   .boton_agregarTarea:hover{
   background-color: green;
   }
+
+
+
+
+
   
+  /* INICIO CALENDARIO */
+  .input-group-append {
+    cursor: pointer;
+  }
+
+  .container{
+    display: flex;
+    justify-content: start;
+    border-radius: 8px;
+    border:none;
+    padding: 1vw;
+    font-weight: 500;
+    width: 30vw;
+    text-align: center;
+    }
+
+    .div-de-divs-horarios{
+      display: flex;
+    }
+
+  .col-5{
+      width: 12vw;
+  }
+  
+  
+  .form-control{
+    text-align: center;
+    font-size: 1vw;
+  }
+
+  .fa-calendar {
+    font-size: 2vw;
+  }
+
+  .btn-notificacion button img{
+    width: 3vw;
+    border-radius: 50%;
+  }
+
+  .icono-aceptar{
+    margin-right: 3vw;
+    background-color: rgba(0, 194, 0, 0.2);
+  }
+
+  .icono-aceptar:hover{
+    background-color: rgb(0, 194, 0, 0.6);
+    
+  }
+
+  .icono-cancelar{
+    background-color: rgba(255, 0, 0, 0.3);
+  }
+
+  .icono-cancelar:hover{
+    background-color: rgba(255, 0, 0, 0.6);
+  }
+  
+  
+  .datepicker {
+    font-size: 1vw; /* Ajusta el tamaño de la fuente */
+  }
+  
+  .datepicker table {
+    width: 100%; /* Ajusta el ancho del calendario */
+  }
+  
+  
+  .datepicker table tbody tr td {
+    width: 3vw; /* Ajusta el ancho de las celdas */
+    height: 3vw; /* Ajusta la altura de las celdas */
+    font-size: 1vw; /* Ajusta el tamaño de la fuente de las celdas */
+  }
+
+
+
+  .div-de-checkbox{
+    display: flex;
+    align-items: center;
+  }
+
+  .div-de-checkbox input{
+    margin-left: 1vw;
+    width: 1.2vw;
+    height: 1.2vw;
+    border-radius: 50%!important;
+    cursor: pointer; 
+    background-color: white;
+    }
+
+  .div-de-checkbox label{
+    font-size: 1vw;
+  }
+
+  /* FIN CALENDARIO */
+  
+
+
+
 
 
 
@@ -99,11 +201,12 @@
     }
   
     .formulario label{
-      font-size: 5vw;
+      font-size: 4.5vw;
     }
   
     .formulario input{
       font-size: 4vw;
+      /* margin: 0; */
     }
   
     .recuadros_formulario{
@@ -125,7 +228,7 @@
       font-weight: 500;
       font-size: 5vw;
       width: 40vw;
-      margin-top: 3vh;
+      margin-top: 0vh;
     }
   
     .recuadros_formulario::placeholder{
@@ -133,6 +236,73 @@
       align-items: center;
       text-align: center;
     }
+
+
+
+
+    /* INICIO CALENDARIO */
+    .datepicker {
+      font-size: 5vw; /* Ajusta el tamaño de la fuente */
+    }
+    
+    
+    .datepicker table tbody tr td {
+      width: 8vw; /* Ajusta el ancho de las celdas */
+      height: 8vw; /* Ajusta la altura de las celdas */
+      font-size: 4vw; /* Ajusta el tamaño de la fuente de las celdas */
+    }
+
+
+
+    .container{
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      align-items: center;
+      border-radius: 8px;
+      border:none;
+      padding: 1vw;
+      font-weight: 500;
+      width: 45vw;
+      text-align: center;
+      }
+
+    .col-5{
+      width: 45vw;
+    }
+
+    .fa-calendar {
+      font-size: 6vw; /* Tamaño deseado del icono */
+    }
+
+    .btn-notificacion button img{
+      margin: 2vh 0 2vh 0;
+      width: 7vw;
+    }
+
+    .icono-aceptar{
+      margin-right: 5vw!important;
+    }
+
+
+    .div-de-checkbox{
+      display: flex;
+      align-items: center;
+    }
+      
+    .div-de-checkbox input{
+        margin-left: 3vw;
+        margin-right: 1vw;
+        width: 5vw;
+        height: 10vh;
+        border-radius: 50%!important;
+        cursor: pointer; 
+        background-color: white;
+        }
+    
+    .div-de-checkbox label{
+        font-size: 3vw;
+      }
   
   }
   /* FIN SECTION_FORMULARIO TAREAS*/

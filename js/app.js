@@ -19,7 +19,6 @@ let unaCard = [];
 
 
 
-
 //DECLARO VARIABLES Y LES ASIGNO EVENTOS ↓
 
 // Variables menú ↓
