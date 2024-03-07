@@ -2,23 +2,28 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
 <!-- INICIO CALENDARIO BS -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css"> -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">		
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">		
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script> -->
 <!-- FIN CALENDARIO BS -->
-		
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="img/agenda.png" type="logo_chico">
-    <title>Notitas</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> -->
+  
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="img/agenda.png" type="logo_chico">
+  <title>Notitas</title>
 </head>
+
 
 <body>
 
@@ -213,13 +218,13 @@
     <form id="tabla_datos" class="formulario">
       <!-- <label for="tareaTitulo">Título: </label> -->
       <input placeholder="Título " class="recuadros_formulario" type="text" id="tareaTitulo"
-        name="tareaTitulo" required>
+        name="tareaTitulo" >
 
       <!-- <label for="tareaDetalle">Detalle: </label> -->
       <textarea class="recuadros_formulario recuadros_formulario_detalle" name="tareaDetalle" id="tareaDetalle" cols="30" rows="10" placeholder="Detalles "></textarea>
 
       <!-- <label for="secciones">Sección: </label> -->
-      <select class="recuadros_formulario" id="secciones-id" name="secciones" required>
+      <select class="recuadros_formulario" id="secciones-id" name="secciones" >
         <option class="opcion-formulario-select" selected disabled value="">Sección </option>
         <option value="Compras">Compras</option>
         <option value="Trabajo">Trabajo</option>
@@ -229,25 +234,25 @@
       </select>
 
       <!-- <label for="tareaUrgencia">Urgencia: </label> -->
-      <select class="recuadros_formulario" id="tareaUrgencia" name="tareaUrgencia" required>
+      <select class="recuadros_formulario" id="tareaUrgencia" name="tareaUrgencia" >
         <option selected disabled value="">Urgencia </option>
         <option value="Alta">Alta</option>
         <option value="Media">Media</option>
         <option value="Baja">Baja</option>
       </select>
 
-      <label for="notificacion">Programar notificación?</label>
+      <label for="notificacion">¿Programar notificación?</label>
 
       <div class="btn-notificacion">      
-        <button><img class="icono-aceptar" src="./img/check-circle.svg" alt="icon-acept"></button>
-        <button><img class="icono-cancelar" src="./img/x-circle.svg" alt="icon-cancel"></button>
+        <button><img id="aceptar-noti" class="icono-aceptar" src="./img/check-circle.svg" alt="icon-acept"></button>
+        <button><img id="rechazar-noti" class="icono-cancelar" src="./img/x-circle.svg" alt="icon-cancel"></button>
       </div>
 
       <section class="container">
           <form class="row">
             <div class="col-5">
               <div class="input-group date" id="datepicker">
-                <input readonly type="text" class="form-control" id="date" />
+                <input disabled readonly type="text" class="form-control" id="date" />
                 <span class="input-group-append">
                   <span class="input-group-text bg-light d-block">
                     <i class="fa fa-calendar"></i>
@@ -259,17 +264,17 @@
 
           <div class="div-de-divs-horarios">
               <div class="div-de-checkbox">
-              <input type="checkbox" name="" id="">
+              <input disabled type="checkbox" name="" id="check-08">
               <label for="horario">08:00hs</label>
             </div>
     
             <div class="div-de-checkbox">
-              <input type="checkbox" name="" id="">
+              <input disabled type="checkbox" name="" id="check-14">
               <label for="horario">14:00hs</label>
             </div>
     
             <div class="div-de-checkbox">
-              <input type="checkbox" name="" id="">
+              <input disabled type="checkbox" name="" id="check-21">
               <label for="horario">21:00hs</label>
             </div>
         </div>
@@ -279,8 +284,8 @@
         </section>
 
 
-      <button class="boton_agregarTarea btn btn-outline-dark" id="boton_agregarTarea_id" type="submit">Agregar
-        Tarea</button>
+      <button class="boton_agregarTarea btn btn-outline-dark" id="boton_agregarTarea_id" type="submit">
+        Agregar Tarea</button>
     </form>
   </section>
   <div id="divDeEstadosID" class="divDeEstados">
@@ -326,7 +331,19 @@
   <!-- FIN MODAL TAREA PANTALLA GRANDE-->
 
 
-
+<!-- INICIO REGISTRO WORKER -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
+        console.log('Service Worker registrado con éxito:', registration);
+      }).catch(error => {
+        console.error('Error al registrar el Service Worker:', error);
+      });
+    });
+  }
+</script>
+<!-- FIN REGISTRO WORKER -->
 
 
   <!-- BOOSTRAP -->
@@ -334,31 +351,8 @@
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
 
-<!-- INICIO ARCHIVOS JS -->
-  <script type="module" src="./js/firestoreConfig.js"></script>
-  <script type="module" src="./js/app.js"></script>
-<!-- FIN ARCHIVOS JS -->
-
-
-<!-- INICIO REGISTRO WORKER -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
-          console.log('Service Worker registrado con éxito:', registration);
-        }).catch(error => {
-          console.error('Error al registrar el Service Worker:', error);
-        });
-      });
-    }
-  </script>
-<!-- FIN REGISTRO WORKER -->
-
-
-
-<!-- INICIO CALENDARIO BS -->
+    <!-- INICIO CALENDARIO BS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
     $(function(){
@@ -369,6 +363,18 @@
     });
 </script>
 <!-- FIN CALENDARIO BS -->
+
+<!-- INICIO ARCHIVOS JS -->
+  <script type="module" src="./js/firestoreConfig.js"></script>
+  <script type="module" src="./js/app.js"></script>
+<!-- FIN ARCHIVOS JS -->
+
+
+
+
+
+
+
 
 
 

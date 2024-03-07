@@ -36,6 +36,30 @@ let botonAgregarTarea = document.getElementById("boton_agregarTarea_id");
 botonAgregarTarea.addEventListener("click", agregarTarea);
 
 
+// Variables del formulario, de la notificación ↓
+let calendario = $('#datepicker');
+let aceptarNoti = document.getElementById("aceptar-noti");
+let rechazarNoti = document.getElementById("rechazar-noti");
+let quiereNotificacion = false;
+let fechaSeleccionadaSinFormato = document.getElementById("date");
+let fechaSeleccionadaParticionada = ""
+let fechaSeleccionadaConFormato = ""
+let check08 = document.getElementById("check-08");
+let check14 = document.getElementById("check-14");
+let check21 = document.getElementById("check-21");
+let selecciona08 = false;
+let selecciona14 = false;
+let selecciona21 = false;
+
+
+
+// Eventos del formulario, para la notificación ↓
+aceptarNoti.addEventListener("click", mostrarCargaDeNotificacion);
+rechazarNoti.addEventListener("click", ocultarCargaDeNotificacion);
+
+
+
+
 // Variable del modal de cargando ↓
 const modalCarga = document.getElementById('modalCarga');
 
@@ -142,10 +166,6 @@ boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
 salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
-// Variables notificaciones
-let fechaSeleccionadaPorUsuario
-let miliSegundosRestantes;
-const datetimepicker = document.getElementById('datetimepicker');
 
 
 
@@ -811,6 +831,14 @@ function mostrarFormulario() {
     navbar_general.classList.add("aplicar-display-none");
     menu.classList.add("disminuir-margin-top");
 
+// Obtener el elemento del calendario
+
+calendario.on('changeDate', function(event) {
+
+  // let fechaSeleccionada = event.date;
+  
+  verSiHorarioDeNotificacionYaPaso();
+});
 
 
     menuBorroso ();
@@ -885,51 +913,126 @@ function vaciarCampos() {
 
 
 
-    // Notificaciones
+// Función para habilitar la programación de la notificación
+function mostrarCargaDeNotificacion(e){
+  e.preventDefault();
+  check08.disabled = false;
+  check14.disabled = false;
+  check21.disabled = false;
+  fechaSeleccionadaSinFormato.disabled = false;
+  quiereNotificacion = true;
+}
 
-// Obtener el input del datetimepicker
+// Función para deshabilitar la programación de la notificación
+function ocultarCargaDeNotificacion(e){
+  e.preventDefault();
+  check08.disabled = true;
+  check14.disabled = true;
+  check21.disabled = true;
+  fechaSeleccionadaSinFormato.disabled = true;
+  quiereNotificacion = false;
+}
 
-// Configurar Flatpickr para el datetimepicker
-flatpickr(datetimepicker, {
-  enableTime: true, // Habilitar selección de hora
-  dateFormat: "Y-m-d H:i", // Formato de fecha y hora
-  minDate: "today", // Fecha mínima (hoy)
-  time_24hr: true, // Usar formato de 24 horas
-  // locale: "es",
-  onClose: function(selectedDates, dateStr, instance) {
-    // Manejar el evento onClose, aquí puedes agregar código para procesar la fecha seleccionada
-    console.log("Fecha seleccionada:", dateStr);
 
-    // Obtener la fecha seleccionada como objeto Date
-    fechaSeleccionadaPorUsuario = new Date(dateStr);
-if(fechaSeleccionadaPorUsuario){
-    // Obtener la fecha y hora actual
-    const fechaActual = new Date();
 
-    // Calcular la diferencia de tiempo entre la fecha seleccionada y la fecha actual
-    miliSegundosRestantes = fechaSeleccionadaPorUsuario.getTime() - fechaActual.getTime();
-    console.log(fechaSeleccionadaPorUsuario - new Date().getTime())
-    console.log("tiene que ser mayor que cero: ", miliSegundosRestantes)
 
-    // Verificar si la fecha seleccionada es en el futuro
-    if (miliSegundosRestantes > 0) {
-        // Calcular días, horas, minutos y segundos restantes
-        const diasRestantes = Math.floor(miliSegundosRestantes / (1000 * 60 * 60 * 24));
-        const horasRestantes = Math.floor((miliSegundosRestantes % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutosRestantes = Math.floor((miliSegundosRestantes % (1000 * 60 * 60)) / (1000 * 60));
-        const segundosRestantes = Math.floor((miliSegundosRestantes % (1000 * 60)) / 1000);
 
-        // Mostrar el tiempo restante
-        console.log("Tiempo restante:", diasRestantes, "días,", horasRestantes, "horas,", minutosRestantes, "minutos,", segundosRestantes, "segundos");
-        console.log(miliSegundosRestantes)
-    } else {
-        console.log("La fecha seleccionada es anterior a la fecha actual");
+
+
+// Función para ver si el checkbox es de un horario que ya pasó
+function verSiHorarioDeNotificacionYaPaso (){
+  console.log("entro a ver si ya paso el horario")
+  let fechaActual = new Date().toLocaleDateString();
+  let horaActual = new Date().toLocaleTimeString([], {hour: '2-digit'});
+  fechaSeleccionadaParticionada = fechaSeleccionadaSinFormato.value.split('-'); // Dividir la cadena por el guion
+  fechaSeleccionadaConFormato = new Date(fechaSeleccionadaParticionada[2], fechaSeleccionadaParticionada[1] - 1, fechaSeleccionadaParticionada[0]).toLocaleDateString();
+
+  if (fechaActual === fechaSeleccionadaConFormato) {
+      if (selecciona08) {
+          if (horaActual > 8) {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Seleccionaste un horario que ya pasó",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          selecciona08 = false;
+          check08.checked = false
+          }
+      
+      }
+      if (selecciona14) {
+          if (horaActual > 14) {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Seleccionaste un horario que ya pasó",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            selecciona14 = false;
+            check14.checked = false
+            }
+      }
+
+      if (selecciona21){
+        console.log(horaActual)
+          if (horaActual > 21) {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Seleccionaste un horario que ya pasó",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            selecciona21 = false;
+            check21.checked = false
+            }
+      } 
     }
-  }else{
-    console.log("No seleccionó ninguna fecha")
   }
+
+
+
+
+
+
+
+// Manejo que pasa si tildan o destildan
+check08.addEventListener('change', function(event) {
+  if (check08.checked) {
+    console.log("El usuario seleccionó el horario de las 08:00hs");
+    selecciona08 = true;
+    verSiHorarioDeNotificacionYaPaso ();
+  } else {
+    console.log("El usuario deseleccionó el horario de las 08:00hs");
+    selecciona08 = false;
   }
 });
+check14.addEventListener('change', function(event) {
+  if (check14.checked) {
+    console.log("El usuario seleccionó el horario de las 14:00hs");
+    selecciona14 = true;
+    verSiHorarioDeNotificacionYaPaso ();
+  } else {
+    console.log("El usuario deseleccionó el horario de las 14:00hs");
+    selecciona14 = false;
+  }
+});
+check21.addEventListener('change', function(event) {
+  if (check21.checked) {
+    console.log("El usuario seleccionó el horario de las 21:00hs");
+    selecciona21 = true;
+    verSiHorarioDeNotificacionYaPaso ();
+  } else {
+    console.log("El usuario deseleccionó el horario de las 21:00hs");
+    selecciona21 = false;
+  }
+});
+
+
+
 
 
 
@@ -955,102 +1058,91 @@ async function agregarTarea(event) {
 
 
   if (!titulo || !detalle || !urgencia || !seccionQueSeMuestraEnPantalla) {
-    Swal.fire({
-      position: "center",
-      icon: "warning",
-      title: "Se deben completar todos los campos",
-      showConfirmButton: false,
-      timer: 1000,
-    });
-    ocultarCarga();
-    return;
-  } else {
-    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, seccionQueSeMuestraEnPantalla, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
-    unaCard.push(nuevaCard);
-
-    try {
-      let docRef = await addDoc(collection(db, nombreDeColeccion), {
-        nombre: nuevaCard.nombre,
-        seccion: nuevaCard.seccion,
-        mail: nuevaCard.mail,
-        titulo: nuevaCard.titulo,
-        detalle: nuevaCard.detalle,
-        urgencia: nuevaCard.urgencia,
-        fechaCreacion: nuevaCard.fechaCreacion,
-        fechaParaOrdenarlas: nuevaCard.fechaParaOrdenarlas,
-        fechaCierre: nuevaCard.fechaCierre,
-        ultimaEdicion: nuevaCard.ultimaEdicion,
-        estado: nuevaCard.estado
-      });
-
-      // Asignar el ID generado por Firestore a la tarjeta
-      nuevaCard.asignarId(docRef.id);
-            // Agregar la nueva card al contenedor correspondiente
-            agregarCardAlContenedor(nuevaCard);
-            ocultarFormulario();
-            vaciarCampos();
-            menuBorroso();
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Se deben completar todos los campos",
+                showConfirmButton: false,
+                timer: 1000,
+              });
+              ocultarCarga();
+              return;
+  } else if(quiereNotificacion) {
+          if(fechaSeleccionadaSinFormato.value === ""){
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "No seleccionó la fecha",
+                showConfirmButton: false,
+                timer: 1000,
+            });
             ocultarCarga();
-            cardsEnPantalla("Pendientes");
-          Swal.fire({
-              title: "Tarea agregada!",
-              timer: 1200,
+            return;
+  } else if (check08.checked===false && check14.checked===false && check21.checked===false){
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "No seleccionó ningun horario",
               showConfirmButton: false,
-              icon: "success"
-          });
+              timer: 1000,
+            });
+            ocultarCarga();
+            return;
+          }
+  } else {
+    // check08.removeEventListener('change', cambioCheck08);
+    // check14.removeEventListener('change', cambioCheck14);
+    // check21.removeEventListener('change', cambioCheck21);
+    // calendario.off('changeDate');
+            let nuevaCard = new Tarjetas(nombreDeUsuarioDB, seccionQueSeMuestraEnPantalla, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
+            unaCard.push(nuevaCard);
 
-              // Notificaciones
+            try {
+              let docRef = await addDoc(collection(db, nombreDeColeccion), {
+                nombre: nuevaCard.nombre,
+                seccion: nuevaCard.seccion,
+                mail: nuevaCard.mail,
+                titulo: nuevaCard.titulo,
+                detalle: nuevaCard.detalle,
+                urgencia: nuevaCard.urgencia,
+                fechaCreacion: nuevaCard.fechaCreacion,
+                fechaParaOrdenarlas: nuevaCard.fechaParaOrdenarlas,
+                fechaCierre: nuevaCard.fechaCierre,
+                ultimaEdicion: nuevaCard.ultimaEdicion,
+                estado: nuevaCard.estado
+              });
 
-// Obtener el input del datetimepicker
+              // Asignar el ID generado por Firestore a la tarjeta
+              nuevaCard.asignarId(docRef.id);
 
-// Configurar Flatpickr para el datetimepicker
-flatpickr(datetimepicker, {
-  enableTime: true, // Habilitar selección de hora
-  dateFormat: "Y-m-d H:i", // Formato de fecha y hora
-  minDate: "today", // Fecha mínima (hoy)
-  time_24hr: true, // Usar formato de 24 horas
-  // locale: "es",
-  onClose: function(selectedDates, dateStr, instance) {
-    // Manejar el evento onClose, aquí puedes agregar código para procesar la fecha seleccionada
-    console.log("Fecha seleccionada:", dateStr);
+                    agregarCardAlContenedor(nuevaCard);
+                    ocultarFormulario();
+                    vaciarCampos();
+                    menuBorroso();
+                    ocultarCarga();
+                    cardsEnPantalla("Pendientes");
+                    // fechaSeleccionadaSinFormato.value = "";
+                    // check08.checked = false;
+                    // check14.checked = false;
+                    // check21.checked = false;
 
-    // Obtener la fecha seleccionada como objeto Date
-    fechaSeleccionadaPorUsuario = new Date(dateStr);
-
-    // Obtener la fecha y hora actual
-    const fechaActual = new Date();
-
-    // Calcular la diferencia de tiempo entre la fecha seleccionada y la fecha actual
-    miliSegundosRestantes = fechaSeleccionadaPorUsuario.getTime() - fechaActual.getTime();
-
-    // Verificar si la fecha seleccionada es en el futuro
-    if (miliSegundosRestantes > 0) {
-        // Calcular días, horas, minutos y segundos restantes
-        const diasRestantes = Math.floor(miliSegundosRestantes / (1000 * 60 * 60 * 24));
-        const horasRestantes = Math.floor((miliSegundosRestantes % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutosRestantes = Math.floor((miliSegundosRestantes % (1000 * 60 * 60)) / (1000 * 60));
-        const segundosRestantes = Math.floor((miliSegundosRestantes % (1000 * 60)) / 1000);
-
-        // Mostrar el tiempo restante
-        console.log("Tiempo restante:", diasRestantes, "días,", horasRestantes, "horas,", minutosRestantes, "minutos,", segundosRestantes, "segundos");
-        console.log(miliSegundosRestantes)
-        console.log(fechaSeleccionadaPorUsuario)
-        console.log(fechaActual)
+                  Swal.fire({
+                      title: "Tarea agregada!",
+                      timer: 1200,
+                      showConfirmButton: false,
+                      icon: "success"
+                  });
 
 
-    } else {
-        console.log("La fecha seleccionada es anterior a la fecha actual");
-    }
-  }
-});
 
-    } catch (error) {
-      console.error("Error al agregar la tarea a Firestore", error);
+            } catch (error) {
+              console.error("Error al agregar la tarea a Firestore", error);
+              ocultarCarga();
+            }
+            ocultarCarga();
+            // llamarProgramarNotificacion(fechaSeleccionadaPorUsuario, titulo, detalle);
+          }
       ocultarCarga();
-    }
-    llamarProgramarNotificacion(fechaSeleccionadaPorUsuario, titulo, detalle);
-    ocultarCarga();
-  }
 }
 
 
