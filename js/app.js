@@ -925,7 +925,9 @@ function mostrarCargaDeNotificacion(e){
 
 // Función para deshabilitar la programación de la notificación
 function ocultarCargaDeNotificacion(e){
-  e.preventDefault();
+  if (e) {
+    e.preventDefault();
+  }
   check08.disabled = true;
   check14.disabled = true;
   check21.disabled = true;
@@ -941,7 +943,6 @@ function ocultarCargaDeNotificacion(e){
 
 // Función para ver si el checkbox es de un horario que ya pasó
 function verSiHorarioDeNotificacionYaPaso (){
-  console.log("entro a ver si ya paso el horario")
   let fechaActual = new Date().toLocaleDateString();
   let horaActual = new Date().toLocaleTimeString([], {hour: '2-digit'});
   fechaSeleccionadaParticionada = fechaSeleccionadaSinFormato.value.split('-'); // Dividir la cadena por el guion
@@ -1002,31 +1003,25 @@ function verSiHorarioDeNotificacionYaPaso (){
 // Manejo que pasa si tildan o destildan
 check08.addEventListener('change', function(event) {
   if (check08.checked) {
-    console.log("El usuario seleccionó el horario de las 08:00hs");
     selecciona08 = true;
     verSiHorarioDeNotificacionYaPaso ();
   } else {
-    console.log("El usuario deseleccionó el horario de las 08:00hs");
     selecciona08 = false;
   }
 });
 check14.addEventListener('change', function(event) {
   if (check14.checked) {
-    console.log("El usuario seleccionó el horario de las 14:00hs");
     selecciona14 = true;
     verSiHorarioDeNotificacionYaPaso ();
   } else {
-    console.log("El usuario deseleccionó el horario de las 14:00hs");
     selecciona14 = false;
   }
 });
 check21.addEventListener('change', function(event) {
   if (check21.checked) {
-    console.log("El usuario seleccionó el horario de las 21:00hs");
     selecciona21 = true;
     verSiHorarioDeNotificacionYaPaso ();
   } else {
-    console.log("El usuario deseleccionó el horario de las 21:00hs");
     selecciona21 = false;
   }
 });
@@ -1067,18 +1062,17 @@ async function agregarTarea(event) {
               });
               ocultarCarga();
               return;
-  } else if(quiereNotificacion) {
-          if(fechaSeleccionadaSinFormato.value === ""){
-              Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "No seleccionó la fecha",
-                showConfirmButton: false,
-                timer: 1000,
-            });
-            ocultarCarga();
-            return;
-  } else if (check08.checked===false && check14.checked===false && check21.checked===false){
+  } else if(quiereNotificacion && fechaSeleccionadaSinFormato.value === "") {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "No seleccionó la fecha",
+              showConfirmButton: false,
+              timer: 1000,
+          });
+  ocultarCarga();
+  return;
+  } else if (quiereNotificacion && !check08.checked && !check14.checked && !check21.checked){
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -1088,12 +1082,7 @@ async function agregarTarea(event) {
             });
             ocultarCarga();
             return;
-          }
-  } else {
-    // check08.removeEventListener('change', cambioCheck08);
-    // check14.removeEventListener('change', cambioCheck14);
-    // check21.removeEventListener('change', cambioCheck21);
-    // calendario.off('changeDate');
+  }  else {
             let nuevaCard = new Tarjetas(nombreDeUsuarioDB, seccionQueSeMuestraEnPantalla, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
             unaCard.push(nuevaCard);
 
@@ -1114,6 +1103,8 @@ async function agregarTarea(event) {
 
               // Asignar el ID generado por Firestore a la tarjeta
               nuevaCard.asignarId(docRef.id);
+                    llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, check08.checked, check14.checked, check21.checked);
+                    console.log(fechaSeleccionadaConFormato, titulo, check08.checked, check14.checked, check21.checked)
 
                     agregarCardAlContenedor(nuevaCard);
                     ocultarFormulario();
@@ -1121,10 +1112,11 @@ async function agregarTarea(event) {
                     menuBorroso();
                     ocultarCarga();
                     cardsEnPantalla("Pendientes");
-                    // fechaSeleccionadaSinFormato.value = "";
-                    // check08.checked = false;
-                    // check14.checked = false;
-                    // check21.checked = false;
+                    ocultarCargaDeNotificacion();
+                    fechaSeleccionadaSinFormato.value = "";
+                    check08.checked = false;
+                    check14.checked = false;
+                    check21.checked = false;
 
                   Swal.fire({
                       title: "Tarea agregada!",
@@ -1140,7 +1132,7 @@ async function agregarTarea(event) {
               ocultarCarga();
             }
             ocultarCarga();
-            // llamarProgramarNotificacion(fechaSeleccionadaPorUsuario, titulo, detalle);
+
           }
       ocultarCarga();
 }

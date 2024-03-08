@@ -59,9 +59,9 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
 
 
-  function llamarProgramarNotificacion (tiempo, titulo, detalle) {
+  function llamarProgramarNotificacion (fechaSeleccionada, titulo, check08, check14, check21) {
     let tokenDelUsuario = elToken;
-    programarNotificacion(tokenDelUsuario, titulo, detalle, tiempo)
+    programarNotificacion(fechaSeleccionada, titulo, check08, check14, check21, tokenDelUsuario)
   }
 
 
@@ -69,20 +69,36 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
 
 
-function programarNotificacion (token, titulo, detalle, tiempo) {
+function programarNotificacion (fechaSeleccionada, titulo, check08, check14, check21, token) {
     const firestore = getFirestore(app);
 
-
-    // Obtener una referencia a la colección "notificaciones"
-
-    let docRef = addDoc(collection(db, 'notificaciones'), {
+    if (check08) {
+      let docRef1 = addDoc(collection(db, 'notificaciones08hs'), {
         token: token,
-        mensaje: titulo,
-        body: detalle,
-        tiempoProgramado: tiempo,
+        titulo: titulo,
+        fecha: fechaSeleccionada,
         procesado: false,
     });
-    
+    }
+
+
+    if (check14) {
+      let docRef2 = addDoc(collection(db, 'notificaciones14hs'), {
+        token: token,
+        titulo: titulo,
+        fecha: fechaSeleccionada,
+        procesado: false,
+      });
+    }
+
+    if (check21) {
+      let docRef3 = addDoc(collection(db, 'notificaciones21hs'), {
+        token: token,
+        titulo: titulo,
+        fecha: fechaSeleccionada,
+        procesado: false,
+    });
+    }
 }
 
 export { llamarProgramarNotificacion }

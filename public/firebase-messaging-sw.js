@@ -22,9 +22,9 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('recibido: ', payload);
   // Customize notification here
-  const notificationTitle = payload.data.titulo;
+  const notificationTitle = "¡TENÉS UN RECORDATORIO!";
   const notificationOptions = {
-    body: payload.data.detalle,
+    body: payload.data.titulo,
     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
         data: {
       url: 'https://notas-seven.vercel.app/'
