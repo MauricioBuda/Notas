@@ -49,7 +49,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
         });
         }
 
-
+        promises.push(sendPromise);
         promises.push(updatePromise);
       });
 
@@ -114,7 +114,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
         });
         }
 
-
+        promises.push(sendPromise);
         promises.push(updatePromise);
       });
 
@@ -179,7 +179,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
         });
         }
 
-
+        promises.push(sendPromise);
         promises.push(updatePromise);
       });
 
