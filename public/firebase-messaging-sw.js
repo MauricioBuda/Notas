@@ -20,10 +20,10 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('recibido: ', payload);
   // const notificationTitle = "¡TENÉS UN RECORDATORIO!";
-  const notificationTitle = payload.data.fechaParaNotificar;
+  const notificationTitle = "¡TENÉS UN RECORDATORIO!:";
 
   const notificationOptions = {
-    body: payload.data.fechaHoy,
+    body: payload.data.titulo,
     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
         data: {
       url: 'https://notas-seven.vercel.app/'

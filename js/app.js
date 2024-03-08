@@ -950,7 +950,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
   if (fechaActual === fechaSeleccionadaConFormato) {
       if (selecciona08) {
-          if (!horaActual) {
+          if (horaActual >= 8) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -964,7 +964,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
       }
       if (selecciona14) {
-          if (!horaActual) {
+          if (horaActual >= 14) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -978,7 +978,7 @@ function verSiHorarioDeNotificacionYaPaso (){
       }
 
       if (selecciona21){
-          if (!horaActual) {
+          if (horaActual >= 21) {
             console.log("entró")
             Swal.fire({
               position: "center",
