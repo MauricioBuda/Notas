@@ -78,6 +78,9 @@ function programarNotificacion (fechaSeleccionada, titulo, check08, check14, che
         titulo: titulo,
         fecha: fechaSeleccionada,
         procesado: false,
+        nombreUsuario: nombreUsuario,
+        mail: mail,
+        fechaDeCarga: fechaDeCarga
     });
     }
 
@@ -88,6 +91,9 @@ function programarNotificacion (fechaSeleccionada, titulo, check08, check14, che
         titulo: titulo,
         fecha: fechaSeleccionada,
         procesado: false,
+        nombreUsuario: nombreUsuario,
+        mail: mail,
+        fechaDeCarga: fechaDeCarga
       });
     }
 
@@ -97,6 +103,9 @@ function programarNotificacion (fechaSeleccionada, titulo, check08, check14, che
         titulo: titulo,
         fecha: fechaSeleccionada,
         procesado: false,
+        nombreUsuario: nombreUsuario,
+        mail: mail,
+        fechaDeCarga: fechaDeCarga
     });
     }
 }
