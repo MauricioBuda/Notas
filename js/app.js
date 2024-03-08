@@ -978,7 +978,7 @@ function verSiHorarioDeNotificacionYaPaso (){
       }
 
       if (selecciona21){
-          if (horaActual <= 21) {
+          if (horaActual < 21) {
             console.log("entró")
             Swal.fire({
               position: "center",
