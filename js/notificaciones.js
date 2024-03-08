@@ -59,9 +59,9 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
 
 
-  function llamarProgramarNotificacion (fechaSeleccionada, titulo, check08, check14, check21) {
+  function llamarProgramarNotificacion (fechaSeleccionada, titulo, check08, check14, check21, nombreDeUsuarioDB, mailDeUsuarioDB, fecha) {
     let tokenDelUsuario = elToken;
-    programarNotificacion(fechaSeleccionada, titulo, check08, check14, check21, tokenDelUsuario)
+    programarNotificacion(fechaSeleccionada, titulo, check08, check14, check21, tokenDelUsuario, nombreDeUsuarioDB, mailDeUsuarioDB, fecha)
   }
 
 
@@ -69,7 +69,7 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
 
 
-function programarNotificacion (fechaSeleccionada, titulo, check08, check14, check21, token) {
+function programarNotificacion (fechaSeleccionada, titulo, check08, check14, check21, token, nombreUsuario, mail, fechaDeCarga) {
     const firestore = getFirestore(app);
 
     if (check08) {

@@ -950,7 +950,8 @@ function verSiHorarioDeNotificacionYaPaso (){
 
   if (fechaActual === fechaSeleccionadaConFormato) {
       if (selecciona08) {
-          if (horaActual >= 8) {
+          // if (horaActual >= 8) {
+            if (!horaActual) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -964,7 +965,8 @@ function verSiHorarioDeNotificacionYaPaso (){
 
       }
       if (selecciona14) {
-          if (horaActual >= 14) {
+          // if (horaActual >= 14) {
+            if (!horaActual) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -978,8 +980,8 @@ function verSiHorarioDeNotificacionYaPaso (){
       }
 
       if (selecciona21){
-          if (horaActual >= 21) {
-            console.log("entró")
+          // if (horaActual >= 21) {
+          if (!horaActual) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -1103,13 +1105,14 @@ async function agregarTarea(event) {
 
               // Asignar el ID generado por Firestore a la tarjeta
               nuevaCard.asignarId(docRef.id);
-                    llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, check08.checked, check14.checked, check21.checked);
-                    console.log(fechaSeleccionadaConFormato, new Date().toDateString(), titulo, check08.checked, check14.checked, check21.checked)
-                    if(fechaSeleccionadaConFormato === new Date().toLocaleDateString()){
-                      console.log("son iguales")
-                    } else {
-                      console.log("nop")
-                    }
+
+                    llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha);
+
+
+                      console.log(nombreDeUsuarioDB)
+                      console.log(mailDeUsuarioDB)
+                      console.log(fecha)
+
 
                     agregarCardAlContenedor(nuevaCard);
                     ocultarFormulario();
