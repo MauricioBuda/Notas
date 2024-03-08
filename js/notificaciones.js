@@ -61,7 +61,7 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
   function llamarProgramarNotificacion (fechaSeleccionada, titulo, detalle, check08, check14, check21, nombreDeUsuarioDB, mailDeUsuarioDB, fecha) {
     let tokenDelUsuario = elToken;
-    programarNotificacion(fechaSeleccionada, titulo, check08, check14, check21, tokenDelUsuario, nombreDeUsuarioDB, mailDeUsuarioDB, fecha)
+    programarNotificacion(fechaSeleccionada, titulo, detalle, check08, check14, check21, tokenDelUsuario, nombreDeUsuarioDB, mailDeUsuarioDB, fecha)
   }
 
 
