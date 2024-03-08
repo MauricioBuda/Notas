@@ -14,17 +14,16 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-// Obtiene una instancia de Firebase Messaging
 const messaging = firebase.messaging();
 
 
-// // 1111111111111111111
 messaging.onBackgroundMessage((payload) => {
   console.log('recibido: ', payload);
-  // Customize notification here
-  const notificationTitle = "¡TENÉS UN RECORDATORIO!";
+  // const notificationTitle = "¡TENÉS UN RECORDATORIO!";
+  const notificationTitle = payload.data.fechaParaNotificar;
+
   const notificationOptions = {
-    body: payload.data.titulo,
+    body: payload.data.fechaHoy,
     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
         data: {
       url: 'https://notas-seven.vercel.app/'

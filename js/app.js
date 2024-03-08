@@ -1104,7 +1104,12 @@ async function agregarTarea(event) {
               // Asignar el ID generado por Firestore a la tarjeta
               nuevaCard.asignarId(docRef.id);
                     llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, check08.checked, check14.checked, check21.checked);
-                    console.log(fechaSeleccionadaConFormato, titulo, check08.checked, check14.checked, check21.checked)
+                    console.log(fechaSeleccionadaConFormato, new Date().toDateString(), titulo, check08.checked, check14.checked, check21.checked)
+                    if(fechaSeleccionadaConFormato === new Date().toLocaleDateString()){
+                      console.log("son iguales")
+                    } else {
+                      console.log("nop")
+                    }
 
                     agregarCardAlContenedor(nuevaCard);
                     ocultarFormulario();
