@@ -1,5 +1,5 @@
 // Imports ↓
-import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
 import { llamarProgramarNotificacion } from './notificaciones';
@@ -809,8 +809,10 @@ function ocultarCarga() {
 
 
 
+
+
 // Funcion para mostrar u ocultar el formulario, poniendo borroso lo demás
-function mostrarFormulario() {
+async function mostrarFormulario() {
   formulario.classList.toggle("oculto");
 
   if (formulario.classList.contains("oculto")) {

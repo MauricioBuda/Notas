@@ -10,7 +10,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
       const snapshot = await admin.firestore().collection('notificaciones08hs').where('procesado', '==', false).get();
       const promises = []; // Arreglo para almacenar las promesas de actualización
 
-      snapshot.forEach((doc) => {
+      snapshot.forEach(async(doc) => {
         const notificacion = doc.data();
         const fechaParaNotificar = notificacion.fecha;
         const fechaHoy = formatarFecha(new Date().toLocaleDateString());
@@ -24,29 +24,11 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
             token: notificacion.token,
           };
          // Enviar notificación
-        const sendPromise = admin.messaging().send(mensaje);
+        const sendPromise = await admin.messaging().send(mensaje);
         
         // Marcar el documento como procesado después de enviar la notificación
-        const updatePromise = sendPromise.then(() => {
-          return doc.ref.update({ procesado: true });
-        });
+        const updatePromise = await doc.ref.update({ procesado: true });
 
-
-        } else{
-          mensaje = {
-            data: {
-              titulo: "Hubo algún error con el título",
-            },
-            token: notificacion.token,
-          };
-
-                            // Enviar notificación
-        const sendPromise = admin.messaging().send(mensaje);
-        
-        // Marcar el documento como procesado después de enviar la notificación
-        const updatePromise = sendPromise.then(() => {
-          return doc.ref.update({ procesado: true });
-        });
         }
 
         promises.push(sendPromise);
@@ -75,7 +57,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
       const snapshot = await admin.firestore().collection('notificaciones14hs').where('procesado', '==', false).get();
       const promises = []; // Arreglo para almacenar las promesas de actualización
 
-      snapshot.forEach((doc) => {
+      snapshot.forEach(async(doc) => {
         const notificacion = doc.data();
         const fechaParaNotificar = notificacion.fecha;
         const fechaHoy = formatarFecha(new Date().toLocaleDateString());
@@ -89,29 +71,11 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
             token: notificacion.token,
           };
          // Enviar notificación
-        const sendPromise = admin.messaging().send(mensaje);
+        const sendPromise = await admin.messaging().send(mensaje);
         
         // Marcar el documento como procesado después de enviar la notificación
-        const updatePromise = sendPromise.then(() => {
-          return doc.ref.update({ procesado: true });
-        });
+        const updatePromise = await doc.ref.update({ procesado: true });
 
-
-        } else{
-          mensaje = {
-            data: {
-              titulo: "Hubo algún error con el título",
-            },
-            token: notificacion.token,
-          };
-
-                            // Enviar notificación
-        const sendPromise = admin.messaging().send(mensaje);
-        
-        // Marcar el documento como procesado después de enviar la notificación
-        const updatePromise = sendPromise.then(() => {
-          return doc.ref.update({ procesado: true });
-        });
         }
 
         promises.push(sendPromise);
@@ -140,7 +104,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
       const snapshot = await admin.firestore().collection('notificaciones21hs').where('procesado', '==', false).get();
       const promises = []; // Arreglo para almacenar las promesas de actualización
 
-      snapshot.forEach((doc) => {
+      snapshot.forEach(async(doc) => {
         const notificacion = doc.data();
         const fechaParaNotificar = notificacion.fecha;
         const fechaHoy = formatarFecha(new Date().toLocaleDateString());
@@ -154,30 +118,12 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
             token: notificacion.token,
           };
          // Enviar notificación
-        const sendPromise = admin.messaging().send(mensaje);
+        const sendPromise = await admin.messaging().send(mensaje);
         
         // Marcar el documento como procesado después de enviar la notificación
-        const updatePromise = sendPromise.then(() => {
-          return doc.ref.update({ procesado: true });
-        });
+        const updatePromise = await doc.ref.update({ procesado: true });
 
-
-        } else{
-          mensaje = {
-            data: {
-              titulo: "Hubo algún error con el título",
-            },
-            token: notificacion.token,
-          };
-
-                            // Enviar notificación
-        const sendPromise = admin.messaging().send(mensaje);
-        
-        // Marcar el documento como procesado después de enviar la notificación
-        const updatePromise = sendPromise.then(() => {
-          return doc.ref.update({ procesado: true });
-        });
-        }
+        } 
 
         promises.push(sendPromise);
         promises.push(updatePromise);
