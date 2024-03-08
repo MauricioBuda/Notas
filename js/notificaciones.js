@@ -59,7 +59,7 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
 
 
-  function llamarProgramarNotificacion (fechaSeleccionada, titulo, check08, check14, check21, nombreDeUsuarioDB, mailDeUsuarioDB, fecha) {
+  function llamarProgramarNotificacion (fechaSeleccionada, titulo, detalle, check08, check14, check21, nombreDeUsuarioDB, mailDeUsuarioDB, fecha) {
     let tokenDelUsuario = elToken;
     programarNotificacion(fechaSeleccionada, titulo, check08, check14, check21, tokenDelUsuario, nombreDeUsuarioDB, mailDeUsuarioDB, fecha)
   }
@@ -69,13 +69,14 @@ getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcO
 
 
 
-function programarNotificacion (fechaSeleccionada, titulo, check08, check14, check21, token, nombreUsuario, mail, fechaDeCarga) {
+function programarNotificacion (fechaSeleccionada, titulo, detalle, check08, check14, check21, token, nombreUsuario, mail, fechaDeCarga) {
     const firestore = getFirestore(app);
 
     if (check08) {
       let docRef1 = addDoc(collection(db, 'notificaciones08hs'), {
         token: token,
         titulo: titulo,
+        detalle:detalle,
         fecha: fechaSeleccionada,
         procesado: false,
         nombreUsuario: nombreUsuario,
@@ -89,6 +90,7 @@ function programarNotificacion (fechaSeleccionada, titulo, check08, check14, che
       let docRef2 = addDoc(collection(db, 'notificaciones14hs'), {
         token: token,
         titulo: titulo,
+        detalle:detalle,
         fecha: fechaSeleccionada,
         procesado: false,
         nombreUsuario: nombreUsuario,
@@ -101,6 +103,7 @@ function programarNotificacion (fechaSeleccionada, titulo, check08, check14, che
       let docRef3 = addDoc(collection(db, 'notificaciones21hs'), {
         token: token,
         titulo: titulo,
+        detalle:detalle,
         fecha: fechaSeleccionada,
         procesado: false,
         nombreUsuario: nombreUsuario,

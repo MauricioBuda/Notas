@@ -1037,7 +1037,7 @@ check21.addEventListener('change', function(event) {
 
 
 
-// Función para aagarrar los datos que ingresa el usuario cuando agrega una tarea, y guardarlos en la DB
+// Función para agarrar los datos que ingresa el usuario cuando agrega una tarea, y guardarlos en la DB
 async function agregarTarea(event) {
   mostrarCarga();
   event.preventDefault();
@@ -1105,9 +1105,9 @@ async function agregarTarea(event) {
 
               // Asignar el ID generado por Firestore a la tarjeta
               nuevaCard.asignarId(docRef.id);
-
-                    llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha);
-
+              
+                    console.log(fechaSeleccionadaConFormato, titulo, detalle, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha)
+                    llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, detalle, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha);
 
                       console.log(nombreDeUsuarioDB)
                       console.log(mailDeUsuarioDB)
