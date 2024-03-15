@@ -19,7 +19,7 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
   console.log('recibido: ', payload);
-  const notificationTitle = `¡RECORDATORIO PARA ${notification.nombreUsuario}!`;
+  const notificationTitle = `¡RECORDATORIO PARA ${payload.data.nombreUsuario}!`;
 
   const notificationOptions = {
     body: payload.data.titulo,
