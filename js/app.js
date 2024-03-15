@@ -38,6 +38,7 @@ botonAgregarTarea.addEventListener("click", agregarTarea);
 
 // Variables del formulario, de la notificación ↓
 let calendario = $('#datepicker');
+let iconoCalendar = document.getElementById("icono-calendar")
 let aceptarNoti = document.getElementById("aceptar-noti");
 let rechazarNoti = document.getElementById("rechazar-noti");
 let quiereNotificacion = false;
@@ -919,6 +920,7 @@ function vaciarCampos() {
 // Función para habilitar la programación de la notificación
 function mostrarCargaDeNotificacion(e){
   e.preventDefault();
+  iconoCalendar.classList.remove("icono-calendar-block")
   check08.disabled = false;
   check14.disabled = false;
   check21.disabled = false;
@@ -931,6 +933,7 @@ function ocultarCargaDeNotificacion(e){
   if (e) {
     e.preventDefault();
   }
+  iconoCalendar.classList.add("icono-calendar-block")
   check08.disabled = true;
   check14.disabled = true;
   check21.disabled = true;

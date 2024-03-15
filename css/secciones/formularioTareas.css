@@ -133,12 +133,24 @@
     
   }
 
+  .icono-aceptar:active{
+    background-color: rgb(0, 194, 0);
+  }
+
   .icono-cancelar{
     background-color: rgba(255, 0, 0, 0.3);
   }
 
   .icono-cancelar:hover{
     background-color: rgba(255, 0, 0, 0.6);
+  }
+
+  .icono-cancelar:active{
+    background-color: rgb(255, 0, 0);
+  }
+
+  .icono-calendar-block{
+    --bs-bg-opacity: 0.2;
   }
   
   
@@ -175,6 +187,11 @@
 
   .div-de-checkbox label{
     font-size: 1vw;
+    
+  }
+
+  .form-control:disabled{
+    opacity: 0.2;
   }
 
   /* FIN CALENDARIO */
