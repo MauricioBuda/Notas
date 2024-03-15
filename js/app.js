@@ -2,7 +2,7 @@
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
-import { llamarProgramarNotificacion } from './notificaciones';
+import { llamarProgramarNotificacion, obtenerToken } from './notificaciones';
 import Swal from 'sweetalert2';
 
 
@@ -217,6 +217,7 @@ async function corroborarSesionIniciada (){
     // Si entro al IF es que hay una sesión iniciada
     if (usuario) {
       console.log('Usuario autenticado:  ', usuario.displayName);
+      obtenerToken();
       // Creo esta variable como bandera para poder cambiar nombre en cambiarNombre();
       usuarioConSesionIniciada=usuario; 
 
@@ -952,8 +953,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
   if (fechaActual === fechaSeleccionadaConFormato) {
       if (selecciona08) {
-          // if (horaActual >= 8) {
-            if (!horaActual) {
+          if (horaActual >= 8) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -967,8 +967,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
       }
       if (selecciona14) {
-          // if (horaActual >= 14) {
-            if (!horaActual) {
+          if (horaActual >= 14) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -982,8 +981,7 @@ function verSiHorarioDeNotificacionYaPaso (){
       }
 
       if (selecciona21){
-          // if (horaActual >= 21) {
-          if (!horaActual) {
+          if (horaActual >= 21) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -1107,13 +1105,13 @@ async function agregarTarea(event) {
 
               // Asignar el ID generado por Firestore a la tarjeta
               nuevaCard.asignarId(docRef.id);
-              
-                    console.log(fechaSeleccionadaConFormato, titulo, detalle, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha)
-                    llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, detalle, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha);
 
-                      console.log(nombreDeUsuarioDB)
-                      console.log(mailDeUsuarioDB)
-                      console.log(fecha)
+
+
+                    if(quiereNotificacion){
+                      llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, detalle, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha);
+                    }
+
 
 
                     agregarCardAlContenedor(nuevaCard);

@@ -332,9 +332,9 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
-        console.log('Service Worker registrado con éxito:', registration);
+        console.log('Service Worker registrado con éxito');
       }).catch(error => {
-        console.error('Error al registrar el Service Worker:', error);
+        console.error('Error al registrar el Service Worker:  ', error);
       });
     });
   }
@@ -353,7 +353,7 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
 <script>
     $(function(){
         $('#datepicker').datepicker({
-            startDate: new Date(), // Establece la fecha mínima como la fecha actual
+            startDate: new Date(), 
             format: 'dd-mm-yyyy',
         });
     });

@@ -31,9 +31,9 @@ function requestPermission() {
     console.log("Esperando confirmación.....");
     Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
-        console.log('Permiso OK');
+        console.log('Permiso otorgado OK');
       } else {
-        console.log("no accede al permiso")
+        console.log("No accede al permiso")
       }
     })
 }
@@ -43,19 +43,21 @@ requestPermission();
 
 
 
+function obtenerToken(){
+  getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcOCde6XrxOX4sfm6wxL0QvtkP2PXmrag_PXb9ctsmU' })
+  .then((currentToken) => {
+      if (currentToken) {
+          elToken = currentToken;
+        console.log ("TOKEN OK →     ", currentToken)
+      } else {
+        // Show permission request UI
+        console.log('No registration token available. Request permission to generate one.');
+      }
+    }).catch((err) => {
+      console.log('An error occurred while retrieving token. ', err);
+    });
+}
 
-getToken(messaging, { vapidKey: 'BDpNk8BoC9BMf5ehzf3gleGjL0QBel69UeLdAbDk4FsCzcOCde6XrxOX4sfm6wxL0QvtkP2PXmrag_PXb9ctsmU' })
-.then((currentToken) => {
-    if (currentToken) {
-        elToken = currentToken;
-      console.log ("TOKEN OK →     ", currentToken)
-    } else {
-      // Show permission request UI
-      console.log('No registration token available. Request permission to generate one.');
-    }
-  }).catch((err) => {
-    console.log('An error occurred while retrieving token. ', err);
-  });
 
 
 
@@ -113,4 +115,4 @@ function programarNotificacion (fechaSeleccionada, titulo, detalle, check08, che
     }
 }
 
-export { llamarProgramarNotificacion }
+export { llamarProgramarNotificacion , obtenerToken }

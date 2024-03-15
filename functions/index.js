@@ -20,6 +20,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
           mensaje = {
             data: {
               titulo: notificacion.titulo,
+              nombreUsuario: notificacion.nombreUsuario,
             },
             token: notificacion.token,
           };
@@ -67,6 +68,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
           mensaje = {
             data: {
               titulo: notificacion.titulo,
+              nombreUsuario: notificacion.nombreUsuario,
             },
             token: notificacion.token,
           };
@@ -114,6 +116,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
           mensaje = {
             data: {
               titulo: notificacion.titulo,
+              nombreUsuario: notificacion.nombreUsuario,
             },
             token: notificacion.token,
           };
