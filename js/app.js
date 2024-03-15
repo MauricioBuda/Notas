@@ -1261,9 +1261,9 @@ function agregarCardAlContenedor(tarea) {
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
       <p class="p_detalle">${textoCortado}</p>
-      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
+      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
     </div>
   `;
@@ -1273,9 +1273,9 @@ function agregarCardAlContenedor(tarea) {
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
       <p class="p_detalle">${textoCortado}</p>
-      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
+      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
     </div>
   `;
@@ -1329,6 +1329,54 @@ function masOpciones(id){
         </div>
   </div>
     `;
+
+    if (tarea.estado === "Pendientes") {
+      nuevaCardHTML = `
+    <div id="${cardModalID}" class="cards_modal">
+    <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
+    <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
+        <div class="div_modales">
+        <strong>URGENCIA: </strong>
+        <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
+        </div>
+        <div class="div_modales">
+        <strong>SECCIÓN: </strong>
+        <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otras"}</p>
+        </div>
+        <div class="div_modales">
+        <strong>CREACIÓN: </strong>
+        <p> ${tarea.fechaCreacion}</p>
+        </div>
+        <div class="div_modales">
+        <strong>ÚLTIMA EDICIÓN: </strong>
+        <p>${tarea.ultimaEdicion}</p>
+        </div>
+  </div>
+    `;
+    } else {
+      nuevaCardHTML = `
+    <div id="${cardModalID}" class="cards_modal">
+    <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
+    <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
+        <div class="div_modales">
+        <strong>URGENCIA: </strong>
+        <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
+        </div>
+        <div class="div_modales">
+        <strong>SECCIÓN: </strong>
+        <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otras"}</p>
+        </div>
+        <div class="div_modales">
+        <strong>CREACIÓN: </strong>
+        <p> ${tarea.fechaCreacion}</p>
+        </div>
+        <div class="div_modales">
+        <strong>FIN: </strong>
+        <p> ${tarea.fechaCierre}</p>
+        </div>
+  </div>
+    `;
+    }
 
 modalCard.innerHTML = nuevaCardHTML;
 modalFooter.innerHTML="";

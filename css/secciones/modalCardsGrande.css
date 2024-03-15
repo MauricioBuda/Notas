@@ -26,9 +26,10 @@
 
   .cards_modal > p, .cards_modal > div, h1{
     width: 100%;
-    padding: 1vw;
+    min-height: 8vh;
+    /* padding: 1vw; */
     border-radius: 10px;
-    /* border: solid 2px black; */
+    box-shadow: 2px 2px rgb(0, 0, 0);
     background-color: #00000011;
   }
   
@@ -54,17 +55,23 @@
   }
   
   .h3_modal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     font-size: 3.5vw;
   }
   
   .detalle_modal{
+    /* display: flex; */
     justify-content: center;
+    align-items: center;
     text-align: center;
     font-size: 2vw;
     max-width: 85vw;
     text-wrap: wrap;
     overflow-wrap: break-word; 
+    margin-bottom: 0;
   }
   
   .div_modales{
@@ -113,7 +120,14 @@
   }
   
   
-
+  .fondo_input_editable{
+    background-color: white!important;
+    border: solid 1px black;
+    border-radius: 10px;
+    padding-left: 2vw;
+    padding-right: 2vw;
+  }
+  
 
     /* MEDIA QUERYS */
   @media screen and (max-width: 524px) {
@@ -128,6 +142,8 @@
     }
     
     .detalle_modal{
+      padding-top: 2.5vw;
+      align-items: center;
       justify-content: center;
       text-align: center;
       font-size: 5vw;
@@ -147,8 +163,8 @@
     }
     
     .div_modales p{
-      margin-top: 2vw;
-      font-size: 3vw;
+      margin-top: 2.5vw;
+      font-size: 3.6vw;
     }
     
     .botonesCards_modal{
