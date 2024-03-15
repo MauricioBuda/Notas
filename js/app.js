@@ -1308,23 +1308,23 @@ function masOpciones(id){
     <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
     <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
         <div class="div_modales">
-        <strong>URGENCIA → </strong>
+        <strong>URGENCIA: </strong>
         <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
         </div>
         <div class="div_modales">
-        <strong>SECCIÓN → </strong>
+        <strong>SECCIÓN: </strong>
         <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otras"}</p>
         </div>
         <div class="div_modales">
-        <strong>CREACIÓN → </strong>
+        <strong>CREACIÓN: </strong>
         <p> ${tarea.fechaCreacion}</p>
         </div>
         <div class="div_modales">
-        <strong>ÚLTIMA EDICIÓN → </strong>
+        <strong>ÚLTIMA EDICIÓN: </strong>
         <p>${tarea.ultimaEdicion}</p>
         </div>
         <div class="div_modales">
-        <strong>FIN → </strong>
+        <strong>FIN: </strong>
         <p> ${tarea.fechaCierre}</p>
         </div>
   </div>
