@@ -1227,7 +1227,7 @@ function agregarCardAlContenedor(tarea) {
             <p>URGENCIA: <br> ${tarea.urgencia}</p>
             <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
             <p>SECCIÓN: <br> ${tarea.seccion}</p>
-            <button class="button-campana-card"><img class="icono-campana-card" src="../img/bell.svg" alt="notification"></button>
+            <button class="button-campana-card"><img class="icono-campana-card" src="/img/bell.svg" alt="notification"></button>
             <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
             <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
           </div>
@@ -1241,7 +1241,7 @@ function agregarCardAlContenedor(tarea) {
           <p>URGENCIA: <br> ${tarea.urgencia}</p>
           <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
           <p>SECCIÓN: <br> ${tarea.seccion}</p>
-          <button class="button-campana-card"><img class="icono-campana-card" src="../img/bell.svg" alt="notification"></button>
+          <button class="button-campana-card"><img class="icono-campana-card" src="/img/bell.svg" alt="notification"></button>
           <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
           <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
         </div>
@@ -1255,7 +1255,7 @@ function agregarCardAlContenedor(tarea) {
           <p>URGENCIA: <br> ${tarea.urgencia}</p>
           <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
           <p>SECCIÓN: <br> ${tarea.seccion}</p>
-          <button class="button-campana-card"><img class="icono-campana-card" src="../img/bell.svg" alt="notification"></button>
+          <button class="button-campana-card"><img class="icono-campana-card" src="/img/bell.svg" alt="notification"></button>
           <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
           <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
         </div>
@@ -1392,7 +1392,7 @@ modalFooter.innerHTML="";
 if (tarea.estado === "Pendientes") {
   let botonesCard = `
   <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
-  <button  class="button-campana-modal"><img class="icono-campana-modal" src="../img/bell.svg" alt="notification"></button>
+  <button  class="button-campana-modal"><img class="icono-campana-modal" src="/img/bell.svg" alt="notification"></button>
   <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
   <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
   <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
