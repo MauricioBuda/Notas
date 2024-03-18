@@ -88,8 +88,21 @@
     border: 2px rgb(255, 0, 0) solid;
     box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.9);
   }
+
+  .button-campana-card{
+    width: 50%;
+  }
   
   
+.icono-campana-card{
+  width: 3vw;
+}
+
+.button-campana-card:hover{
+  filter: drop-shadow(2px 4px 3px rgb(0, 0, 0));
+}
+
+
 
 
 
@@ -118,6 +131,15 @@
     .cards{
       min-height: 10vh;
     }
+
+    .button-campana-card{
+      width: 70%;
+    }
+    
+    
+  .icono-campana-card{
+    width: 4vw;
+  }
   }
   /* FIN SECTION_CARDS*/
   

@@ -63,7 +63,6 @@
   }
   
   .detalle_modal{
-    /* display: flex; */
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -127,6 +126,23 @@
     padding-left: 2vw;
     padding-right: 2vw;
   }
+
+
+  
+  .button-campana-modal{
+    color: #000000;
+    font-size: 2.5vw;
+    border: solid 1px rgba(0, 0, 0, 0.499);
+    width: auto;
+    margin: 0 1px 0 1px;
+    padding: 0 8px 0 8px;
+    background-color: white;
+    border-radius: 8px;
+    }
+    
+    .icono-campana-modal{
+      width: 2.5vw;
+    }
   
 
     /* MEDIA QUERYS */
@@ -168,13 +184,25 @@
     }
     
     .botonesCards_modal{
-      color: #000000;
-      font-size: 4vw;
-      border: solid 1px rgba(0, 0, 0, 0.499);
+      font-size: 3vw;
+      border: solid 1px #0000007f;
       width: auto;
-      margin: 0 1px 0 3px;
+      margin: 0 0px 0 0px;
       background-color: white;
       border-radius: 5px;
     }
+
+    .button-campana-modal{
+      border: solid 1px rgba(0, 0, 0, 0.499);
+      width: auto;
+      /* margin: 0 1px 0 1px; */
+      padding: 2.2px 8px 2.2px 8px;
+      background-color: white;
+      border-radius: 5px;
+      }
+      
+      .icono-campana-modal{
+        width: 6vw;
+      }
   }
   /* FIN MODAL DE CARDS GRANDE */

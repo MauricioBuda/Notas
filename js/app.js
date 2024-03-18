@@ -54,6 +54,7 @@ let selecciona21 = false;
 
 
 
+
 // Eventos del formulario, para la notificación ↓
 aceptarNoti.addEventListener("click", mostrarCargaDeNotificacion);
 rechazarNoti.addEventListener("click", ocultarCargaDeNotificacion);
@@ -589,7 +590,7 @@ async function cambiarNombre(){
 
 // Clase para generar cada card (tarea)
 class Tarjetas {
-  constructor(nombre, seccion, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado) {
+  constructor(nombre, seccion, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado, quiereNotificacion) {
     this.nombre = nombre;
     this.seccion = seccion;
     this.mail = mail;
@@ -601,6 +602,7 @@ class Tarjetas {
     this.fechaCierre = fechaCierre;
     this.ultimaEdicion = ultimaEdicion;
     this.estado = estado;
+    this.quiereNotificacion = quiereNotificacion;
     this.id = null; // Inicializamos el ID como nulo
   }
   asignarId(id) {
@@ -956,9 +958,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
   if (fechaActual === fechaSeleccionadaConFormato) {
       if (selecciona08) {
-          // if (horaActual >= 8) {
-          if (!horaActual) {
-
+          if (horaActual >= 8) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -972,9 +972,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
       }
       if (selecciona14) {
-          // if (horaActual >= 14) {
-          if (!horaActual) {
-
+          if (horaActual >= 14) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -988,9 +986,7 @@ function verSiHorarioDeNotificacionYaPaso (){
       }
 
       if (selecciona21){
-          // if (horaActual >= 21) {
-          if (!horaActual) {
-
+          if (horaActual >= 21) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -1094,7 +1090,7 @@ async function agregarTarea(event) {
             ocultarCarga();
             return;
   }  else {
-            let nuevaCard = new Tarjetas(nombreDeUsuarioDB, seccionQueSeMuestraEnPantalla, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
+            let nuevaCard = new Tarjetas(nombreDeUsuarioDB, seccionQueSeMuestraEnPantalla, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado, quiereNotificacion);
             unaCard.push(nuevaCard);
 
             try {
@@ -1109,16 +1105,18 @@ async function agregarTarea(event) {
                 fechaParaOrdenarlas: nuevaCard.fechaParaOrdenarlas,
                 fechaCierre: nuevaCard.fechaCierre,
                 ultimaEdicion: nuevaCard.ultimaEdicion,
-                estado: nuevaCard.estado
+                estado: nuevaCard.estado,
+                quiereNotificacion: quiereNotificacion
               });
 
               // Asignar el ID generado por Firestore a la tarjeta
               nuevaCard.asignarId(docRef.id);
+              console.log(nuevaCard.id)
 
 
 
                     if(quiereNotificacion){
-                      llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, detalle, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha);
+                      llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, detalle, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha, nuevaCard.id);
                     }
 
 
@@ -1229,6 +1227,7 @@ function agregarCardAlContenedor(tarea) {
             <p>URGENCIA: <br> ${tarea.urgencia}</p>
             <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
             <p>SECCIÓN: <br> ${tarea.seccion}</p>
+            <button class="button-campana-card"><img class="icono-campana-card" src="./img/bell.svg" alt="notification"></button>
             <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
             <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
           </div>
@@ -1242,6 +1241,7 @@ function agregarCardAlContenedor(tarea) {
           <p>URGENCIA: <br> ${tarea.urgencia}</p>
           <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
           <p>SECCIÓN: <br> ${tarea.seccion}</p>
+          <button class="button-campana-card"><img class="icono-campana-card" src="./img/bell.svg" alt="notification"></button>
           <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
           <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
         </div>
@@ -1255,6 +1255,7 @@ function agregarCardAlContenedor(tarea) {
           <p>URGENCIA: <br> ${tarea.urgencia}</p>
           <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
           <p>SECCIÓN: <br> ${tarea.seccion}</p>
+          <button class="button-campana-card"><img class="icono-campana-card" src="./img/bell.svg" alt="notification"></button>
           <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
           <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
         </div>
@@ -1341,6 +1342,7 @@ function masOpciones(id){
     <div id="${cardModalID}" class="cards_modal">
     <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
     <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
+
         <div class="div_modales">
         <strong>URGENCIA: </strong>
         <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
@@ -1390,6 +1392,7 @@ modalFooter.innerHTML="";
 if (tarea.estado === "Pendientes") {
   let botonesCard = `
   <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
+  <button  class="button-campana-modal"><img class="icono-campana-modal" src="./img/bell.svg" alt="notification"></button>
   <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
   <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
   <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
@@ -1626,7 +1629,6 @@ if (tarea) {
 async function editarTarea(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
-
   
   if (tarea) {
      //Me fijo fecha para después guardarla

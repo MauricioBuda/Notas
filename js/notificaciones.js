@@ -61,9 +61,9 @@ function obtenerToken(){
 
 
 
-  function llamarProgramarNotificacion (fechaSeleccionada, titulo, detalle, check08, check14, check21, nombreDeUsuarioDB, mailDeUsuarioDB, fecha) {
+  function llamarProgramarNotificacion (fechaSeleccionada, titulo, detalle, check08, check14, check21, nombreDeUsuarioDB, mailDeUsuarioDB, fecha, idDeLaCardEnFirestore) {
     let tokenDelUsuario = elToken;
-    programarNotificacion(fechaSeleccionada, titulo, detalle, check08, check14, check21, tokenDelUsuario, nombreDeUsuarioDB, mailDeUsuarioDB, fecha)
+    programarNotificacion(fechaSeleccionada, titulo, detalle, check08, check14, check21, tokenDelUsuario, nombreDeUsuarioDB, mailDeUsuarioDB, fecha, idDeLaCardEnFirestore)
   }
 
 
@@ -71,7 +71,7 @@ function obtenerToken(){
 
 
 
-function programarNotificacion (fechaSeleccionada, titulo, detalle, check08, check14, check21, token, nombreUsuario, mail, fechaDeCarga) {
+function programarNotificacion (fechaSeleccionada, titulo, detalle, check08, check14, check21, token, nombreUsuario, mail, fechaDeCarga, idDeLaCardEnFirestore) {
     const firestore = getFirestore(app);
 
     if (check08) {
@@ -83,7 +83,8 @@ function programarNotificacion (fechaSeleccionada, titulo, detalle, check08, che
         procesado: false,
         nombreUsuario: nombreUsuario,
         mail: mail,
-        fechaDeCarga: fechaDeCarga
+        fechaDeCarga: fechaDeCarga,
+        idDeLaCardEnFirestore: idDeLaCardEnFirestore
     });
     }
 
@@ -97,7 +98,8 @@ function programarNotificacion (fechaSeleccionada, titulo, detalle, check08, che
         procesado: false,
         nombreUsuario: nombreUsuario,
         mail: mail,
-        fechaDeCarga: fechaDeCarga
+        fechaDeCarga: fechaDeCarga,
+        idDeLaCardEnFirestore: idDeLaCardEnFirestore
       });
     }
 
@@ -110,7 +112,8 @@ function programarNotificacion (fechaSeleccionada, titulo, detalle, check08, che
         procesado: false,
         nombreUsuario: nombreUsuario,
         mail: mail,
-        fechaDeCarga: fechaDeCarga
+        fechaDeCarga: fechaDeCarga,
+        idDeLaCardEnFirestore: idDeLaCardEnFirestore
     });
     }
 }
