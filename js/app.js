@@ -118,11 +118,11 @@ let canceladasCards = document.getElementById("canceladas-cards");
 
 // Variables de la ventana modal, de cards grandes ↓
 let modalCard = document.getElementById("cardEnModal");
+let modalNotificacion = document.getElementById("modalNotificacion");
 let modalFooter = document.getElementById("modal_footerID");
 let svgBell = `<svg class="img-campana-card" xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
 <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
 </svg>`;
-
 
 // Variables para pantalla de ingreso ↓
 let pantallaInicioSesion = document.getElementById("formInicioSesion");
@@ -1114,7 +1114,6 @@ async function agregarTarea(event) {
 
               // Asignar el ID generado por Firestore a la tarjeta
               nuevaCard.asignarId(docRef.id);
-              console.log(nuevaCard.id)
 
 
 
@@ -1165,39 +1164,54 @@ async function agregarTarea(event) {
 function asignarEventosSegunDondeHagaClick() {
   // Asignar eventos a los botones
   document.addEventListener("click", (event) => {
+
       // Verificar si el clic ocurrió en un botón de editar
       if (event.target.id.startsWith("editar-")) {
-          // Extraer el ID de la tarea de la identificación del botón
-          editarTarea(event.target.id.split("-")[1]);
+        // Extraer el ID de la tarea de la identificación del botón
+        editarTarea(event.target.id.split("-")[1]);
       } 
+
       // Verificar si el clic ocurrió en un botón de finalizar
       else if (event.target.id.startsWith("finalizar-")) {
-          // Extraer el ID de la tarea de la identificación del botón
-          finalizarTarea(event.target.id.split("-")[1]);
+        // Extraer el ID de la tarea de la identificación del botón
+        finalizarTarea(event.target.id.split("-")[1]);
       } 
-            // Verificar si el clic ocurrió en un botón de finalizar
-            else if (event.target.id.startsWith("restaurar-")) {
-              // Extraer el ID de la tarea de la identificación del botón
-              restaurarTarea(event.target.id.split("-")[1]);
-          }
+
+        // Verificar si el clic ocurrió en un botón de restaurar
+      else if (event.target.id.startsWith("restaurar-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        restaurarTarea(event.target.id.split("-")[1]);
+      }
+
       // Verificar si el clic ocurrió en un botón de finalizar
       else if (event.target.id.startsWith("modal-finalizar-")) {
         // Extraer el ID de la tarea de la identificación del botón
         finalizarTarea(event.target.id.split("-")[2]);
-      // Verificar si el clic ocurrió en un botón de cancelar
       }
+
+      // Verificar si el clic ocurrió en un botón de cancelar
       else if (event.target.id.startsWith("cancelar-")) {
-          // Extraer el ID de la tarea de la identificación del botón
-          cancelarTarea(event.target.id.split("-")[1]);
-      }// Verificar si el clic ocurrió en un botón de opciones
+        // Extraer el ID de la tarea de la identificación del botón
+        cancelarTarea(event.target.id.split("-")[1]);
+      }
+      
+      // Verificar si el clic ocurrió en un botón de opciones
       else if (event.target.id.startsWith("opciones-")) {
         // Extraer el ID de la tarea de la identificación del botón
         masOpciones(event.target.id.split("-")[1]);
-    }// Verificar si el clic ocurrió en un botón de eliminar
-    else if (event.target.id.startsWith("eliminar-")) {
-      // Extraer el ID de la tarea de la identificación del botón
-      eliminar(event.target.id.split("-")[1]);
-  }
+      }
+      
+      // Verificar si el clic ocurrió en un botón de eliminar
+      else if (event.target.id.startsWith("eliminar-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        eliminar(event.target.id.split("-")[1]);
+      }
+
+      // Verificar si el clic ocurrió en un botón de campanita
+      else if (event.target.id.startsWith("bell-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        mostrarSiTieneNotificaciones(event.target.id.split("-")[1]);
+      }
   });
 }
 
@@ -1310,6 +1324,7 @@ function masOpciones(id){
     let botonCancelarID = `cancelar-${tarea.id}`;
     let botonEliminarID = `eliminar-${tarea.id}`;
     let botonRestaurarID = `restaurar-${tarea.id}`;
+    let botonBellID = `bell-${tarea.id}`;
   
     let nuevaCardHTML = `
     <div id="${cardModalID}" class="cards_modal">
@@ -1393,7 +1408,7 @@ modalFooter.innerHTML="";
 if (tarea.estado === "Pendientes") {
   let botonesCard = `
   <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
-  <button class="button-campana-modal">${svgBell}</button>
+  <button id="${botonBellID}" class="button-campana-modal">${svgBell}</button>
   <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
   <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
   <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
@@ -1406,6 +1421,56 @@ modalFooter.innerHTML = botonesCard;
 
     `
     modalFooter.innerHTML = botonesCard;
+  }
+}
+
+
+
+
+
+// Funcion del boton de la campanita, para ver si esa tarea tiene notificaciones
+function mostrarSiTieneNotificaciones (id) {
+  let tarea = unaCard.find((t) => t.id === id);
+
+  let modalDeNotificacionID = `modalNotificacion-${tarea.id}`;
+  let botonAgregarNotificacionID = `eliminar-${tarea.id}`;
+  let notificacionesExistentesID = `notificacionesExistentes-${tarea.id}`;
+
+
+  if(tarea.quiereNotificacion){
+    console.log("entra al if")
+    const db = firebase.firestore();
+    const coleccion = db.collection('notificaciones08hs');
+    let modalParaNotificacion = document.createElement("div");
+    modalParaNotificacion.innerHTML = `
+    <div class="modalDeNotificacion" id="${modalDeNotificacionID}" class="modal-notificacion">
+      <div>
+      <h1> Notificacines programadas: </h1>
+      </div>
+      <div id="${notificacionesExistentesID}">
+            <!-- Aquí se mostrarán las notificaciones -->
+      </div>
+      <div>
+        <button id="${botonAgregarNotificacionID}" class="btn botonesCards_modal" >Agregar</button>
+      </div>
+    </div>
+    `;
+
+    modalCard.appendChild(modalParaNotificacion)
+  } else {
+    let modalParaNotificacion = document.createElement("div");
+    modalParaNotificacion.innerHTML = `
+    <div class="modalDeNotificacion" id="${modalDeNotificacionID}" class="modal-notificacion">
+      <div>
+      <h1> No tiene notificacines programadas </h1>
+      </div>
+      <div>
+        <button id="${botonAgregarNotificacionID}" class="btn botonesCards_modal" >Agregar</button>
+      </div>
+    </div>
+    `;
+    console.log("entra al else")
+    modalCard.appendChild(modalParaNotificacion)
   }
 }
 

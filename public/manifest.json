@@ -1,0 +1,11 @@
+{
+    "name": "Nombre de tu aplicación",
+    "short_name": "Nombre corto",
+    "icons": [
+      {
+        "src": "./img-public/agenda.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ]
+  }
