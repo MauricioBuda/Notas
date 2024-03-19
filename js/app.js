@@ -1,6 +1,6 @@
 // Imports ↓
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
-import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
+import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
 import { llamarProgramarNotificacion, obtenerToken } from './notificaciones';
 import Swal from 'sweetalert2';
@@ -961,8 +961,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
   if (fechaActual === fechaSeleccionadaConFormato) {
       if (selecciona08) {
-          // if (horaActual >= 8) {
-            if (!horaActual){
+          if (horaActual >= 8) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -976,8 +975,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
       }
       if (selecciona14) {
-          // if (horaActual >= 14) {
-            if (!horaActual){
+          if (horaActual >= 14) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -991,8 +989,7 @@ function verSiHorarioDeNotificacionYaPaso (){
       }
 
       if (selecciona21){
-          // if (horaActual >= 21) {
-            if (!horaActual){
+          if (horaActual >= 21) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -1442,8 +1439,10 @@ function mostrarSiTieneNotificaciones (id) {
 
   if(tarea.quiereNotificacion){
     console.log("entra al if")
-    const db = firebase.firestore();
-    const coleccion = db.collection('notificaciones08hs');
+    obtenerColeccionDeFirestore("notificaciones08hs", tarea.id);
+    obtenerColeccionDeFirestore("notificaciones14hs", tarea.id);
+    obtenerColeccionDeFirestore("notificaciones21hs", tarea.id);
+
     let modalParaNotificacion = document.createElement("div");
     modalParaNotificacion.innerHTML = `
     <div class="modalDeNotificacion" id="${modalDeNotificacionID}" class="modal-notificacion">

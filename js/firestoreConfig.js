@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore'
+import { getFirestore, getDocs, collection } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2';
 
@@ -112,8 +112,24 @@ async function eliminarCuenta() {
 
 
 
+async function obtenerColeccionDeFirestore (nombreColeccion, idDeLaCardSeleccionada){
+  const querySnapshot = await getDocs(collection(db, nombreColeccion));
+
+  // Iterar sobre las tareas y agregarlas al array y al contenedor
+  querySnapshot.forEach((doc) => {
+    const cardDeNotificacion = doc.data();
+    if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
+      console.log("Hay una cargada en: ", nombreColeccion)
+      console.log("Para la fecha: ", cardDeNotificacion.fecha)
+    }
+  })
+
+}
 
 
-export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta};
+
+
+
+export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore};
 
 
