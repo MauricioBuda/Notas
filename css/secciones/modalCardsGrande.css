@@ -140,9 +140,6 @@
     border-radius: 8px;
     }
     
-    .icono-campana-modal{
-      width: 2.5vw;
-    }
   
 
     /* MEDIA QUERYS */
@@ -201,8 +198,5 @@
       border-radius: 5px;
       }
       
-      .icono-campana-modal{
-        width: 6vw;
-      }
   }
   /* FIN MODAL DE CARDS GRANDE */
