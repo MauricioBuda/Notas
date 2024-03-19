@@ -89,27 +89,9 @@
     box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.9);
   }
 
-  .button-campana-card{
-    width: 50%;
-    color: #000000;
-    font-size: 1.5vw;
-    border: solid 1px rgba(0, 0, 0, 0.499);
-    margin: 0 10px 0 20px;
-    padding: 6px 0 6px 0;
-    background-color: white;
-    border-radius: 8px;
-  }
+
+
   
-
-.button-campana-card:hover{
-  filter: drop-shadow(2px 4px 3px rgb(0, 0, 0));
-}
-
-.img-campana-card{
-  width: inherit;
-}
-
-
 
   /* MEDIA QUERYS */
   @media screen and (max-width: 524px) {
@@ -136,17 +118,6 @@
     .cards{
       min-height: 10vh;
     }
-
-    .button-campana-card{
-      margin: 0px 5px 0 2px;
-      border-radius: 5px;
-      width: 70%;
-      padding: 2px 4px 2px 4px;
-  }
-
-  .img-campana-card{
-    width: 4vw;
-  }
 }
   /* FIN SECTION_CARDS*/
   
