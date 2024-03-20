@@ -1,6 +1,6 @@
 // Imports ↓
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
-import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore } from './firestoreConfig';
+import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
 import { llamarProgramarNotificacion, obtenerToken } from './notificaciones';
 import Swal from 'sweetalert2';
@@ -59,8 +59,8 @@ let selecciona21 = false;
 aceptarNoti.addEventListener("click", mostrarCargaDeNotificacion);
 rechazarNoti.addEventListener("click", ocultarCargaDeNotificacion);
 
-
-
+// Variables para el modal de notificación ↓
+let modalParaNotificacion
 
 // Variable del modal de cargando ↓
 const modalCarga = document.getElementById('modalCarga');
@@ -118,7 +118,7 @@ let canceladasCards = document.getElementById("canceladas-cards");
 
 // Variables de la ventana modal, de cards grandes ↓
 let modalCard = document.getElementById("cardEnModal");
-let modalNotificacion = document.getElementById("modalNotificacion");
+// let modalNotificacion = document.getElementById("modalNotificacion");
 let modalFooter = document.getElementById("modal_footerID");
 let svgBell = `<svg class="img-campana-card" xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
 <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
@@ -193,6 +193,7 @@ corroborarSesionIniciada();
 
 // Le asigno eventos a los botones de las cards
 asignarEventosSegunDondeHagaClick();
+
 
 
 
@@ -1212,6 +1213,25 @@ function asignarEventosSegunDondeHagaClick() {
         // Extraer el ID de la tarea de la identificación del botón
         mostrarSiTieneNotificaciones(event.target.id.split("-")[1]);
       }
+      
+      // Verificar si el clic ocurrió en un botón de agregar notificación a card existente
+      else if (event.target.id.startsWith("agregarNoti-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        agregarNotificacionACardExistente(event.target.id.split("-")[1]);
+      }
+      
+      // Verificar si el clic ocurrió en un botón cerrar el modal para ver notificaciones existentes
+      else if (event.target.id.startsWith("salirDeModalNoti-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        cerrarModalConNotificacionesExistentes(event.target.id.split("-")[1]);
+      }
+
+                  
+      // Verificar si el clic ocurrió en un botón eliminar notificación existente
+      else if (event.target.id.startsWith("eliminarNoti-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        eliminarNotificaconExistente(event.target.id.split("-")[1]);
+      }
   });
 }
 
@@ -1225,7 +1245,6 @@ function agregarCardAlContenedor(tarea) {
   let cardID = `card-${tarea.id}`;
   let botonFinalizarID = `finalizar-${tarea.id}`;
   let botonMasOpcionesID = `opciones-${tarea.id}`;
-  let botonEliminarID = `eliminar-${tarea.id}`;
   let textoCortado = tarea.detalle
 
   let maxCaracteres = 40;
@@ -1429,53 +1448,157 @@ modalFooter.innerHTML = botonesCard;
 
 
 // Funcion del boton de la campanita, para ver si esa tarea tiene notificaciones
-function mostrarSiTieneNotificaciones (id) {
+async function mostrarSiTieneNotificaciones (id) {
   let tarea = unaCard.find((t) => t.id === id);
 
+
+  let botonEditarID = document.getElementById(`editar-${tarea.id}`);
+  let botonFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
+  let botonCancelarID = document.getElementById(`cancelar-${tarea.id}`);
+  let botonEliminarID = document.getElementById(`eliminar-${tarea.id}`);
+  let botonBellID = document.getElementById(`bell-${tarea.id}`);
+
+
   let modalDeNotificacionID = `modalNotificacion-${tarea.id}`;
-  let botonAgregarNotificacionID = `eliminar-${tarea.id}`;
+  let botonAgregarNotificacionID = `agregarNoti-${tarea.id}`;
+  let botonSalirDeNotificacionID = `salirDeModalNoti-${tarea.id}`;
   let notificacionesExistentesID = `notificacionesExistentes-${tarea.id}`;
 
 
   if(tarea.quiereNotificacion){
-    console.log("entra al if")
-    obtenerColeccionDeFirestore("notificaciones08hs", tarea.id);
-    obtenerColeccionDeFirestore("notificaciones14hs", tarea.id);
-    obtenerColeccionDeFirestore("notificaciones21hs", tarea.id);
 
-    let modalParaNotificacion = document.createElement("div");
+
+    botonEditarID.disabled = true; 
+    botonFinalizarID.disabled = true;
+    botonCancelarID.disabled = true;
+    botonEliminarID.disabled = true;
+    botonBellID.disabled = true;
+
+    modalParaNotificacion = document.createElement("div");
     modalParaNotificacion.innerHTML = `
     <div class="modalDeNotificacion" id="${modalDeNotificacionID}" class="modal-notificacion">
-      <div>
-      <h1> Notificacines programadas: </h1>
-      </div>
-      <div id="${notificacionesExistentesID}">
-            <!-- Aquí se mostrarán las notificaciones -->
-      </div>
-      <div>
-        <button id="${botonAgregarNotificacionID}" class="btn botonesCards_modal" >Agregar</button>
-      </div>
+
+        <h1 class="h1-modal-notificaciones"> Notificacines programadas: </h1>
+  
+        <div id="${notificacionesExistentesID}">
+              <!-- Aquí se mostrarán las notificaciones -->
+        </div>
+
+        <div class="botones-modal-notificacion">
+          <button id="${botonAgregarNotificacionID}" >Agregar</button>
+          <button id="${botonSalirDeNotificacionID}" >Cerrar</button>
+        </div>
     </div>
     `;
 
     modalCard.appendChild(modalParaNotificacion)
+
+    await obtenerColeccionDeFirestore("notificaciones08hs", tarea.id, notificacionesExistentesID);
+    await obtenerColeccionDeFirestore("notificaciones14hs", tarea.id, notificacionesExistentesID);
+    await obtenerColeccionDeFirestore("notificaciones21hs", tarea.id, notificacionesExistentesID);
+
+
   } else {
     let modalParaNotificacion = document.createElement("div");
     modalParaNotificacion.innerHTML = `
     <div class="modalDeNotificacion" id="${modalDeNotificacionID}" class="modal-notificacion">
       <div>
-      <h1> No tiene notificacines programadas </h1>
+      <h1 class="h1-modal-notificaciones"> No tiene notificacines programadas </h1>
       </div>
-      <div>
-        <button id="${botonAgregarNotificacionID}" class="btn botonesCards_modal" >Agregar</button>
+      <div class="botones-modal-notificacion">
+        <button id="${botonAgregarNotificacionID}" >Agregar</button>
+        <button id="${botonSalirDeNotificacionID}" >Cerrar</button>
       </div>
     </div>
     `;
-    console.log("entra al else")
     modalCard.appendChild(modalParaNotificacion)
   }
 }
 
+
+
+
+
+
+
+// Función para agregar una notificación a una tarea pendiente existente
+function agregarNotificacionACardExistente () {
+console.log("agregar")
+}
+
+
+
+
+
+// Función para cerrar modal que muestra notificaciones de una tarea pendiente existente
+function cerrarModalConNotificacionesExistentes(id){
+  let tarea = unaCard.find((t) => t.id === id);
+
+  modalParaNotificacion.remove();
+
+  let botonEditarID = document.getElementById(`editar-${tarea.id}`);
+  let botonFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
+  let botonCancelarID = document.getElementById(`cancelar-${tarea.id}`);
+  let botonEliminarID = document.getElementById(`eliminar-${tarea.id}`);
+  let botonBellID = document.getElementById(`bell-${tarea.id}`);
+
+
+  botonEditarID.disabled = false; 
+  botonFinalizarID.disabled = false;
+  botonCancelarID.disabled = false;
+  botonEliminarID.disabled = false;
+  botonBellID.disabled = false;
+}
+
+
+
+
+
+// Función para eliminar una notificación a una tarea pendiente existente
+async function eliminarNotificaconExistente(id){
+  let tarea = unaCard.find((t) => t.id === id);
+
+  let idParaEliminar08hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones08hs", tarea.id);
+  let idParaEliminar14hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones14hs", tarea.id);
+  let idParaEliminar21hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones21hs", tarea.id);
+
+  let idQueSeDebeEliminar = idParaEliminar08hs[0]?idParaEliminar08hs[0]:idParaEliminar14hs[0]?idParaEliminar14hs[0]:idParaEliminar21hs[0]?idParaEliminar21hs[0]:"Error";
+  let coleccionDelDocumentoAEliminar = idParaEliminar08hs[1]?idParaEliminar08hs[1]:idParaEliminar14hs[1]?idParaEliminar14hs[1]:idParaEliminar21hs[1]?idParaEliminar21hs[1]:"Error";
+
+  console.log(idQueSeDebeEliminar)
+  console.log(coleccionDelDocumentoAEliminar)
+
+
+
+ if (tarea) {
+  Swal.fire({
+    title: "¿Eliminar notificación programada?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Eliminar",
+    cancelButtonText: 'Cancelar',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      mostrarCarga();
+      deleteDoc(doc(db, coleccionDelDocumentoAEliminar, idQueSeDebeEliminar));
+      Swal.fire({
+        title: "Tarea eliminada!",
+        timer: 1000,
+        showConfirmButton: false,
+        icon: "success"
+      });
+      setTimeout(() => {
+        mostrarSiTieneNotificaciones(tarea.id);
+        ocultarCarga();
+      }, 1000);
+    }
+  }); 
+ } else {
+    console.log("Algún error")
+ }
+}
 
 
 
@@ -1719,6 +1842,8 @@ async function editarTarea(id) {
   let botonDeFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
   let botonDeCancelarID = document.getElementById(`cancelar-${tarea.id}`);
   let botonDeEliminarID = document.getElementById(`eliminar-${tarea.id}`);
+  let botonBellID = document.getElementById(`bell-${tarea.id}`);
+
 
 
   // Verificar si estamos en modo de edición o no
@@ -1751,6 +1876,7 @@ async function editarTarea(id) {
     botonDeFinalizarID.disabled = false;
     botonDeCancelarID.disabled = false;
     botonDeEliminarID.disabled = false;
+    botonBellID.disabled = false;
  
 
 
@@ -1813,6 +1939,7 @@ async function editarTarea(id) {
     botonDeFinalizarID.disabled = true;
     botonDeCancelarID.disabled = true;
     botonDeEliminarID.disabled = true;
+    botonBellID.disabled = true;
 
 
     let seccionSeleccionada = tarea.seccion?tarea.seccion: "Otras";

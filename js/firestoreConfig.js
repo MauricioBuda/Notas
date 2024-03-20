@@ -112,24 +112,94 @@ async function eliminarCuenta() {
 
 
 
-async function obtenerColeccionDeFirestore (nombreColeccion, idDeLaCardSeleccionada){
+
+
+
+//   // Función para asignar los eventos a los botones de las cards ↓
+//   function asignarEventosCuandoQuiereEliminarNotificacion() {
+//     // Asignar eventos a los botones
+//     document.addEventListener("click", (event) => {
+
+//   });
+// }
+
+// asignarEventosCuandoQuiereEliminarNotificacion();
+
+
+
+
+
+
+async function obtenerColeccionDeFirestore (nombreColeccion, idDeLaCardSeleccionada, IDDelcontenedorParaInsertarNotificaciones){
   const querySnapshot = await getDocs(collection(db, nombreColeccion));
+  let contenedor = document.getElementById(IDDelcontenedorParaInsertarNotificaciones);
+
 
   // Iterar sobre las tareas y agregarlas al array y al contenedor
   querySnapshot.forEach((doc) => {
     const cardDeNotificacion = doc.data();
     if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
-      console.log("Hay una cargada en: ", nombreColeccion)
-      console.log("Para la fecha: ", cardDeNotificacion.fecha)
+
+      let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
+      let modificarVariableSegunHorarioDeNotif 
+
+
+      switch (nombreColeccion) {
+        case "notificaciones08hs":
+          modificarVariableSegunHorarioDeNotif = " a las 08hs";
+          break;
+          case "notificaciones14hs":
+            modificarVariableSegunHorarioDeNotif = " a las 14hs";
+          break;
+          case "notificaciones21hs":
+            modificarVariableSegunHorarioDeNotif = " a las 21hs";
+          break;
+            modificarVariableSegunHorarioDeNotif = "Error";
+        default:
+          break;
+      }
+      
+      let cardsConNotificacionesProgramadas = `
+      <div class="modal-hijo-con-notificaciones">
+        <h3>${cardDeNotificacion.fecha}</h3>
+        <p>${modificarVariableSegunHorarioDeNotif}</p>
+        <button id= ${botonEliminarNotificacionID}>X</button>
+      </div>
+    `;
+
+    contenedor.innerHTML += cardsConNotificacionesProgramadas;
     }
   })
+}
 
+
+
+async function obtenerIDDelDocumentoAEliminarDeLasNotificaciones (nombreColeccion, idDeLaCardSeleccionada){
+  const querySnapshot = await getDocs(collection(db, nombreColeccion));
+  let documentoID
+  let nombreColeccionFinal
+
+  // Iterar sobre las tareas y agregarlas al array y al contenedor
+  querySnapshot.forEach((doc) => {
+    const cardDeNotificacion = doc.data();
+
+    if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
+      // Obtener el ID del documento
+      documentoID = doc.id;
+      nombreColeccionFinal = nombreColeccion;
+    }
+  });
+      
+      // console.log("ID de documento de notif para eliminar: ", documentoID?documentoID:"No hay en este horario");
+
+
+      return [documentoID , nombreColeccionFinal];
 }
 
 
 
 
 
-export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore};
+export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones };
 
 
