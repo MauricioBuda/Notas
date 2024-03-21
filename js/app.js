@@ -1575,7 +1575,7 @@ function agregarNotificacionACardExistente () {
     <div class="botones-modal-notificacion">
     <button  >Agregar</button>
     <button  >Cerrar</button>
-    
+
     </div>
 
 
@@ -1633,9 +1633,8 @@ async function eliminarNotificaconExistente(id){
   let idQueSeDebeEliminar = idParaEliminar08hs[0]?idParaEliminar08hs[0]:idParaEliminar14hs[0]?idParaEliminar14hs[0]:idParaEliminar21hs[0]?idParaEliminar21hs[0]:null;
   let coleccionDelDocumentoAEliminar = idParaEliminar08hs[1]?idParaEliminar08hs[1]:idParaEliminar14hs[1]?idParaEliminar14hs[1]:idParaEliminar21hs[1]?idParaEliminar21hs[1]:null;
 
-  console.log(idQueSeDebeEliminar)
-  console.log(coleccionDelDocumentoAEliminar)
-
+  // console.log(idQueSeDebeEliminar)
+  // console.log(coleccionDelDocumentoAEliminar)
 
 
  if (idQueSeDebeEliminar) {
@@ -1658,6 +1657,12 @@ async function eliminarNotificaconExistente(id){
         icon: "success"
       });
     }
+
+    setTimeout(() => {
+      cerrarModalConNotificacionesExistentes(tarea.id);
+      mostrarSiTieneNotificaciones(tarea.id);
+    }, 300);
+
   }); 
  } else {
   Swal.fire({
@@ -1674,14 +1679,15 @@ async function eliminarNotificaconExistente(id){
 
  let verSiQuedanNotificaciones = verSiQuedanNotificaciones08hs[0]?verSiQuedanNotificaciones08hs[0]:verSiQuedanNotificaciones14hs[0]?verSiQuedanNotificaciones14hs[0]:verSiQuedanNotificaciones21hs[0]?verSiQuedanNotificaciones21hs[0]:null;
 
+  console.log(verSiQuedanNotificaciones, tarea.quiereNotificacion)
+
  if(!verSiQuedanNotificaciones){
+  console.log("Paso a false la variable")
   tarea.quiereNotificacion = false;
  }
-  setTimeout(() => {
-    cerrarModalConNotificacionesExistentes(tarea.id);
-    mostrarSiTieneNotificaciones(tarea.id);
-    ocultarCarga();
-  }, 1000);
+
+
+
 }
 
 
