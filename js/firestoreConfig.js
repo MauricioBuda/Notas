@@ -148,12 +148,19 @@ async function eliminarCuenta() {
 
 
 async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, notificaciones21, idDeLaCardSeleccionada, IDDelcontenedorParaInsertarNotificaciones){
+
+  let contenedor = document.getElementById(IDDelcontenedorParaInsertarNotificaciones);
+  let bandera = 0;
+
+  let cartelCarga = document.createElement("p");
+  cartelCarga.innerText = "Buscando...";
+  contenedor.appendChild(cartelCarga);
+  
   const querySnapshot1 = await getDocs(collection(db, notificaciones08));
   const querySnapshot2 = await getDocs(collection(db, notificaciones14));
   const querySnapshot3 = await getDocs(collection(db, notificaciones21));
 
-  let contenedor = document.getElementById(IDDelcontenedorParaInsertarNotificaciones);
-  let bandera = 0;
+
 
 
   // Iterar sobre las tareas y agregarlas al array y al contenedor
@@ -164,6 +171,7 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
 
       if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
         bandera++;
+        cartelCarga.remove();
         
         let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
 
@@ -187,6 +195,7 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
 
       if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
         bandera++;
+        cartelCarga.remove();
 
         let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
 
@@ -209,6 +218,7 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
 
       if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
         bandera++;
+        cartelCarga.remove();
 
         let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
 
