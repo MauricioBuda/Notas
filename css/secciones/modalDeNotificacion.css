@@ -1,3 +1,4 @@
+/* INICIO MODAL DE NOTIFICACIONES */
 .modalDeNotificacion{
     position: absolute; 
     border-radius: 10px;
@@ -12,6 +13,9 @@
 }
 
 .h1-modal-notificaciones{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border:none;
     box-shadow: none;
     background-color: rgba(255, 255, 255, 0);
@@ -67,3 +71,45 @@
     color:red;
 }
 
+
+
+
+
+/* INICIO MEDIA QUERYS */
+.modalDeNotificacion{
+    top: 25%; 
+    right: 10%; 
+    width: 80%; 
+    min-height: 30%; 
+    height: auto;
+    padding: 10px;
+}
+
+.h1-modal-notificaciones{
+    font-size: 5vw;
+    margin-bottom: 0;
+}
+
+.botones-modal-notificacion{
+    min-height: 10vw;
+    margin-bottom: 0;
+}
+
+.botones-modal-notificacion button{
+    display: flex;
+    font-size: 3vw;
+    height: auto;
+    min-height: 4vh;
+    width: auto;
+    min-width: 15vw;
+}
+
+.modal-hijo-con-notificaciones * {
+    font-size: 4vw;
+    color: black;
+    margin: 0;
+}
+
+/* FINAL MEDIA QUERYS */
+
+/* FINAL MODAL NOTIFICACIONES */
