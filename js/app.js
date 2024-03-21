@@ -1455,6 +1455,7 @@ modalFooter.innerHTML = botonesCard;
 
 // Funcion del boton de la campanita, para ver si esa tarea tiene notificaciones
 async function mostrarSiTieneNotificaciones (id) {
+  mostrarCarga();
   let tarea = unaCard.find((t) => t.id === id);
 
   let botonEditarID = document.getElementById(`editar-${tarea.id}`);
@@ -1497,9 +1498,8 @@ async function mostrarSiTieneNotificaciones (id) {
 
     modalCard.appendChild(modalParaNotificacion)
 
-    await obtenerColeccionDeFirestore("notificaciones08hs", tarea.id, notificacionesExistentesID);
-    await obtenerColeccionDeFirestore("notificaciones14hs", tarea.id, notificacionesExistentesID);
-    await obtenerColeccionDeFirestore("notificaciones21hs", tarea.id, notificacionesExistentesID);
+    await obtenerColeccionDeFirestore("notificaciones08hs", "notificaciones14hs", "notificaciones21hs", tarea.id, notificacionesExistentesID);
+
 
   } else {
 
@@ -1523,6 +1523,7 @@ async function mostrarSiTieneNotificaciones (id) {
     `;
     modalCard.appendChild(modalParaNotificacion)
   }
+  ocultarCarga();
 }
 
 
@@ -1624,69 +1625,54 @@ function cerrarModalConNotificacionesExistentes(id){
 
 // Función para eliminar una notificación a una tarea pendiente existente
 async function eliminarNotificaconExistente(id){
-  let tarea = unaCard.find((t) => t.id === id);
+    let tarea = unaCard.find((t) => t.id === id);
 
-  let idParaEliminar08hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones08hs", tarea.id);
-  let idParaEliminar14hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones14hs", tarea.id);
-  let idParaEliminar21hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones21hs", tarea.id);
+    let idParaEliminar08hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones08hs", tarea.id);
+    let idParaEliminar14hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones14hs", tarea.id);
+    let idParaEliminar21hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones21hs", tarea.id);
 
-  let idQueSeDebeEliminar = idParaEliminar08hs[0]?idParaEliminar08hs[0]:idParaEliminar14hs[0]?idParaEliminar14hs[0]:idParaEliminar21hs[0]?idParaEliminar21hs[0]:null;
-  let coleccionDelDocumentoAEliminar = idParaEliminar08hs[1]?idParaEliminar08hs[1]:idParaEliminar14hs[1]?idParaEliminar14hs[1]:idParaEliminar21hs[1]?idParaEliminar21hs[1]:null;
+    let idQueSeDebeEliminar = idParaEliminar08hs[0]?idParaEliminar08hs[0]:idParaEliminar14hs[0]?idParaEliminar14hs[0]:idParaEliminar21hs[0]?idParaEliminar21hs[0]:null;
+    let coleccionDelDocumentoAEliminar = idParaEliminar08hs[1]?idParaEliminar08hs[1]:idParaEliminar14hs[1]?idParaEliminar14hs[1]:idParaEliminar21hs[1]?idParaEliminar21hs[1]:null;
 
-  // console.log(idQueSeDebeEliminar)
-  // console.log(coleccionDelDocumentoAEliminar)
-
-
- if (idQueSeDebeEliminar) {
-  Swal.fire({
-    title: "¿Eliminar notificación programada?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar",
-    cancelButtonText: 'Cancelar',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      mostrarCarga();
-      deleteDoc(doc(db, coleccionDelDocumentoAEliminar, idQueSeDebeEliminar));
-      Swal.fire({
-        title: "Tarea eliminada!",
-        timer: 1000,
-        showConfirmButton: false,
-        icon: "success"
-      });
-    }
-
-    setTimeout(() => {
-      cerrarModalConNotificacionesExistentes(tarea.id);
-      mostrarSiTieneNotificaciones(tarea.id);
-    }, 300);
-
-  }); 
- } else {
-  Swal.fire({
-    title: "Ocurrió algún error",
-    timer: 1200,
-    showConfirmButton: false,
-    icon: "error"
-  });
- }
-
- let verSiQuedanNotificaciones08hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones08hs", tarea.id);
- let verSiQuedanNotificaciones14hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones14hs", tarea.id);
- let verSiQuedanNotificaciones21hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones21hs", tarea.id);
-
- let verSiQuedanNotificaciones = verSiQuedanNotificaciones08hs[0]?verSiQuedanNotificaciones08hs[0]:verSiQuedanNotificaciones14hs[0]?verSiQuedanNotificaciones14hs[0]:verSiQuedanNotificaciones21hs[0]?verSiQuedanNotificaciones21hs[0]:null;
-
-  console.log(verSiQuedanNotificaciones, tarea.quiereNotificacion)
-
- if(!verSiQuedanNotificaciones){
-  console.log("Paso a false la variable")
-  tarea.quiereNotificacion = false;
- }
+    // console.log(idQueSeDebeEliminar)
+    // console.log(coleccionDelDocumentoAEliminar)
 
 
+  if (idQueSeDebeEliminar) {
+    Swal.fire({
+      title: "¿Eliminar notificación programada?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mostrarCarga();
+        deleteDoc(doc(db, coleccionDelDocumentoAEliminar, idQueSeDebeEliminar));
+        Swal.fire({
+          title: "Tarea eliminada!",
+          timer: 1000,
+          showConfirmButton: false,
+          icon: "success"
+        });
+      }
+
+      setTimeout(() => {
+        cerrarModalConNotificacionesExistentes(tarea.id);
+        mostrarSiTieneNotificaciones(tarea.id);
+      }, 300);
+
+    }); 
+  } else {
+    Swal.fire({
+      title: "Ocurrió algún error",
+      timer: 1200,
+      showConfirmButton: false,
+      icon: "error"
+    });
+  }
 
 }
 

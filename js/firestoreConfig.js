@@ -23,6 +23,12 @@ const auth = getAuth();
 
 
 
+
+
+
+
+
+
 async function registrarUsuario(nombre, email, password) {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -57,6 +63,12 @@ async function registrarUsuario(nombre, email, password) {
 
 }
 
+
+
+
+
+
+
 async function iniciarSesion(email, password) {
   try {
     const datos = auth.currentUser;
@@ -78,6 +90,12 @@ async function iniciarSesion(email, password) {
 
 }
 
+
+
+
+
+
+
 async function recuperarClave(mail){
   try {
     const recuperar = await sendPasswordResetEmail(auth,mail)
@@ -88,6 +106,12 @@ async function recuperarClave(mail){
   }
 }
 
+
+
+
+
+
+
 async function cerrarSesion(){
     signOut(auth).then(() => {
       return "ok";
@@ -96,6 +120,12 @@ async function cerrarSesion(){
       console.log("error", error)
     });
 }
+
+
+
+
+
+
 
 async function eliminarCuenta() {
   const user = auth.currentUser;
@@ -116,56 +146,104 @@ async function eliminarCuenta() {
 
 
 
-async function obtenerColeccionDeFirestore (nombreColeccion, idDeLaCardSeleccionada, IDDelcontenedorParaInsertarNotificaciones){
-  const querySnapshot = await getDocs(collection(db, nombreColeccion));
+
+async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, notificaciones21, idDeLaCardSeleccionada, IDDelcontenedorParaInsertarNotificaciones){
+  const querySnapshot1 = await getDocs(collection(db, notificaciones08));
+  const querySnapshot2 = await getDocs(collection(db, notificaciones14));
+  const querySnapshot3 = await getDocs(collection(db, notificaciones21));
 
   let contenedor = document.getElementById(IDDelcontenedorParaInsertarNotificaciones);
-
+  let bandera = 0;
 
 
   // Iterar sobre las tareas y agregarlas al array y al contenedor
 
-    querySnapshot.forEach((doc) => {
+    querySnapshot1.forEach((doc) => {
 
       const cardDeNotificacion = doc.data();
 
       if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
-
-  
+        bandera++;
+        
         let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
-        let modificarVariableSegunHorarioDeNotif 
-  
-  
-  
-        switch (nombreColeccion) {
-          case "notificaciones08hs":
-            modificarVariableSegunHorarioDeNotif = " a las 08hs";
-            break;
-            case "notificaciones14hs":
-              modificarVariableSegunHorarioDeNotif = " a las 14hs";
-            break;
-            case "notificaciones21hs":
-              modificarVariableSegunHorarioDeNotif = " a las 21hs";
-            break;
-          default:
-            modificarVariableSegunHorarioDeNotif = "Error, no existe la colección";
-            break;
-        }
+
         
         let cardsConNotificacionesProgramadas = `
         <div class="modal-hijo-con-notificaciones">
           <h3>${cardDeNotificacion.fecha}</h3>
-          <p>${modificarVariableSegunHorarioDeNotif}</p>
+          <p> a las 08hs</p>
           <button id= ${botonEliminarNotificacionID}>X</button>
         </div>
       `;
   
       contenedor.innerHTML += cardsConNotificacionesProgramadas;
-
-
       }
     })
+
+
+    querySnapshot2.forEach((doc) => {
+
+      const cardDeNotificacion = doc.data();
+
+      if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
+        bandera++;
+
+        let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
+
+        let cardsConNotificacionesProgramadas = `
+        <div class="modal-hijo-con-notificaciones">
+          <h3>${cardDeNotificacion.fecha}</h3>
+          <p> a las 14hs</p>
+          <button id= ${botonEliminarNotificacionID}>X</button>
+        </div>
+      `;
+  
+      contenedor.innerHTML += cardsConNotificacionesProgramadas;
+      }
+    })
+
+
+    querySnapshot3.forEach((doc) => {
+
+      const cardDeNotificacion = doc.data();
+
+      if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
+        bandera++;
+
+        let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
+
+        
+
+        let cardsConNotificacionesProgramadas = `
+        <div class="modal-hijo-con-notificaciones">
+          <h3>${cardDeNotificacion.fecha}</h3>
+          <p> a las 21hs</p>
+          <button id= ${botonEliminarNotificacionID}>X</button>
+        </div>
+      `;
+      contenedor.innerHTML += cardsConNotificacionesProgramadas;
+      }
+
+    })
+
+    if (bandera === 0){
+      let noTieneNotificaciones = `
+      <div class="modal-hijo-con-notificaciones">
+        <h3>No hay notificaciones programadas</h3>
+      </div>
+    `;
+    contenedor.innerHTML = noTieneNotificaciones;
+    }
+
   }
+
+
+
+
+
+
+
+
 
 
 
