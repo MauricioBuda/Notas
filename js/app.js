@@ -61,6 +61,7 @@ rechazarNoti.addEventListener("click", ocultarCargaDeNotificacion);
 
 // Variables para el modal de notificación ↓
 let modalParaNotificacion
+let modalParaAgregarNotificacionACardExistente
 
 // Variable del modal de cargando ↓
 const modalCarga = document.getElementById('modalCarga');
@@ -1447,17 +1448,20 @@ modalFooter.innerHTML = botonesCard;
 
 
 
+
+
+
+
+
 // Funcion del boton de la campanita, para ver si esa tarea tiene notificaciones
 async function mostrarSiTieneNotificaciones (id) {
   let tarea = unaCard.find((t) => t.id === id);
-
 
   let botonEditarID = document.getElementById(`editar-${tarea.id}`);
   let botonFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
   let botonCancelarID = document.getElementById(`cancelar-${tarea.id}`);
   let botonEliminarID = document.getElementById(`eliminar-${tarea.id}`);
   let botonBellID = document.getElementById(`bell-${tarea.id}`);
-
 
   let modalDeNotificacionID = `modalNotificacion-${tarea.id}`;
   let botonAgregarNotificacionID = `agregarNoti-${tarea.id}`;
@@ -1476,9 +1480,9 @@ async function mostrarSiTieneNotificaciones (id) {
 
     modalParaNotificacion = document.createElement("div");
     modalParaNotificacion.innerHTML = `
-    <div class="modalDeNotificacion" id="${modalDeNotificacionID}" class="modal-notificacion">
+    <div class="modalDeNotificacion" id="${modalDeNotificacionID}">
 
-        <h1 class="h1-modal-notificaciones"> Notificacines programadas: </h1>
+        <h1 class="h1-modal-notificaciones"> Notificaciones programadas: </h1>
   
         <div id="${notificacionesExistentesID}">
               <!-- Aquí se mostrarán las notificaciones -->
@@ -1497,11 +1501,17 @@ async function mostrarSiTieneNotificaciones (id) {
     await obtenerColeccionDeFirestore("notificaciones14hs", tarea.id, notificacionesExistentesID);
     await obtenerColeccionDeFirestore("notificaciones21hs", tarea.id, notificacionesExistentesID);
 
-
   } else {
-    let modalParaNotificacion = document.createElement("div");
+
+    botonEditarID.disabled = true; 
+    botonFinalizarID.disabled = true;
+    botonCancelarID.disabled = true;
+    botonEliminarID.disabled = true;
+    botonBellID.disabled = true;
+
+    modalParaNotificacion = document.createElement("div");
     modalParaNotificacion.innerHTML = `
-    <div class="modalDeNotificacion" id="${modalDeNotificacionID}" class="modal-notificacion">
+    <div class="modalDeNotificacion" id="${modalDeNotificacionID}">
       <div>
       <h1 class="h1-modal-notificaciones"> No tiene notificacines programadas </h1>
       </div>
@@ -1523,7 +1533,63 @@ async function mostrarSiTieneNotificaciones (id) {
 
 // Función para agregar una notificación a una tarea pendiente existente
 function agregarNotificacionACardExistente () {
-console.log("agregar")
+
+  modalParaNotificacion.remove();
+
+    modalParaAgregarNotificacionACardExistente = document.createElement("div");
+    modalParaAgregarNotificacionACardExistente.innerHTML = `    
+    <div class="modalDeNotificacion">
+    <section class="container">
+    <form class="row">
+      <div class="col-5">
+        <div class="input-group date" id="datepicker2">
+          <input readonly type="text" class="form-control" id="date" />
+          <span class="input-group-append">
+            <span class="input-group-text bg-light d-block " id="icono-calendar">
+              <i class="fa fa-calendar"></i>
+            </span>
+          </span>
+        </div>
+      </div>
+    </form>
+
+    <div class="div-de-divs-horarios">
+        <div class="div-de-checkbox">
+        <input type="checkbox" name="" id="check-08">
+        <label for="horario">08:00hs</label>
+      </div>
+
+      <div class="div-de-checkbox">
+        <input type="checkbox" name="" id="check-14">
+        <label for="horario">14:00hs</label>
+      </div>
+
+      <div class="div-de-checkbox">
+        <input type="checkbox" name="" id="check-21">
+        <label for="horario">21:00hs</label>
+      </div>
+    </div>
+
+    </section>
+
+    <div class="botones-modal-notificacion">
+    <button  >Agregar</button>
+    <button  >Cerrar</button>
+    
+    </div>
+
+
+  </div>
+    `
+
+    $(function(){
+      $('#datepicker2').datepicker({
+          startDate: new Date(), 
+          format: 'dd-mm-yyyy',
+      });
+    });
+
+    modalCard.appendChild(modalParaAgregarNotificacionACardExistente);
 }
 
 
@@ -1554,6 +1620,8 @@ function cerrarModalConNotificacionesExistentes(id){
 
 
 
+
+
 // Función para eliminar una notificación a una tarea pendiente existente
 async function eliminarNotificaconExistente(id){
   let tarea = unaCard.find((t) => t.id === id);
@@ -1562,15 +1630,15 @@ async function eliminarNotificaconExistente(id){
   let idParaEliminar14hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones14hs", tarea.id);
   let idParaEliminar21hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones21hs", tarea.id);
 
-  let idQueSeDebeEliminar = idParaEliminar08hs[0]?idParaEliminar08hs[0]:idParaEliminar14hs[0]?idParaEliminar14hs[0]:idParaEliminar21hs[0]?idParaEliminar21hs[0]:"Error";
-  let coleccionDelDocumentoAEliminar = idParaEliminar08hs[1]?idParaEliminar08hs[1]:idParaEliminar14hs[1]?idParaEliminar14hs[1]:idParaEliminar21hs[1]?idParaEliminar21hs[1]:"Error";
+  let idQueSeDebeEliminar = idParaEliminar08hs[0]?idParaEliminar08hs[0]:idParaEliminar14hs[0]?idParaEliminar14hs[0]:idParaEliminar21hs[0]?idParaEliminar21hs[0]:null;
+  let coleccionDelDocumentoAEliminar = idParaEliminar08hs[1]?idParaEliminar08hs[1]:idParaEliminar14hs[1]?idParaEliminar14hs[1]:idParaEliminar21hs[1]?idParaEliminar21hs[1]:null;
 
   console.log(idQueSeDebeEliminar)
   console.log(coleccionDelDocumentoAEliminar)
 
 
 
- if (tarea) {
+ if (idQueSeDebeEliminar) {
   Swal.fire({
     title: "¿Eliminar notificación programada?",
     icon: "warning",
@@ -1589,15 +1657,31 @@ async function eliminarNotificaconExistente(id){
         showConfirmButton: false,
         icon: "success"
       });
-      setTimeout(() => {
-        mostrarSiTieneNotificaciones(tarea.id);
-        ocultarCarga();
-      }, 1000);
     }
   }); 
  } else {
-    console.log("Algún error")
+  Swal.fire({
+    title: "Ocurrió algún error",
+    timer: 1200,
+    showConfirmButton: false,
+    icon: "error"
+  });
  }
+
+ let verSiQuedanNotificaciones08hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones08hs", tarea.id);
+ let verSiQuedanNotificaciones14hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones14hs", tarea.id);
+ let verSiQuedanNotificaciones21hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones21hs", tarea.id);
+
+ let verSiQuedanNotificaciones = verSiQuedanNotificaciones08hs[0]?verSiQuedanNotificaciones08hs[0]:verSiQuedanNotificaciones14hs[0]?verSiQuedanNotificaciones14hs[0]:verSiQuedanNotificaciones21hs[0]?verSiQuedanNotificaciones21hs[0]:null;
+
+ if(!verSiQuedanNotificaciones){
+  tarea.quiereNotificacion = false;
+ }
+  setTimeout(() => {
+    cerrarModalConNotificacionesExistentes(tarea.id);
+    mostrarSiTieneNotificaciones(tarea.id);
+    ocultarCarga();
+  }, 1000);
 }
 
 
@@ -2001,3 +2085,4 @@ function actualizarCards() {
   finalizadasCards.innerHTML = "";
   canceladasCards.innerHTML = "";
 }
+
