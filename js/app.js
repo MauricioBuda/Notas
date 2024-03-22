@@ -1148,6 +1148,14 @@ async function agregarTarea(event) {
 
             } catch (error) {
               console.error("Error al agregar la tarea a Firestore", error);
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error al cargar",
+                showConfirmButton: false,
+                timer: 1000,
+                footer: "Por favor actualizar página"
+              });
               ocultarCarga();
             }
             ocultarCarga();
@@ -1582,15 +1590,18 @@ function agregarNotificacionACardExistente () {
 
   </div>
     `
+    modalCard.appendChild(modalParaAgregarNotificacionACardExistente);
 
     $(function(){
       $('#datepicker2').datepicker({
           startDate: new Date(), 
           format: 'dd-mm-yyyy',
+          orientation: 'bottom',
+          autoclose: true,
+          todayHighlight: true,
       });
     });
 
-    modalCard.appendChild(modalParaAgregarNotificacionACardExistente);
 }
 
 

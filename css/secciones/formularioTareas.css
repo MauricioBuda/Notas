@@ -106,7 +106,7 @@
 
   .col-5{
       width: 12vw;
-  }
+    }
   
   
   .form-control{
@@ -178,6 +178,7 @@
 
   .div-de-checkbox input{
     margin-left: 1vw;
+    margin-right: 0.2vw;
     width: 1.2vw;
     height: 1.2vw;
     border-radius: 50%!important;
@@ -262,6 +263,9 @@
       font-size: 5vw; /* Ajusta el tamaño de la fuente */
     }
     
+    .form-control{
+      font-size: 4vw;
+    }
     
     .datepicker table tbody tr td {
       width: 8vw; /* Ajusta el ancho de las celdas */
@@ -289,7 +293,7 @@
     }
 
     .fa-calendar {
-      font-size: 6vw; /* Tamaño deseado del icono */
+      font-size: 6vw; /* Tamaño del icono */
     }
 
     .btn-notificacion button img{
