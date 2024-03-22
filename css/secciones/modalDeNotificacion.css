@@ -81,6 +81,10 @@
     color:red;
 }
 
+.datepicker-orient-bottom{
+    margin-top: 4vw;
+    }
+    
 
 
 
@@ -88,6 +92,11 @@
 
 /* INICIO MEDIA QUERYS */
 @media screen and (max-width: 524px) {
+
+        .datepicker-orient-bottom{
+        margin-top: 14vw;
+        }
+
         .modalDeNotificacion{
             top: 25%; 
             right: 10%; 

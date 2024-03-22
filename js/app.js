@@ -36,7 +36,7 @@ let botonAgregarTarea = document.getElementById("boton_agregarTarea_id");
 botonAgregarTarea.addEventListener("click", agregarTarea);
 
 
-// Variables del formulario, de la notificación ↓
+// Variables del formulario, de la notificación en tarea nueva ↓
 let calendario = $('#datepicker');
 let iconoCalendar = document.getElementById("icono-calendar")
 let aceptarNoti = document.getElementById("aceptar-noti");
@@ -51,6 +51,13 @@ let check21 = document.getElementById("check-21");
 let selecciona08 = false;
 let selecciona14 = false;
 let selecciona21 = false;
+
+
+// Variables del formulario, de la notificación en tarea existente ↓
+let check08existente = document.getElementById("check-08existente");
+let check14existente = document.getElementById("check-14existente");
+let check21existente = document.getElementById("check-21existente");
+
 
 
 
@@ -186,6 +193,8 @@ boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
 
 
+
+
 // EJECUTO FUNCIONES NECESARIAS ↓
 
 
@@ -208,7 +217,15 @@ asignarEventosSegunDondeHagaClick();
 
 
 
+
+
+
 // EMPIEZO CON LA DECLARACIÓN DE TODAS LAS FUNCIONES (PRIMERO ESTÁN LAS RELACIONADAS CON LA DB, LUEGO LAS DE LA PÁGINNA EN SI) ↓
+
+
+
+
+
 
 
 
@@ -591,6 +608,14 @@ async function cambiarNombre(){
 
 
 
+// TERMINO CON TEMA REGISTRO Y FIREBASE AUTH ↑
+
+// EMPIEZO CON FUNCIONALIDADES DE LA APP INTERNAS ↓
+
+
+
+
+
 
 
 // Clase para generar cada card (tarea)
@@ -860,6 +885,8 @@ calendario.on('changeDate', function(event) {
 
 
 
+
+
 // Función para poner/sacar lo borroso
 function menuBorroso () {
   if (formulario.classList.contains("oculto")) {
@@ -924,6 +951,9 @@ function vaciarCampos() {
 
 
 
+
+
+
 // Función para habilitar la programación de la notificación
 function mostrarCargaDeNotificacion(e){
   e.preventDefault();
@@ -947,6 +977,7 @@ function ocultarCargaDeNotificacion(e){
   fechaSeleccionadaSinFormato.disabled = true;
   quiereNotificacion = false;
 }
+
 
 
 
@@ -1012,7 +1043,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
 
 
-// Manejo que pasa si tildan o destildan
+// Manejo que pasa si tildan o destildan en el formulario de nueva tarea
 check08.addEventListener('change', function(event) {
   if (check08.checked) {
     selecciona08 = true;
@@ -1031,6 +1062,39 @@ check14.addEventListener('change', function(event) {
 });
 check21.addEventListener('change', function(event) {
   if (check21.checked) {
+    selecciona21 = true;
+    verSiHorarioDeNotificacionYaPaso ();
+  } else {
+    selecciona21 = false;
+  }
+});
+
+
+
+
+
+// Manejo que pasa si tildan o destildan en agregar notificación a tarea existente
+check08existente.addEventListener('change', function(event) {
+  if (check08existente.checked) {
+    console.log("08")
+    selecciona08 = true;
+    verSiHorarioDeNotificacionYaPaso ();
+  } else {
+    selecciona08 = false;
+  }
+});
+check14existente.addEventListener('change', function(event) {
+  if (check14existente.checked) {
+    console.log("14")
+    selecciona14 = true;
+    verSiHorarioDeNotificacionYaPaso ();
+  } else {
+    selecciona14 = false;
+  }
+});
+check21existente.addEventListener('change', function(event) {
+  if (check21existente.checked) {
+    console.log("21")
     selecciona21 = true;
     verSiHorarioDeNotificacionYaPaso ();
   } else {
@@ -1540,8 +1604,14 @@ async function mostrarSiTieneNotificaciones (id) {
 
 
 
+
+
 // Función para agregar una notificación a una tarea pendiente existente
-function agregarNotificacionACardExistente () {
+function agregarNotificacionACardExistente (id) {
+  let tarea = unaCard.find((t) => t.id === id);
+
+  let botonSalirDeNotificacionID = `salirDeModalNoti-${tarea.id}`;
+
 
   modalParaNotificacion.remove();
 
@@ -1564,17 +1634,17 @@ function agregarNotificacionACardExistente () {
 
     <div class="div-de-divs-horarios">
         <div class="div-de-checkbox">
-        <input type="checkbox" name="" id="check-08">
+        <input type="checkbox" name="" id="check-08existente">
         <label for="horario">08:00hs</label>
       </div>
 
       <div class="div-de-checkbox">
-        <input type="checkbox" name="" id="check-14">
+        <input type="checkbox" name="" id="check-14existente">
         <label for="horario">14:00hs</label>
       </div>
 
       <div class="div-de-checkbox">
-        <input type="checkbox" name="" id="check-21">
+        <input type="checkbox" name="" id="check-21existente">
         <label for="horario">21:00hs</label>
       </div>
     </div>
@@ -1582,11 +1652,11 @@ function agregarNotificacionACardExistente () {
     </section>
 
     <div class="botones-modal-notificacion">
+
     <button  >Agregar</button>
-    <button  >Cerrar</button>
+    <button id="${botonSalirDeNotificacionID}" >Cerrar</button>
 
     </div>
-
 
   </div>
     `
@@ -1608,11 +1678,15 @@ function agregarNotificacionACardExistente () {
 
 
 
+
+
 // Función para cerrar modal que muestra notificaciones de una tarea pendiente existente
 function cerrarModalConNotificacionesExistentes(id){
   let tarea = unaCard.find((t) => t.id === id);
 
   modalParaNotificacion.remove();
+  modalParaAgregarNotificacionACardExistente.remove();
+
 
   let botonEditarID = document.getElementById(`editar-${tarea.id}`);
   let botonFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
@@ -1627,6 +1701,8 @@ function cerrarModalConNotificacionesExistentes(id){
   botonEliminarID.disabled = false;
   botonBellID.disabled = false;
 }
+
+
 
 
 
