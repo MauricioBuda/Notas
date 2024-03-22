@@ -54,10 +54,9 @@ let selecciona21 = false;
 
 
 // Variables del formulario, de la notificación en tarea existente ↓
-let check08existente = document.getElementById("check-08existente");
-let check14existente = document.getElementById("check-14existente");
-let check21existente = document.getElementById("check-21existente");
-
+let check08a
+let check14a
+let check21a
 
 
 
@@ -1073,37 +1072,6 @@ check21.addEventListener('change', function(event) {
 
 
 
-// Manejo que pasa si tildan o destildan en agregar notificación a tarea existente
-check08existente.addEventListener('change', function(event) {
-  if (check08existente.checked) {
-    console.log("08")
-    selecciona08 = true;
-    verSiHorarioDeNotificacionYaPaso ();
-  } else {
-    selecciona08 = false;
-  }
-});
-check14existente.addEventListener('change', function(event) {
-  if (check14existente.checked) {
-    console.log("14")
-    selecciona14 = true;
-    verSiHorarioDeNotificacionYaPaso ();
-  } else {
-    selecciona14 = false;
-  }
-});
-check21existente.addEventListener('change', function(event) {
-  if (check21existente.checked) {
-    console.log("21")
-    selecciona21 = true;
-    verSiHorarioDeNotificacionYaPaso ();
-  } else {
-    selecciona21 = false;
-  }
-});
-
-
-
 
 
 
@@ -1304,6 +1272,13 @@ function asignarEventosSegunDondeHagaClick() {
       else if (event.target.id.startsWith("eliminarNoti-")) {
         // Extraer el ID de la tarea de la identificación del botón
         eliminarNotificaconExistente(event.target.id.split("-")[1]);
+      }
+
+
+      // Verificar si el clic ocurrió en un botón agregar notificación a card existente
+      else if (event.target.id.startsWith("agregarNotificacionEnCardExistente-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        confirmarNotificacionAgregadaACardExistente(event.target.id.split("-")[1]);
       }
   });
 }
@@ -1611,6 +1586,8 @@ function agregarNotificacionACardExistente (id) {
   let tarea = unaCard.find((t) => t.id === id);
 
   let botonSalirDeNotificacionID = `salirDeModalNoti-${tarea.id}`;
+  let botonAgregarNotificacionEnCardExistenteID = `agregarNotificacionEnCardExistente-${tarea.id}`;
+
 
 
   modalParaNotificacion.remove();
@@ -1634,17 +1611,17 @@ function agregarNotificacionACardExistente (id) {
 
     <div class="div-de-divs-horarios">
         <div class="div-de-checkbox">
-        <input type="checkbox" name="" id="check-08existente">
+        <input type="checkbox" name="" id="check-08a">
         <label for="horario">08:00hs</label>
       </div>
 
       <div class="div-de-checkbox">
-        <input type="checkbox" name="" id="check-14existente">
+        <input type="checkbox" name="" id="check-14a">
         <label for="horario">14:00hs</label>
       </div>
 
       <div class="div-de-checkbox">
-        <input type="checkbox" name="" id="check-21existente">
+        <input type="checkbox" name="" id="check-21a">
         <label for="horario">21:00hs</label>
       </div>
     </div>
@@ -1653,7 +1630,7 @@ function agregarNotificacionACardExistente (id) {
 
     <div class="botones-modal-notificacion">
 
-    <button  >Agregar</button>
+    <button id="${botonAgregarNotificacionEnCardExistenteID}" >Aceptar</button>
     <button id="${botonSalirDeNotificacionID}" >Cerrar</button>
 
     </div>
@@ -1671,8 +1648,24 @@ function agregarNotificacionACardExistente (id) {
           todayHighlight: true,
       });
     });
-
 }
+
+
+
+
+
+function confirmarNotificacionAgregadaACardExistente (id){
+  Swal.fire({
+    title: "Sección en mantenimiento",
+    timer: 1000,
+    showConfirmButton: false,
+    icon: "error"
+  });
+}
+
+
+
+
 
 
 
