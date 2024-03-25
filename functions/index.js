@@ -15,8 +15,9 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
         const fechaParaNotificar = notificacion.fecha;
         const fechaHoy = formatarFecha(new Date().toLocaleDateString());
         let mensaje 
-
+        console.log("ENTRA AL FOREACH", notificacion.nombreUsuario, notificacion.titulo )
         if (fechaHoy === fechaParaNotificar) {
+          console.log("SIIII ENTRA AL IF", notificacion.nombreUsuario, notificacion.titulo )
           mensaje = {
             data: {
               titulo: notificacion.titulo,
@@ -30,6 +31,8 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
         // Marcar el documento como procesado después de enviar la notificación
         const updatePromise = await doc.ref.update({ procesado: true });
 
+        } else {
+          console.log("NO ENTRA AL IF", notificacion.nombreUsuario, notificacion.titulo )
         }
 
         promises.push(sendPromise);
@@ -38,7 +41,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
 
       // Esperar a que todas las promesas de actualización se resuelvan
       await Promise.all(promises);
-
+      console.log("ULTIMA LINEA", notificacion.nombreUsuario, notificacion.titulo )
       return null;
     } catch (error) {
       console.error('Error al verificar nuevas notificaciones:', error);
