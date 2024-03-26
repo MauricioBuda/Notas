@@ -464,6 +464,9 @@ async function olvideClave(event){
 
 
 
+
+
+
 // Función para eliminar definitivamente la cuenta
 async function elimnarLaCuenta(){
   Swal.fire({
@@ -504,6 +507,7 @@ function ocultarModalRegistro(){
 function mostrarModalRegistro(){
   modalRegistrarse.classList.remove("aplicar-display-none")
 }
+
 
 
 
@@ -607,9 +611,11 @@ async function cambiarNombre(){
 
 
 
+
 // TERMINO CON TEMA REGISTRO Y FIREBASE AUTH ↑
 
 // EMPIEZO CON FUNCIONALIDADES DE LA APP INTERNAS ↓
+
 
 
 
@@ -638,6 +644,7 @@ class Tarjetas {
     this.id = id;
   }
 }
+
 
 
 
@@ -701,6 +708,8 @@ async function cardsEnPantalla(estadoDeLaTarjetaSeleccionada) {
   
   
   
+
+
 // función para filtrar por secciones
 function filtroDeSecciones (seccionElegida) {
   let botonSeccionTodas = document.getElementById("boton-secciones-todas");
@@ -785,6 +794,8 @@ function filtroDeSecciones (seccionElegida) {
 
 
 
+
+
 // Función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
   // Limpiar el array de cards antes de obtener las nuevas desde Firestore
@@ -837,6 +848,7 @@ function mostrarCarga() {
 function ocultarCarga() {
   modalCarga.style.display = 'none';
 }
+
 
 
 
@@ -909,6 +921,8 @@ function menuBorroso () {
 
 
 
+
+
 // Funcion para cuando agrego una tarea, y debo ocultar el formulario y sacar lo borroso
 function ocultarFormulario() {
   formulario.classList.add("oculto");
@@ -928,6 +942,8 @@ function ocultarFormulario() {
     }
   }
 }
+
+
 
 
 
@@ -991,11 +1007,10 @@ function verSiHorarioDeNotificacionYaPaso (){
   fechaSeleccionadaParticionada = fechaSeleccionadaSinFormato.value.split('-'); // Dividir la cadena por el guion
   fechaSeleccionadaConFormato = new Date(fechaSeleccionadaParticionada[2], fechaSeleccionadaParticionada[1] - 1, fechaSeleccionadaParticionada[0]).toLocaleDateString();
 
+  
   if (fechaActual === fechaSeleccionadaConFormato) {
       if (selecciona08) {
-          // if (horaActual >= 8) {
-          if (!horaActual) {
-
+          if (horaActual >= 8) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -1009,8 +1024,7 @@ function verSiHorarioDeNotificacionYaPaso (){
 
       }
       if (selecciona14) {
-          // if (horaActual >= 14) {
-          if (!horaActual) {
+          if (horaActual >= 14) {
 
             Swal.fire({
               position: "center",
@@ -1025,8 +1039,7 @@ function verSiHorarioDeNotificacionYaPaso (){
       }
 
       if (selecciona21){
-          // if (horaActual >= 21) {
-          if (!horaActual){
+          if (horaActual >= 21) {
             Swal.fire({
               position: "center",
               icon: "warning",
@@ -1604,7 +1617,7 @@ function agregarNotificacionACardExistente (id) {
     <form class="row">
       <div class="col-5">
         <div class="input-group date" id="datepicker2">
-          <input readonly type="text" class="form-control" id="date" />
+          <input readonly type="text" class="form-control" id="date2" />
           <span class="input-group-append">
             <span class="input-group-text bg-light d-block " id="icono-calendar">
               <i class="fa fa-calendar"></i>
@@ -1653,19 +1666,112 @@ function agregarNotificacionACardExistente (id) {
           todayHighlight: true,
       });
     });
+
+
+    check08a = document.getElementById("check-08a");
+    check14a = document.getElementById("check-14a");
+    check21a = document.getElementById("check-21a");
 }
 
 
 
 
 
+
+
+// Carga de nueva notificación en la DB
 function confirmarNotificacionAgregadaACardExistente (id){
+  let tarea = unaCard.find((t) => t.id === id);
+  let fecha2 = new Date ();
+  let fechaActual = new Date().toLocaleDateString();
+  let horaActual = new Date().toLocaleTimeString([], {hour: '2-digit'});
+  let fechaSeleccionadaPorUsuario = document.getElementById("date2").value
+
+  let fechaSeleccionadaParticionada2 = fechaSeleccionadaPorUsuario.split('-'); // Dividir la cadena por el guion
+  let fechaSeleccionadaConFormato2 = new Date(fechaSeleccionadaParticionada2[2], fechaSeleccionadaParticionada2[1] - 1, fechaSeleccionadaParticionada2[0]).toLocaleDateString();
+
+
+if(!fechaSeleccionadaPorUsuario){
+
   Swal.fire({
-    title: "Sección en mantenimiento",
-    timer: 1000,
+    position: "center",
+    icon: "warning",
+    title: "Seleccione alguna fecha",
     showConfirmButton: false,
-    icon: "error"
+    timer: 1000,
   });
+  return;
+}
+
+if(!check08a.checked && !check14a.checked && !check21a.checked){
+
+  Swal.fire({
+    position: "center",
+    icon: "warning",
+    title: "Seleccione algún horario",
+    showConfirmButton: false,
+    timer: 1000,
+  });
+  return;
+}
+
+if (fechaActual === fechaSeleccionadaConFormato2) {
+
+
+    if (horaActual >= 8 && check08a.checked) {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Seleccionaste un horario que ya pasó",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    check08a.checked = false
+    return;
+    }
+
+
+
+    if (horaActual >= 14 && check14a.checked) {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Seleccionaste un horario que ya pasó",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      check14a.checked = false
+      return;
+      }
+
+
+    if (horaActual >= 21 && check21a.checked) {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Seleccionaste un horario que ya pasó",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      check21a.checked = false
+      return;
+    }
+
+
+  } 
+
+    llamarProgramarNotificacion(fechaSeleccionadaConFormato2, tarea.titulo, tarea.detalle, check08a.checked, check14a.checked, check21a.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha2, tarea.id);
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Notificaciones actualizadas!",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    cerrarModalConNotificacionesExistentes(id);
+    mostrarSiTieneNotificaciones(id)
+
+
 }
 
 
@@ -1723,9 +1829,6 @@ async function eliminarNotificaconExistente(id){
 
     let idQueSeDebeEliminar = idParaEliminar08hs[0]?idParaEliminar08hs[0]:idParaEliminar14hs[0]?idParaEliminar14hs[0]:idParaEliminar21hs[0]?idParaEliminar21hs[0]:null;
     let coleccionDelDocumentoAEliminar = idParaEliminar08hs[1]?idParaEliminar08hs[1]:idParaEliminar14hs[1]?idParaEliminar14hs[1]:idParaEliminar21hs[1]?idParaEliminar21hs[1]:null;
-
-    // console.log(idQueSeDebeEliminar)
-    // console.log(coleccionDelDocumentoAEliminar)
 
 
   if (idQueSeDebeEliminar) {

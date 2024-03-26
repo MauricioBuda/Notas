@@ -258,6 +258,17 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
 
 
 async function obtenerIDDelDocumentoAEliminarDeLasNotificaciones (nombreColeccion, idDeLaCardSeleccionada){
+
+  let contenedor = document.getElementById(`notificacionesExistentes-${idDeLaCardSeleccionada}`);
+
+
+  let cartelCarga = document.createElement("p");
+  contenedor.innerHTML = "";
+  cartelCarga.innerText = "En proceso...";
+  contenedor.appendChild(cartelCarga);
+
+
+
   const querySnapshot = await getDocs(collection(db, nombreColeccion));
   let documentoID
   let nombreColeccionFinal
@@ -273,7 +284,7 @@ async function obtenerIDDelDocumentoAEliminarDeLasNotificaciones (nombreColeccio
     }
   });
 
-
+      cartelCarga.remove();
       return [documentoID , nombreColeccionFinal];
 }
 
