@@ -1682,8 +1682,13 @@ function confirmarNotificacionAgregadaACardExistente (id){
 function cerrarModalConNotificacionesExistentes(id){
   let tarea = unaCard.find((t) => t.id === id);
 
-  modalParaNotificacion.remove();
-  modalParaAgregarNotificacionACardExistente.remove();
+  if (modalParaNotificacion) {
+      modalParaNotificacion.remove();
+  }
+
+  if (  modalParaAgregarNotificacionACardExistente) {
+      modalParaAgregarNotificacionACardExistente.remove();
+  }
 
 
   let botonEditarID = document.getElementById(`editar-${tarea.id}`);

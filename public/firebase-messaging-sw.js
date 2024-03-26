@@ -19,10 +19,11 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
   console.log('recibido: ', payload);
-  const notificationTitle = `¡${payload.data.nombreUsuario}, NO OLVIDES ESTA TAREA!:`;
+  const notificationTitle = `${payload.data.nombreUsuario}: ${payload.data.titulo}`;
 
   const notificationOptions = {
-    body: payload.data.titulo,
+    vibrate: [200, 100, 200],
+    body: payload.data.detalle,
     icon: 'https://raw.githubusercontent.com/MauricioBuda/Notas/master/img/agenda.png',
         data: {
       url: 'https://notas-seven.vercel.app/'
