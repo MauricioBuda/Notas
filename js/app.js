@@ -1908,13 +1908,13 @@ async function finalizarTarea(id) {
       });
       Swal.fire({
         title: "Tarea finalizada!",
-        timer: 1000,
+        timer: 2000,
         showConfirmButton: false,
         icon: "success"
       });
       setTimeout(() => {
-        cardsEnPantalla(pantallaActual);
-      }, 1000);
+        location.reload();
+      }, 2000);
     }
     });
     } else {
@@ -1950,14 +1950,13 @@ async function eliminar(id){
       deleteDoc(doc(db, nombreDeColeccion, tarea.id));
       Swal.fire({
         title: "Tarea eliminada!",
-        timer: 1000,
+        timer: 2000,
         showConfirmButton: false,
         icon: "success"
       });
       setTimeout(() => {
-        cardsEnPantalla(pantallaActual);
-        ocultarCarga();
-      }, 1000);
+        location.reload();
+      }, 2000);
     }
   }); 
  } else {
@@ -2002,14 +2001,13 @@ async function restaurarTarea(id){
         });
         Swal.fire({
           title: "Tarea restaurada!",
-          timer: 1000,
+          timer: 2000,
           showConfirmButton: false,
           icon: "success"
         });
         setTimeout(() => {
-          cardsEnPantalla(pantallaActual);
-          ocultarCarga();
-        }, 1000);
+          location.reload();
+        }, 2000);
   
       }
     });
@@ -2060,14 +2058,13 @@ if (tarea) {
       });
       Swal.fire({
         title: "Tarea cancelada!",
-        timer: 1000,
+        timer: 2000,
         showConfirmButton: false,
         icon: "success"
       });
       setTimeout(() => {
-        cardsEnPantalla(pantallaActual);
-        ocultarCarga();
-      }, 1000);
+        location.reload();
+      }, 2000);
 
     }
   });
