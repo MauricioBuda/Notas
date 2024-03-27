@@ -30,6 +30,9 @@ let divDeEstados = document.getElementById("divDeEstadosID");
 // Variables formulario para agregar tarea ↓
 let formulario = document.getElementById("section_formulario_id");
 let botonAgregarTarea = document.getElementById("boton_agregarTarea_id");
+const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
 
 
 // Eventos del formulario ↓

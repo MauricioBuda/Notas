@@ -80,6 +80,21 @@
   }
 
 
+  .div-label-programar-notif{
+    display: flex;
+    justify-content: center!important;
+    gap: 2vw;
+    align-items: center;
+    width: 30vw;
+  }
+
+  .btn-info-notif{
+    font-size: 1vw;
+    background-color: rgba(0, 0, 0, 0.175)!important;
+    border-radius: 50%;
+    border: solid black 1px!important;
+  }
+
 
 
 
@@ -253,6 +268,10 @@
       font-size: 3vw;
       align-items: center;
       text-align: center;
+    }
+
+    .div-label-programar-notif{
+      width: 70vw;
     }
 
 
