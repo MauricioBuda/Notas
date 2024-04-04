@@ -3,8 +3,7 @@ import { getMessaging, getToken } from "firebase/messaging";
 import { getFirestore, Timestamp } from "firebase/firestore";
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from './firestoreConfig';
-
-
+import Swal from 'sweetalert2';
 
 
 let elToken
