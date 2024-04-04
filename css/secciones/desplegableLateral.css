@@ -17,6 +17,7 @@
     display: flex;
     gap: 1vw;
     font-size: 2vw;
+    margin-bottom: 1vh;
   }
   
   .nav-item a{

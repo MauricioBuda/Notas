@@ -173,13 +173,15 @@ let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
 let salir_navbar =  document.getElementById("navbar_salir");
 let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre");
 let boton_eliminar_cuenta = document.getElementById("button_eliminar_cuenta");
+let boton_notas_rapidas = document.getElementById("button_notas_rapidas");
 let usuarioConSesionIniciada = null;
 
 
 // Eventos del menú desplegable
 boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
-salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
+boton_notas_rapidas.addEventListener("click", modalNotasRapidas);
+salir_navbar.addEventListener("click", salir);
 
 
 
@@ -2311,3 +2313,8 @@ function actualizarCards() {
   canceladasCards.innerHTML = "";
 }
 
+
+
+function modalNotasRapidas () {
+  console.log("Notas rápidas")
+}
