@@ -2,7 +2,7 @@
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
-import { llamarProgramarNotificacion, obtenerToken } from './notificaciones';
+import { llamarProgramarNotificacion, obtenerToken, requestPermission } from './notificaciones';
 import Swal from 'sweetalert2';
 
 
@@ -243,11 +243,14 @@ async function corroborarSesionIniciada (){
     // Si entro al IF es que hay una sesión iniciada
     if (usuario) {
       console.log('Usuario autenticado:  ', usuario.displayName);
-      obtenerToken();
+
+      // Pido permiso para notificaciones
+      requestPermission();
+
       // Creo esta variable como bandera para poder cambiar nombre en cambiarNombre();
       usuarioConSesionIniciada=usuario; 
 
-      // Oculo/muestro las pantallas necesarias
+      // Oculto/muestro las pantallas necesarias
       pantallaInicioSesion.classList.add("aplicar-display-none");
       menu.classList.remove("aplicar-display-none");
       navbar_general.classList.remove("aplicar-display-none")
@@ -265,6 +268,9 @@ async function corroborarSesionIniciada (){
 
       // Cuando entra a la cuenta, se muestran todas las cards existentes
       cardsEnPantalla(pantallaActual);
+
+      // Obtengo token para notificaciones
+      obtenerToken();
     } else {
       // Si no hay nadie ingresado, solo muestro pantalla de loguin
       pantallaInicioSesion.classList.remove("aplicar-display-none");

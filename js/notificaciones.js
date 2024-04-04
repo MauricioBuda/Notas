@@ -38,7 +38,7 @@ function requestPermission() {
     })
 }
 
-requestPermission();
+
 
 
 
@@ -118,4 +118,4 @@ function programarNotificacion (fechaSeleccionada, titulo, detalle, check08, che
     }
 }
 
-export { llamarProgramarNotificacion , obtenerToken }
+export { llamarProgramarNotificacion , obtenerToken, requestPermission }

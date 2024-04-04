@@ -4,19 +4,29 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 08:00')
-  .timeZone('America/Argentina/Buenos_Aires')
+  .timeZone('America/Buenos_Aires')
   .onRun(async (context) => {
     try {
       const snapshot = await admin.firestore().collection('notificaciones08hs').where('procesado', '==', false).get();
       const promises = []; // Arreglo para almacenar las promesas de actualización
+      
+
 
       snapshot.forEach(async(doc) => {
 
+
+
         const notificacion = doc.data();
         const fechaParaNotificar = notificacion.fecha;
-        const fechaHoy = formatarFecha(new Date().toLocaleDateString());
+        const fechaHoy = formatarFecha(new Date().toLocaleDateString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
         let mensaje 
         console.log("ENTRA AL FOREACH 08hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle )
+
+      console.log("FECHA DE HOY: ", fechaHoy);
+      console.log("FECHA DE NOTIFICACIÓN: ", fechaParaNotificar);
+      console.log("NewDate: ", new Date());
+      console.log("NewDate.toLocalDateString: ", new Date().toLocaleDateString());
+      console.log("NewDate.toLocaleString2: ", new Date().toLocaleString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
 
         if (fechaHoy === fechaParaNotificar) {
           console.log("ENTRA AL IF 08hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle  )
@@ -62,19 +72,30 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
 
 
   exports.verificarNuevasNotificaciones0801 = functions.pubsub.schedule('every day 08:01')
-  .timeZone('America/Argentina/Buenos_Aires')
+  .timeZone('America/Buenos_Aires')
   .onRun(async (context) => {
     try {
       const snapshot = await admin.firestore().collection('notificaciones08hs').where('procesado', '==', false).get();
       const promises = []; // Arreglo para almacenar las promesas de actualización
+      
+
 
       snapshot.forEach(async(doc) => {
 
+
+
         const notificacion = doc.data();
         const fechaParaNotificar = notificacion.fecha;
-        const fechaHoy = formatarFecha(new Date().toLocaleDateString());
+        const fechaHoy = formatarFecha(new Date().toLocaleDateString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
         let mensaje 
         console.log("ENTRA AL FOREACH 08:01hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle )
+
+      console.log("FECHA DE HOY: ", fechaHoy);
+      console.log("FECHA DE NOTIFICACIÓN: ", fechaParaNotificar);
+      console.log("NewDate: ", new Date());
+      console.log("NewDate.toLocalDateString: ", new Date().toLocaleDateString());
+      console.log("NewDate.toLocaleString2: ", new Date().toLocaleString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
+
 
         if (fechaHoy === fechaParaNotificar) {
           console.log("ENTRA AL IF 08:01hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle  )
@@ -120,19 +141,30 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
 
 
   exports.verificarNuevasNotificaciones14 = functions.pubsub.schedule('every day 14:00')
-  .timeZone('America/Argentina/Buenos_Aires')
+  .timeZone('America/Buenos_Aires')
   .onRun(async (context) => {
     try {
       const snapshot = await admin.firestore().collection('notificaciones14hs').where('procesado', '==', false).get();
       const promises = []; // Arreglo para almacenar las promesas de actualización
+      
+
 
       snapshot.forEach(async(doc) => {
 
+
+
         const notificacion = doc.data();
         const fechaParaNotificar = notificacion.fecha;
-        const fechaHoy = formatarFecha(new Date().toLocaleDateString());
+        const fechaHoy = formatarFecha(new Date().toLocaleDateString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
         let mensaje 
         console.log("ENTRA AL FOREACH 14hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle )
+
+      console.log("FECHA DE HOY: ", fechaHoy);
+      console.log("FECHA DE NOTIFICACIÓN: ", fechaParaNotificar);
+      console.log("NewDate: ", new Date());
+      console.log("NewDate.toLocalDateString: ", new Date().toLocaleDateString());
+      console.log("NewDate.toLocaleString2: ", new Date().toLocaleString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
+
 
         if (fechaHoy === fechaParaNotificar) {
           console.log("ENTRA AL IF 14hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle  )
@@ -178,19 +210,30 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
 
 
   exports.verificarNuevasNotificaciones1401 = functions.pubsub.schedule('every day 14:01')
-  .timeZone('America/Argentina/Buenos_Aires')
+  .timeZone('America/Buenos_Aires')
   .onRun(async (context) => {
     try {
       const snapshot = await admin.firestore().collection('notificaciones14hs').where('procesado', '==', false).get();
       const promises = []; // Arreglo para almacenar las promesas de actualización
+      
+
 
       snapshot.forEach(async(doc) => {
 
+
+
         const notificacion = doc.data();
         const fechaParaNotificar = notificacion.fecha;
-        const fechaHoy = formatarFecha(new Date().toLocaleDateString());
+        const fechaHoy = formatarFecha(new Date().toLocaleDateString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
         let mensaje 
         console.log("ENTRA AL FOREACH 14:01hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle )
+
+      console.log("FECHA DE HOY: ", fechaHoy);
+      console.log("FECHA DE NOTIFICACIÓN: ", fechaParaNotificar);
+      console.log("NewDate: ", new Date());
+      console.log("NewDate.toLocalDateString: ", new Date().toLocaleDateString());
+      console.log("NewDate.toLocaleString2: ", new Date().toLocaleString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
+
 
         if (fechaHoy === fechaParaNotificar) {
           console.log("ENTRA AL IF 14:01hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle  )
@@ -236,19 +279,30 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
 
 
   exports.verificarNuevasNotificaciones21 = functions.pubsub.schedule('every day 21:00')
-  .timeZone('America/Argentina/Buenos_Aires')
+  .timeZone('America/Buenos_Aires')
   .onRun(async (context) => {
     try {
       const snapshot = await admin.firestore().collection('notificaciones21hs').where('procesado', '==', false).get();
       const promises = []; // Arreglo para almacenar las promesas de actualización
 
+
+
       snapshot.forEach(async(doc) => {
+
+
 
         const notificacion = doc.data();
         const fechaParaNotificar = notificacion.fecha;
-        const fechaHoy = formatarFecha(new Date().toLocaleDateString());
+        const fechaHoy = formatarFecha(new Date().toLocaleDateString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
         let mensaje 
         console.log("ENTRA AL FOREACH 21hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle )
+
+      console.log("FECHA DE HOY: ", fechaHoy);
+      console.log("FECHA DE NOTIFICACIÓN: ", fechaParaNotificar);
+      console.log("NewDate: ", new Date());
+      console.log("NewDate.toLocalDateString: ", new Date().toLocaleDateString());
+      console.log("NewDate.toLocaleString2: ", new Date().toLocaleString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
+
 
         if (fechaHoy === fechaParaNotificar) {
           console.log("ENTRA AL IF 21hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle  )
@@ -294,19 +348,30 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
 
 
   exports.verificarNuevasNotificaciones2101 = functions.pubsub.schedule('every day 21:01')
-  .timeZone('America/Argentina/Buenos_Aires')
+  .timeZone('America/Buenos_Aires')
   .onRun(async (context) => {
     try {
       const snapshot = await admin.firestore().collection('notificaciones21hs').where('procesado', '==', false).get();
       const promises = []; // Arreglo para almacenar las promesas de actualización
+      
+
 
       snapshot.forEach(async(doc) => {
 
+
+
         const notificacion = doc.data();
         const fechaParaNotificar = notificacion.fecha;
-        const fechaHoy = formatarFecha(new Date().toLocaleDateString());
+        const fechaHoy = formatarFecha(new Date().toLocaleDateString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
         let mensaje 
         console.log("ENTRA AL FOREACH 21:01hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle )
+
+      console.log("FECHA DE HOY: ", fechaHoy);
+      console.log("FECHA DE NOTIFICACIÓN: ", fechaParaNotificar);
+      console.log("NewDate: ", new Date());
+      console.log("NewDate.toLocalDateString: ", new Date().toLocaleDateString());
+      console.log("NewDate.toLocaleString2: ", new Date().toLocaleString('default', { timeZone: 'America/Argentina/Buenos_Aires' }));
+
 
         if (fechaHoy === fechaParaNotificar) {
           console.log("ENTRA AL IF 21:01hs", notificacion.nombreUsuario, notificacion.titulo, notificacion.detalle  )
@@ -351,7 +416,7 @@ exports.verificarNuevasNotificaciones08 = functions.pubsub.schedule('every day 0
 
 
   exports.eliminarNotificacionesYaEjecutadas = functions.pubsub.schedule('every sunday 21:30')
-  .timeZone('America/Argentina/Buenos_Aires')
+  .timeZone('America/Buenos_Aires')
   .onRun(async (context) => {
     console.log("Ingreso a la funcion para borrar");
     try {
