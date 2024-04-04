@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, getDocs, collection } from 'firebase/firestore'
+import { getFirestore, getDocs, collection, doc, updateDoc } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2';
 
@@ -138,6 +138,22 @@ async function eliminarCuenta() {
     console.error("Error al eliminar el usuario:", error);
     // Maneja el error según sea necesario
   }
+}
+
+
+
+
+
+
+// Agregar nuevo campo a un documento de Firestore
+async function agregarNuevoCampoADoc (nombreDeLaColeccion , idDelDocumento, valor){
+
+  const tareaRef = doc(db, nombreDeLaColeccion, idDelDocumento);
+  await updateDoc(tareaRef, {
+    quiereNotificacion: valor,
+  });
+
+
 }
 
 
@@ -292,6 +308,6 @@ async function obtenerIDDelDocumentoAEliminarDeLasNotificaciones (nombreColeccio
 
 
 
-export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones };
+export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones, agregarNuevoCampoADoc };
 
 

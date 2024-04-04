@@ -1,6 +1,6 @@
 // Imports ↓
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
-import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones } from './firestoreConfig';
+import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones, agregarNuevoCampoADoc } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
 import { llamarProgramarNotificacion, obtenerToken, requestPermission } from './notificaciones';
 import Swal from 'sweetalert2';
@@ -1530,6 +1530,7 @@ modalFooter.innerHTML = botonesCard;
 // Funcion del boton de la campanita, para ver si esa tarea tiene notificaciones
 async function mostrarSiTieneNotificaciones (id) {
   mostrarCarga();
+
   let tarea = unaCard.find((t) => t.id === id);
 
   let botonEditarID = document.getElementById(`editar-${tarea.id}`);
@@ -1542,6 +1543,10 @@ async function mostrarSiTieneNotificaciones (id) {
   let botonAgregarNotificacionID = `agregarNoti-${tarea.id}`;
   let botonSalirDeNotificacionID = `salirDeModalNoti-${tarea.id}`;
   let notificacionesExistentesID = `notificacionesExistentes-${tarea.id}`;
+
+
+
+
 
 
   if(tarea.quiereNotificacion){
@@ -1575,6 +1580,19 @@ async function mostrarSiTieneNotificaciones (id) {
     await obtenerColeccionDeFirestore("notificaciones08hs", "notificaciones14hs", "notificaciones21hs", tarea.id, notificacionesExistentesID);
 
 
+  } else if(tarea.quiereNotificacion === undefined){
+      console.log("Entra al else if, porque es undefinded")
+      await agregarNuevoCampoADoc(nombreDeColeccion, id, true);
+      Swal.fire({
+        position: "center",
+        icon: "info",
+        title: "Al ser una tarea vieja, se recargará la página para que puedas agregar notificaciones",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setTimeout(() => {
+        location.reload();
+      }, 1500);
   } else {
 
     botonEditarID.disabled = true; 
@@ -1777,10 +1795,25 @@ if (fechaActual === fechaSeleccionadaConFormato2) {
       showConfirmButton: false,
       timer: 1000,
     });
+    agregarNuevoCampoADoc(nombreDeColeccion, id, true);
     cerrarModalConNotificacionesExistentes(id);
     mostrarSiTieneNotificaciones(id)
+    
+    if(!tarea.quiereNotificacion)
+    setTimeout(() => {
+      Swal.fire({
+        position: "center",
+        icon: "info",
+        title: "Para que esta notificación se guarde, necesitamos actualizar la página",
+        showConfirmButton: false,
+        timer: 2000,
+      });
 
+      setTimeout(() => {
+        location.reload();
+      }, 1200);
 
+    }, 1000);
 }
 
 
