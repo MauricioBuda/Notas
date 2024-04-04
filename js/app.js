@@ -1,7 +1,8 @@
 // Imports ↓
-import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta } from './firestoreConfig';
+import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
+import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones, agregarNuevoCampoADoc } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
+import { llamarProgramarNotificacion, obtenerToken, requestPermission } from './notificaciones';
 import Swal from 'sweetalert2';
 
 
@@ -11,7 +12,6 @@ import Swal from 'sweetalert2';
 
 // Array para ir guardando las cards ↓
 let unaCard = [];
-
 
 
 
@@ -30,11 +30,47 @@ let divDeEstados = document.getElementById("divDeEstadosID");
 // Variables formulario para agregar tarea ↓
 let formulario = document.getElementById("section_formulario_id");
 let botonAgregarTarea = document.getElementById("boton_agregarTarea_id");
+const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
 
 
 // Eventos del formulario ↓
 botonAgregarTarea.addEventListener("click", agregarTarea);
 
+
+// Variables del formulario, de la notificación en tarea nueva ↓
+let calendario = $('#datepicker');
+let iconoCalendar = document.getElementById("icono-calendar")
+let aceptarNoti = document.getElementById("aceptar-noti");
+let rechazarNoti = document.getElementById("rechazar-noti");
+let quiereNotificacion = false;
+let fechaSeleccionadaSinFormato = document.getElementById("date");
+let fechaSeleccionadaParticionada = ""
+let fechaSeleccionadaConFormato = ""
+let check08 = document.getElementById("check-08");
+let check14 = document.getElementById("check-14");
+let check21 = document.getElementById("check-21");
+let selecciona08 = false;
+let selecciona14 = false;
+let selecciona21 = false;
+
+
+// Variables del formulario, de la notificación en tarea existente ↓
+let check08a
+let check14a
+let check21a
+
+
+
+
+// Eventos del formulario, para la notificación ↓
+aceptarNoti.addEventListener("click", mostrarCargaDeNotificacion);
+rechazarNoti.addEventListener("click", ocultarCargaDeNotificacion);
+
+// Variables para el modal de notificación ↓
+let modalParaNotificacion
+let modalParaAgregarNotificacionACardExistente
 
 // Variable del modal de cargando ↓
 const modalCarga = document.getElementById('modalCarga');
@@ -92,8 +128,11 @@ let canceladasCards = document.getElementById("canceladas-cards");
 
 // Variables de la ventana modal, de cards grandes ↓
 let modalCard = document.getElementById("cardEnModal");
+// let modalNotificacion = document.getElementById("modalNotificacion");
 let modalFooter = document.getElementById("modal_footerID");
-
+let svgBell = `<svg class="img-campana-card" xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+</svg>`;
 
 // Variables para pantalla de ingreso ↓
 let pantallaInicioSesion = document.getElementById("formInicioSesion");
@@ -142,7 +181,12 @@ boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
 salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 
+
+
+
 // TERMINO DE DECLARAR VARIABLES Y ASIGNAR EVENTOS ↑
+
+
 
 
 
@@ -164,7 +208,11 @@ asignarEventosSegunDondeHagaClick();
 
 
 
+
 // TERMINO CON EJECUCIÓN DE FUNCIONES NECESARIAS ↑
+
+
+
 
 
 
@@ -180,6 +228,11 @@ asignarEventosSegunDondeHagaClick();
 
 
 
+
+
+
+
+
 // Funcion con la que compruebo si hay una sesión iniciada
 async function corroborarSesionIniciada (){
   mostrarCarga();
@@ -190,10 +243,14 @@ async function corroborarSesionIniciada (){
     // Si entro al IF es que hay una sesión iniciada
     if (usuario) {
       console.log('Usuario autenticado:  ', usuario.displayName);
+
+      // Pido permiso para notificaciones
+      requestPermission();
+
       // Creo esta variable como bandera para poder cambiar nombre en cambiarNombre();
       usuarioConSesionIniciada=usuario; 
 
-      // Oculo/muestro las pantallas necesarias
+      // Oculto/muestro las pantallas necesarias
       pantallaInicioSesion.classList.add("aplicar-display-none");
       menu.classList.remove("aplicar-display-none");
       navbar_general.classList.remove("aplicar-display-none")
@@ -211,6 +268,9 @@ async function corroborarSesionIniciada (){
 
       // Cuando entra a la cuenta, se muestran todas las cards existentes
       cardsEnPantalla(pantallaActual);
+
+      // Obtengo token para notificaciones
+      obtenerToken();
     } else {
       // Si no hay nadie ingresado, solo muestro pantalla de loguin
       pantallaInicioSesion.classList.remove("aplicar-display-none");
@@ -413,6 +473,9 @@ async function olvideClave(event){
 
 
 
+
+
+
 // Función para eliminar definitivamente la cuenta
 async function elimnarLaCuenta(){
   Swal.fire({
@@ -453,6 +516,7 @@ function ocultarModalRegistro(){
 function mostrarModalRegistro(){
   modalRegistrarse.classList.remove("aplicar-display-none")
 }
+
 
 
 
@@ -557,10 +621,20 @@ async function cambiarNombre(){
 
 
 
+// TERMINO CON TEMA REGISTRO Y FIREBASE AUTH ↑
+
+// EMPIEZO CON FUNCIONALIDADES DE LA APP INTERNAS ↓
+
+
+
+
+
+
+
 
 // Clase para generar cada card (tarea)
 class Tarjetas {
-  constructor(nombre, seccion, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado) {
+  constructor(nombre, seccion, mail, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado, quiereNotificacion) {
     this.nombre = nombre;
     this.seccion = seccion;
     this.mail = mail;
@@ -572,12 +646,14 @@ class Tarjetas {
     this.fechaCierre = fechaCierre;
     this.ultimaEdicion = ultimaEdicion;
     this.estado = estado;
+    this.quiereNotificacion = quiereNotificacion;
     this.id = null; // Inicializamos el ID como nulo
   }
   asignarId(id) {
     this.id = id;
   }
 }
+
 
 
 
@@ -641,6 +717,8 @@ async function cardsEnPantalla(estadoDeLaTarjetaSeleccionada) {
   
   
   
+
+
 // función para filtrar por secciones
 function filtroDeSecciones (seccionElegida) {
   let botonSeccionTodas = document.getElementById("boton-secciones-todas");
@@ -725,6 +803,8 @@ function filtroDeSecciones (seccionElegida) {
 
 
 
+
+
 // Función para obtener las cards desde Firestore
 async function obtenerCardsDesdeFirestore(estado) {
   // Limpiar el array de cards antes de obtener las nuevas desde Firestore
@@ -782,8 +862,11 @@ function ocultarCarga() {
 
 
 
+
+
+
 // Funcion para mostrar u ocultar el formulario, poniendo borroso lo demás
-function mostrarFormulario() {
+async function mostrarFormulario() {
   formulario.classList.toggle("oculto");
 
   if (formulario.classList.contains("oculto")) {
@@ -804,11 +887,21 @@ function mostrarFormulario() {
     navbar_general.classList.add("aplicar-display-none");
     menu.classList.add("disminuir-margin-top");
 
+// Obtener el elemento del calendario
+
+calendario.on('changeDate', function(event) {
+
+  // let fechaSeleccionada = event.date;
+  
+  verSiHorarioDeNotificacionYaPaso();
+});
 
 
     menuBorroso ();
   }
 }
+
+
 
 
 
@@ -832,6 +925,8 @@ function menuBorroso () {
 
   }
 }
+
+
 
 
 
@@ -861,6 +956,8 @@ function ocultarFormulario() {
 
 
 
+
+
 // Función para vaciar campos del formulario
 function vaciarCampos() {
   let tituloInput = document.getElementById("tareaTitulo");
@@ -878,7 +975,138 @@ function vaciarCampos() {
 
 
 
-// Función para aagarrar los datos que ingresa el usuario cuando agrega una tarea, y guardarlos en la DB
+
+
+
+// Función para habilitar la programación de la notificación
+function mostrarCargaDeNotificacion(e){
+  e.preventDefault();
+  iconoCalendar.classList.remove("icono-calendar-block")
+  check08.disabled = false;
+  check14.disabled = false;
+  check21.disabled = false;
+  fechaSeleccionadaSinFormato.disabled = false;
+  quiereNotificacion = true;
+}
+
+// Función para deshabilitar la programación de la notificación
+function ocultarCargaDeNotificacion(e){
+  if (e) {
+    e.preventDefault();
+  }
+  iconoCalendar.classList.add("icono-calendar-block")
+  check08.disabled = true;
+  check14.disabled = true;
+  check21.disabled = true;
+  fechaSeleccionadaSinFormato.disabled = true;
+  quiereNotificacion = false;
+}
+
+
+
+
+
+
+
+
+// Función para ver si el checkbox es de un horario que ya pasó
+function verSiHorarioDeNotificacionYaPaso (){
+  let fechaActual = new Date().toLocaleDateString();
+  let horaActual = new Date().toLocaleTimeString([], {hour: '2-digit'});
+  fechaSeleccionadaParticionada = fechaSeleccionadaSinFormato.value.split('-'); // Dividir la cadena por el guion
+  fechaSeleccionadaConFormato = new Date(fechaSeleccionadaParticionada[2], fechaSeleccionadaParticionada[1] - 1, fechaSeleccionadaParticionada[0]).toLocaleDateString();
+
+  
+  if (fechaActual === fechaSeleccionadaConFormato) {
+      if (selecciona08) {
+          if (horaActual >= 8) {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Seleccionaste un horario que ya pasó",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          selecciona08 = false;
+          check08.checked = false
+          }
+
+      }
+      if (selecciona14) {
+          if (horaActual >= 14) {
+
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Seleccionaste un horario que ya pasó",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            selecciona14 = false;
+            check14.checked = false
+            }
+      }
+
+      if (selecciona21){
+          if (horaActual >= 21) {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Seleccionaste un horario que ya pasó",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            selecciona21 = false;
+            check21.checked = false
+            }
+      } 
+    }
+  }
+
+
+
+
+
+
+
+// Manejo que pasa si tildan o destildan en el formulario de nueva tarea
+check08.addEventListener('change', function(event) {
+  if (check08.checked) {
+    selecciona08 = true;
+    verSiHorarioDeNotificacionYaPaso ();
+  } else {
+    selecciona08 = false;
+  }
+});
+check14.addEventListener('change', function(event) {
+  if (check14.checked) {
+    selecciona14 = true;
+    verSiHorarioDeNotificacionYaPaso ();
+  } else {
+    selecciona14 = false;
+  }
+});
+check21.addEventListener('change', function(event) {
+  if (check21.checked) {
+    selecciona21 = true;
+    verSiHorarioDeNotificacionYaPaso ();
+  } else {
+    selecciona21 = false;
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// Función para agarrar los datos que ingresa el usuario cuando agrega una tarea, y guardarlos en la DB
 async function agregarTarea(event) {
   mostrarCarga();
   event.preventDefault();
@@ -896,56 +1124,106 @@ async function agregarTarea(event) {
 
 
   if (!titulo || !detalle || !urgencia || !seccionQueSeMuestraEnPantalla) {
-    Swal.fire({
-      position: "center",
-      icon: "warning",
-      title: "Se deben completar todos los campos",
-      showConfirmButton: false,
-      timer: 1000,
-    });
-    ocultarCarga();
-    return;
-  } else {
-    let nuevaCard = new Tarjetas(nombreDeUsuarioDB, seccionQueSeMuestraEnPantalla, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado);
-    unaCard.push(nuevaCard);
-
-    try {
-      let docRef = await addDoc(collection(db, nombreDeColeccion), {
-        nombre: nuevaCard.nombre,
-        seccion: nuevaCard.seccion,
-        mail: nuevaCard.mail,
-        titulo: nuevaCard.titulo,
-        detalle: nuevaCard.detalle,
-        urgencia: nuevaCard.urgencia,
-        fechaCreacion: nuevaCard.fechaCreacion,
-        fechaParaOrdenarlas: nuevaCard.fechaParaOrdenarlas,
-        fechaCierre: nuevaCard.fechaCierre,
-        ultimaEdicion: nuevaCard.ultimaEdicion,
-        estado: nuevaCard.estado
-      });
-
-      // Asignar el ID generado por Firestore a la tarjeta
-      nuevaCard.asignarId(docRef.id);
-            // Agregar la nueva card al contenedor correspondiente
-            agregarCardAlContenedor(nuevaCard);
-            ocultarFormulario();
-            vaciarCampos();
-            menuBorroso();
-            ocultarCarga();
-            cardsEnPantalla("Pendientes");
-          Swal.fire({
-              title: "Tarea agregada!",
-              timer: 1200,
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Se deben completar todos los campos",
+                showConfirmButton: false,
+                timer: 1000,
+              });
+              ocultarCarga();
+              return;
+  } else if(quiereNotificacion && fechaSeleccionadaSinFormato.value === "") {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "No seleccionó la fecha",
               showConfirmButton: false,
-              icon: "success"
+              timer: 1000,
           });
-    } catch (error) {
-      console.error("Error al agregar la tarea a Firestore", error);
+  ocultarCarga();
+  return;
+  } else if (quiereNotificacion && !check08.checked && !check14.checked && !check21.checked){
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "No seleccionó ningun horario",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            ocultarCarga();
+            return;
+  }  else {
+            let nuevaCard = new Tarjetas(nombreDeUsuarioDB, seccionQueSeMuestraEnPantalla, mailDeUsuarioDB, titulo, detalle, urgencia, fechaCreacion, fechaParaOrdenarlas, fechaCierre, ultimaEdicion, estado, quiereNotificacion);
+            unaCard.push(nuevaCard);
+
+            try {
+              let docRef = await addDoc(collection(db, nombreDeColeccion), {
+                nombre: nuevaCard.nombre,
+                seccion: nuevaCard.seccion,
+                mail: nuevaCard.mail,
+                titulo: nuevaCard.titulo,
+                detalle: nuevaCard.detalle,
+                urgencia: nuevaCard.urgencia,
+                fechaCreacion: nuevaCard.fechaCreacion,
+                fechaParaOrdenarlas: nuevaCard.fechaParaOrdenarlas,
+                fechaCierre: nuevaCard.fechaCierre,
+                ultimaEdicion: nuevaCard.ultimaEdicion,
+                estado: nuevaCard.estado,
+                quiereNotificacion: quiereNotificacion
+              });
+
+              // Asignar el ID generado por Firestore a la tarjeta
+              nuevaCard.asignarId(docRef.id);
+
+
+
+                    if(quiereNotificacion){
+                      llamarProgramarNotificacion(fechaSeleccionadaConFormato, titulo, detalle, check08.checked, check14.checked, check21.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha, nuevaCard.id);
+                    }
+
+
+
+                    agregarCardAlContenedor(nuevaCard);
+                    ocultarFormulario();
+                    vaciarCampos();
+                    menuBorroso();
+                    ocultarCarga();
+                    cardsEnPantalla("Pendientes");
+                    ocultarCargaDeNotificacion();
+                    fechaSeleccionadaSinFormato.value = "";
+                    check08.checked = false;
+                    check14.checked = false;
+                    check21.checked = false;
+
+                  Swal.fire({
+                      title: "Tarea agregada!",
+                      timer: 1200,
+                      showConfirmButton: false,
+                      icon: "success"
+                  });
+
+
+
+            } catch (error) {
+              console.error("Error al agregar la tarea a Firestore", error);
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error al cargar",
+                showConfirmButton: false,
+                timer: 1000,
+                footer: "Por favor actualizar página"
+              });
+              ocultarCarga();
+            }
+            ocultarCarga();
+
+          }
       ocultarCarga();
-    }
-    ocultarCarga();
-  }
 }
+
+
 
 
 
@@ -955,39 +1233,80 @@ async function agregarTarea(event) {
 function asignarEventosSegunDondeHagaClick() {
   // Asignar eventos a los botones
   document.addEventListener("click", (event) => {
+
       // Verificar si el clic ocurrió en un botón de editar
       if (event.target.id.startsWith("editar-")) {
-          // Extraer el ID de la tarea de la identificación del botón
-          editarTarea(event.target.id.split("-")[1]);
+        // Extraer el ID de la tarea de la identificación del botón
+        editarTarea(event.target.id.split("-")[1]);
       } 
+
       // Verificar si el clic ocurrió en un botón de finalizar
       else if (event.target.id.startsWith("finalizar-")) {
-          // Extraer el ID de la tarea de la identificación del botón
-          finalizarTarea(event.target.id.split("-")[1]);
+        // Extraer el ID de la tarea de la identificación del botón
+        finalizarTarea(event.target.id.split("-")[1]);
       } 
-            // Verificar si el clic ocurrió en un botón de finalizar
-            else if (event.target.id.startsWith("restaurar-")) {
-              // Extraer el ID de la tarea de la identificación del botón
-              restaurarTarea(event.target.id.split("-")[1]);
-          }
+
+        // Verificar si el clic ocurrió en un botón de restaurar
+      else if (event.target.id.startsWith("restaurar-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        restaurarTarea(event.target.id.split("-")[1]);
+      }
+
       // Verificar si el clic ocurrió en un botón de finalizar
       else if (event.target.id.startsWith("modal-finalizar-")) {
         // Extraer el ID de la tarea de la identificación del botón
         finalizarTarea(event.target.id.split("-")[2]);
-      // Verificar si el clic ocurrió en un botón de cancelar
       }
+
+      // Verificar si el clic ocurrió en un botón de cancelar
       else if (event.target.id.startsWith("cancelar-")) {
-          // Extraer el ID de la tarea de la identificación del botón
-          cancelarTarea(event.target.id.split("-")[1]);
-      }// Verificar si el clic ocurrió en un botón de opciones
+        // Extraer el ID de la tarea de la identificación del botón
+        cancelarTarea(event.target.id.split("-")[1]);
+      }
+      
+      // Verificar si el clic ocurrió en un botón de opciones
       else if (event.target.id.startsWith("opciones-")) {
         // Extraer el ID de la tarea de la identificación del botón
         masOpciones(event.target.id.split("-")[1]);
-    }// Verificar si el clic ocurrió en un botón de eliminar
-    else if (event.target.id.startsWith("eliminar-")) {
-      // Extraer el ID de la tarea de la identificación del botón
-      eliminar(event.target.id.split("-")[1]);
-  }
+      }
+      
+      // Verificar si el clic ocurrió en un botón de eliminar
+      else if (event.target.id.startsWith("eliminar-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        eliminar(event.target.id.split("-")[1]);
+      }
+
+      // Verificar si el clic ocurrió en un botón de campanita
+      else if (event.target.id.startsWith("bell-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        mostrarSiTieneNotificaciones(event.target.id.split("-")[1]);
+      }
+      
+      // Verificar si el clic ocurrió en un botón de agregar notificación a card existente
+      else if (event.target.id.startsWith("agregarNoti-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        agregarNotificacionACardExistente(event.target.id.split("-")[1]);
+      }
+      
+      // Verificar si el clic ocurrió en un botón cerrar el modal para ver notificaciones existentes
+      else if (event.target.id.startsWith("salirDeModalNoti-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        cerrarModalConNotificacionesExistentes(event.target.id.split("-")[1]);
+      }
+
+                  
+      // Verificar si el clic ocurrió en un botón eliminar notificación existente
+      else if (event.target.id.startsWith("eliminarNoti-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        eliminarNotificaconExistente(event.target.id.split("-")[1]);
+      }
+
+
+      // Verificar si el clic ocurrió en un botón agregar notificación a card existente
+      else if (event.target.id.startsWith("agregarNotificacionEnCardExistente-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        confirmarNotificacionAgregadaACardExistente(event.target.id.split("-")[1]);
+      }
   });
 }
 
@@ -1001,7 +1320,6 @@ function agregarCardAlContenedor(tarea) {
   let cardID = `card-${tarea.id}`;
   let botonFinalizarID = `finalizar-${tarea.id}`;
   let botonMasOpcionesID = `opciones-${tarea.id}`;
-  let botonEliminarID = `eliminar-${tarea.id}`;
   let textoCortado = tarea.detalle
 
   let maxCaracteres = 40;
@@ -1020,6 +1338,7 @@ function agregarCardAlContenedor(tarea) {
             <p>URGENCIA: <br> ${tarea.urgencia}</p>
             <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
             <p>SECCIÓN: <br> ${tarea.seccion}</p>
+
             <button id="${botonFinalizarID}" class="btn botonesCards" >Finalizar</button>
             <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
           </div>
@@ -1058,9 +1377,9 @@ function agregarCardAlContenedor(tarea) {
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
       <p class="p_detalle">${textoCortado}</p>
-      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
+      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
     </div>
   `;
@@ -1070,9 +1389,9 @@ function agregarCardAlContenedor(tarea) {
     <div id="${cardID}" class="cards">
       <h3>${tarea.titulo}</h3>
       <p class="p_detalle">${textoCortado}</p>
-      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <p>CREACIÓN: <br> ${tarea.fechaCreacion}</p>
       <p>FIN: <br> ${tarea.fechaCierre}</p>
+      <p>SECCIÓN: <br> ${tarea.seccion}</p>
       <button id="${botonMasOpcionesID}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn botonesCards" >Opciones</button>
     </div>
   `;
@@ -1099,45 +1418,96 @@ function masOpciones(id){
     let botonCancelarID = `cancelar-${tarea.id}`;
     let botonEliminarID = `eliminar-${tarea.id}`;
     let botonRestaurarID = `restaurar-${tarea.id}`;
+    let botonBellID = `bell-${tarea.id}`;
   
     let nuevaCardHTML = `
     <div id="${cardModalID}" class="cards_modal">
     <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
     <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
         <div class="div_modales">
-        <strong>URGENCIA → </strong>
+        <strong>URGENCIA: </strong>
         <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
         </div>
         <div class="div_modales">
-        <strong>SECCIÓN → </strong>
+        <strong>SECCIÓN: </strong>
         <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otras"}</p>
         </div>
         <div class="div_modales">
-        <strong>CREACIÓN → </strong>
+        <strong>CREACIÓN: </strong>
         <p> ${tarea.fechaCreacion}</p>
         </div>
         <div class="div_modales">
-        <strong>ÚLTIMA EDICIÓN → </strong>
+        <strong>ÚLTIMA EDICIÓN: </strong>
         <p>${tarea.ultimaEdicion}</p>
         </div>
         <div class="div_modales">
-        <strong>FIN → </strong>
+        <strong>FIN: </strong>
         <p> ${tarea.fechaCierre}</p>
         </div>
   </div>
     `;
 
+    if (tarea.estado === "Pendientes") {
+      nuevaCardHTML = `
+    <div id="${cardModalID}" class="cards_modal">
+    <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
+    <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
+
+        <div class="div_modales">
+        <strong>URGENCIA: </strong>
+        <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
+        </div>
+        <div class="div_modales">
+        <strong>SECCIÓN: </strong>
+        <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otras"}</p>
+        </div>
+        <div class="div_modales">
+        <strong>CREACIÓN: </strong>
+        <p> ${tarea.fechaCreacion}</p>
+        </div>
+        <div class="div_modales">
+        <strong>ÚLTIMA EDICIÓN: </strong>
+        <p>${tarea.ultimaEdicion}</p>
+        </div>
+  </div>
+    `;
+    } else {
+      nuevaCardHTML = `
+    <div id="${cardModalID}" class="cards_modal">
+    <h1 class="h3_modal" id="${tituloID}">${tarea.titulo}</h1>
+    <p class="detalle_modal" id="${detalleID}">${tarea.detalle}</p>
+        <div class="div_modales">
+        <strong>URGENCIA: </strong>
+        <p class="urgencia_editar" id="${urgenciaID}">${tarea.urgencia}</p>
+        </div>
+        <div class="div_modales">
+        <strong>SECCIÓN: </strong>
+        <p class="seccion_editar" id="${seccionID}">${tarea.seccion?tarea.seccion:"Otras"}</p>
+        </div>
+        <div class="div_modales">
+        <strong>CREACIÓN: </strong>
+        <p> ${tarea.fechaCreacion}</p>
+        </div>
+        <div class="div_modales">
+        <strong>FIN: </strong>
+        <p> ${tarea.fechaCierre}</p>
+        </div>
+  </div>
+    `;
+    }
+
 modalCard.innerHTML = nuevaCardHTML;
 modalFooter.innerHTML="";
 
-    if (tarea.estado === "Pendientes") {
-      let botonesCard = `
-      <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
-      <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
-      <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
-      <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
-      `
-      modalFooter.innerHTML = botonesCard;
+if (tarea.estado === "Pendientes") {
+  let botonesCard = `
+  <button id="${botonEditarID}" class="btn botonesCards_modal" >Editar</button>
+  <button id="${botonBellID}" class="button-campana-modal">${svgBell}</button>
+  <button id="${botonFinalizarID}" class="btn botonesCards_modal" >Finalizar</button>
+  <button id="${botonCancelarID}" class="btn botonesCards_modal" >Cancelar</button>
+  <button id="${botonEliminarID}" class="btn botonesCards_modal" >Eliminar</button>
+  `
+modalFooter.innerHTML = botonesCard;
   }  else if (tarea.estado === "Finalizadas" || tarea.estado === "Canceladas") {
     let botonesCard = `
     <button id="${botonRestaurarID}" class="btn botonesCards_modal" >Restaurar</button>
@@ -1148,6 +1518,398 @@ modalFooter.innerHTML="";
   }
 }
 
+
+
+
+
+
+
+
+
+
+// Funcion del boton de la campanita, para ver si esa tarea tiene notificaciones
+async function mostrarSiTieneNotificaciones (id) {
+  mostrarCarga();
+
+  let tarea = unaCard.find((t) => t.id === id);
+
+  let botonEditarID = document.getElementById(`editar-${tarea.id}`);
+  let botonFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
+  let botonCancelarID = document.getElementById(`cancelar-${tarea.id}`);
+  let botonEliminarID = document.getElementById(`eliminar-${tarea.id}`);
+  let botonBellID = document.getElementById(`bell-${tarea.id}`);
+
+  let modalDeNotificacionID = `modalNotificacion-${tarea.id}`;
+  let botonAgregarNotificacionID = `agregarNoti-${tarea.id}`;
+  let botonSalirDeNotificacionID = `salirDeModalNoti-${tarea.id}`;
+  let notificacionesExistentesID = `notificacionesExistentes-${tarea.id}`;
+
+
+
+
+
+
+  if(tarea.quiereNotificacion){
+
+
+    botonEditarID.disabled = true; 
+    botonFinalizarID.disabled = true;
+    botonCancelarID.disabled = true;
+    botonEliminarID.disabled = true;
+    botonBellID.disabled = true;
+
+    modalParaNotificacion = document.createElement("div");
+    modalParaNotificacion.innerHTML = `
+    <div class="modalDeNotificacion" id="${modalDeNotificacionID}">
+
+        <h1 class="h1-modal-notificaciones"> Notificaciones programadas: </h1>
+  
+        <div id="${notificacionesExistentesID}">
+              <!-- Aquí se mostrarán las notificaciones -->
+        </div>
+
+        <div class="botones-modal-notificacion">
+          <button id="${botonAgregarNotificacionID}" >Agregar</button>
+          <button id="${botonSalirDeNotificacionID}" >Cerrar</button>
+        </div>
+    </div>
+    `;
+
+    modalCard.appendChild(modalParaNotificacion)
+
+    await obtenerColeccionDeFirestore("notificaciones08hs", "notificaciones14hs", "notificaciones21hs", tarea.id, notificacionesExistentesID);
+
+
+  } else if(tarea.quiereNotificacion === undefined){
+      console.log("Entra al else if, porque es undefinded")
+      await agregarNuevoCampoADoc(nombreDeColeccion, id, true);
+      Swal.fire({
+        position: "center",
+        icon: "info",
+        title: "Al ser una tarea vieja, se recargará la página para que puedas agregar notificaciones",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      setTimeout(() => {
+        location.reload();
+      }, 1500);
+  } else {
+
+    botonEditarID.disabled = true; 
+    botonFinalizarID.disabled = true;
+    botonCancelarID.disabled = true;
+    botonEliminarID.disabled = true;
+    botonBellID.disabled = true;
+
+    modalParaNotificacion = document.createElement("div");
+    modalParaNotificacion.innerHTML = `
+    <div class="modalDeNotificacion" id="${modalDeNotificacionID}">
+      <div>
+      <h1 class="h1-modal-notificaciones"> No tiene notificacines programadas </h1>
+      </div>
+      <div class="botones-modal-notificacion">
+        <button id="${botonAgregarNotificacionID}" >Agregar</button>
+        <button id="${botonSalirDeNotificacionID}" >Cerrar</button>
+      </div>
+    </div>
+    `;
+    modalCard.appendChild(modalParaNotificacion)
+  }
+  ocultarCarga();
+}
+
+
+
+
+
+
+
+
+
+// Función para agregar una notificación a una tarea pendiente existente
+function agregarNotificacionACardExistente (id) {
+  let tarea = unaCard.find((t) => t.id === id);
+
+  let botonSalirDeNotificacionID = `salirDeModalNoti-${tarea.id}`;
+  let botonAgregarNotificacionEnCardExistenteID = `agregarNotificacionEnCardExistente-${tarea.id}`;
+
+
+
+  modalParaNotificacion.remove();
+
+    modalParaAgregarNotificacionACardExistente = document.createElement("div");
+    modalParaAgregarNotificacionACardExistente.innerHTML = `    
+    <div class="modalDeNotificacion">
+    <section class="container">
+    <form class="row">
+      <div class="col-5">
+        <div class="input-group date" id="datepicker2">
+          <input readonly type="text" class="form-control" id="date2" />
+          <span class="input-group-append">
+            <span class="input-group-text bg-light d-block " id="icono-calendar">
+              <i class="fa fa-calendar"></i>
+            </span>
+          </span>
+        </div>
+      </div>
+    </form>
+
+    <div class="div-de-divs-horarios">
+        <div class="div-de-checkbox">
+        <input type="checkbox" name="" id="check-08a">
+        <label for="horario">08:00hs</label>
+      </div>
+
+      <div class="div-de-checkbox">
+        <input type="checkbox" name="" id="check-14a">
+        <label for="horario">14:00hs</label>
+      </div>
+
+      <div class="div-de-checkbox">
+        <input type="checkbox" name="" id="check-21a">
+        <label for="horario">21:00hs</label>
+      </div>
+    </div>
+
+    </section>
+
+    <div class="botones-modal-notificacion">
+
+    <button id="${botonAgregarNotificacionEnCardExistenteID}" >Aceptar</button>
+    <button id="${botonSalirDeNotificacionID}" >Cerrar</button>
+
+    </div>
+
+  </div>
+    `
+    modalCard.appendChild(modalParaAgregarNotificacionACardExistente);
+
+    $(function(){
+      $('#datepicker2').datepicker({
+          startDate: new Date(), 
+          format: 'dd-mm-yyyy',
+          orientation: 'bottom',
+          autoclose: true,
+          todayHighlight: true,
+      });
+    });
+
+
+    check08a = document.getElementById("check-08a");
+    check14a = document.getElementById("check-14a");
+    check21a = document.getElementById("check-21a");
+}
+
+
+
+
+
+
+
+// Carga de nueva notificación en la DB
+function confirmarNotificacionAgregadaACardExistente (id){
+  let tarea = unaCard.find((t) => t.id === id);
+  let fecha2 = new Date ();
+  let fechaActual = new Date().toLocaleDateString();
+  let horaActual = new Date().toLocaleTimeString([], {hour: '2-digit'});
+  let fechaSeleccionadaPorUsuario = document.getElementById("date2").value
+
+  let fechaSeleccionadaParticionada2 = fechaSeleccionadaPorUsuario.split('-'); // Dividir la cadena por el guion
+  let fechaSeleccionadaConFormato2 = new Date(fechaSeleccionadaParticionada2[2], fechaSeleccionadaParticionada2[1] - 1, fechaSeleccionadaParticionada2[0]).toLocaleDateString();
+
+
+if(!fechaSeleccionadaPorUsuario){
+
+  Swal.fire({
+    position: "center",
+    icon: "warning",
+    title: "Seleccione alguna fecha",
+    showConfirmButton: false,
+    timer: 1000,
+  });
+  return;
+}
+
+if(!check08a.checked && !check14a.checked && !check21a.checked){
+
+  Swal.fire({
+    position: "center",
+    icon: "warning",
+    title: "Seleccione algún horario",
+    showConfirmButton: false,
+    timer: 1000,
+  });
+  return;
+}
+
+if (fechaActual === fechaSeleccionadaConFormato2) {
+
+
+    if (horaActual >= 8 && check08a.checked) {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Seleccionaste un horario que ya pasó",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    check08a.checked = false
+    return;
+    }
+
+
+
+    if (horaActual >= 14 && check14a.checked) {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Seleccionaste un horario que ya pasó",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      check14a.checked = false
+      return;
+      }
+
+
+    if (horaActual >= 21 && check21a.checked) {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Seleccionaste un horario que ya pasó",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      check21a.checked = false
+      return;
+    }
+
+
+  } 
+
+    llamarProgramarNotificacion(fechaSeleccionadaConFormato2, tarea.titulo, tarea.detalle, check08a.checked, check14a.checked, check21a.checked, nombreDeUsuarioDB, mailDeUsuarioDB, fecha2, tarea.id);
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Notificaciones actualizadas!",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    agregarNuevoCampoADoc(nombreDeColeccion, id, true);
+    cerrarModalConNotificacionesExistentes(id);
+    mostrarSiTieneNotificaciones(id)
+    
+    if(!tarea.quiereNotificacion)
+    setTimeout(() => {
+      Swal.fire({
+        position: "center",
+        icon: "info",
+        title: "Para que esta notificación se guarde, necesitamos actualizar la página",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
+      setTimeout(() => {
+        location.reload();
+      }, 1200);
+
+    }, 1000);
+}
+
+
+
+
+
+
+
+
+
+
+
+// Función para cerrar modal que muestra notificaciones de una tarea pendiente existente
+function cerrarModalConNotificacionesExistentes(id){
+  let tarea = unaCard.find((t) => t.id === id);
+
+  if (modalParaNotificacion) {
+      modalParaNotificacion.remove();
+  }
+
+  if (  modalParaAgregarNotificacionACardExistente) {
+      modalParaAgregarNotificacionACardExistente.remove();
+  }
+
+
+  let botonEditarID = document.getElementById(`editar-${tarea.id}`);
+  let botonFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
+  let botonCancelarID = document.getElementById(`cancelar-${tarea.id}`);
+  let botonEliminarID = document.getElementById(`eliminar-${tarea.id}`);
+  let botonBellID = document.getElementById(`bell-${tarea.id}`);
+
+
+  botonEditarID.disabled = false; 
+  botonFinalizarID.disabled = false;
+  botonCancelarID.disabled = false;
+  botonEliminarID.disabled = false;
+  botonBellID.disabled = false;
+}
+
+
+
+
+
+
+
+
+
+// Función para eliminar una notificación a una tarea pendiente existente
+async function eliminarNotificaconExistente(id){
+    let tarea = unaCard.find((t) => t.id === id);
+
+    let idParaEliminar08hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones08hs", tarea.id);
+    let idParaEliminar14hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones14hs", tarea.id);
+    let idParaEliminar21hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones21hs", tarea.id);
+
+    let idQueSeDebeEliminar = idParaEliminar08hs[0]?idParaEliminar08hs[0]:idParaEliminar14hs[0]?idParaEliminar14hs[0]:idParaEliminar21hs[0]?idParaEliminar21hs[0]:null;
+    let coleccionDelDocumentoAEliminar = idParaEliminar08hs[1]?idParaEliminar08hs[1]:idParaEliminar14hs[1]?idParaEliminar14hs[1]:idParaEliminar21hs[1]?idParaEliminar21hs[1]:null;
+
+
+  if (idQueSeDebeEliminar) {
+    Swal.fire({
+      title: "¿Eliminar notificación programada?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mostrarCarga();
+        deleteDoc(doc(db, coleccionDelDocumentoAEliminar, idQueSeDebeEliminar));
+        Swal.fire({
+          title: "Tarea eliminada!",
+          timer: 1000,
+          showConfirmButton: false,
+          icon: "success"
+        });
+      }
+
+      setTimeout(() => {
+        cerrarModalConNotificacionesExistentes(tarea.id);
+        mostrarSiTieneNotificaciones(tarea.id);
+      }, 300);
+
+    }); 
+  } else {
+    Swal.fire({
+      title: "Ocurrió algún error",
+      timer: 1200,
+      showConfirmButton: false,
+      icon: "error"
+    });
+  }
+
+}
 
 
 
@@ -1285,7 +2047,7 @@ async function restaurarTarea(id){
           icon: "success"
         });
         setTimeout(() => {
-            location.reload();
+          location.reload();
         }, 2000);
   
       }
@@ -1367,7 +2129,6 @@ if (tarea) {
 async function editarTarea(id) {
   // Buscar la tarea por su ID
   let tarea = unaCard.find((t) => t.id === id);
-
   
   if (tarea) {
      //Me fijo fecha para después guardarla
@@ -1390,6 +2151,8 @@ async function editarTarea(id) {
   let botonDeFinalizarID = document.getElementById(`modal-finalizar-${tarea.id}`);
   let botonDeCancelarID = document.getElementById(`cancelar-${tarea.id}`);
   let botonDeEliminarID = document.getElementById(`eliminar-${tarea.id}`);
+  let botonBellID = document.getElementById(`bell-${tarea.id}`);
+
 
 
   // Verificar si estamos en modo de edición o no
@@ -1422,6 +2185,7 @@ async function editarTarea(id) {
     botonDeFinalizarID.disabled = false;
     botonDeCancelarID.disabled = false;
     botonDeEliminarID.disabled = false;
+    botonBellID.disabled = false;
  
 
 
@@ -1484,6 +2248,7 @@ async function editarTarea(id) {
     botonDeFinalizarID.disabled = true;
     botonDeCancelarID.disabled = true;
     botonDeEliminarID.disabled = true;
+    botonBellID.disabled = true;
 
 
     let seccionSeleccionada = tarea.seccion?tarea.seccion: "Otras";
@@ -1545,3 +2310,4 @@ function actualizarCards() {
   finalizadasCards.innerHTML = "";
   canceladasCards.innerHTML = "";
 }
+

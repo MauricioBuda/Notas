@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore'
+import { getFirestore, getDocs, collection, doc, updateDoc } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2';
 
@@ -19,6 +19,12 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const auth = getAuth();
+
+
+
+
+
+
 
 
 
@@ -57,6 +63,12 @@ async function registrarUsuario(nombre, email, password) {
 
 }
 
+
+
+
+
+
+
 async function iniciarSesion(email, password) {
   try {
     const datos = auth.currentUser;
@@ -78,6 +90,12 @@ async function iniciarSesion(email, password) {
 
 }
 
+
+
+
+
+
+
 async function recuperarClave(mail){
   try {
     const recuperar = await sendPasswordResetEmail(auth,mail)
@@ -88,6 +106,12 @@ async function recuperarClave(mail){
   }
 }
 
+
+
+
+
+
+
 async function cerrarSesion(){
     signOut(auth).then(() => {
       return "ok";
@@ -96,6 +120,12 @@ async function cerrarSesion(){
       console.log("error", error)
     });
 }
+
+
+
+
+
+
 
 async function eliminarCuenta() {
   const user = auth.currentUser;
@@ -114,6 +144,170 @@ async function eliminarCuenta() {
 
 
 
-export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta};
+
+// Agregar nuevo campo a un documento de Firestore
+async function agregarNuevoCampoADoc (nombreDeLaColeccion , idDelDocumento, valor){
+
+  const tareaRef = doc(db, nombreDeLaColeccion, idDelDocumento);
+  await updateDoc(tareaRef, {
+    quiereNotificacion: valor,
+  });
+
+
+}
+
+
+
+
+
+
+
+
+async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, notificaciones21, idDeLaCardSeleccionada, IDDelcontenedorParaInsertarNotificaciones){
+
+  let contenedor = document.getElementById(IDDelcontenedorParaInsertarNotificaciones);
+  let bandera = 0;
+
+  let cartelCarga = document.createElement("p");
+  cartelCarga.innerText = "Buscando...";
+  contenedor.appendChild(cartelCarga);
+  
+  const querySnapshot1 = await getDocs(collection(db, notificaciones08));
+  const querySnapshot2 = await getDocs(collection(db, notificaciones14));
+  const querySnapshot3 = await getDocs(collection(db, notificaciones21));
+
+
+
+
+  // Iterar sobre las tareas y agregarlas al array y al contenedor
+
+    querySnapshot1.forEach((doc) => {
+
+      const cardDeNotificacion = doc.data();
+
+      if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
+        bandera++;
+        cartelCarga.remove();
+        
+        let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
+
+        
+        let cardsConNotificacionesProgramadas = `
+        <div class="modal-hijo-con-notificaciones">
+          <h3>${cardDeNotificacion.fecha}</h3>
+          <p> a las 08hs</p>
+          <button id= ${botonEliminarNotificacionID}>X</button>
+        </div>
+      `;
+  
+      contenedor.innerHTML += cardsConNotificacionesProgramadas;
+      }
+    })
+
+
+    querySnapshot2.forEach((doc) => {
+
+      const cardDeNotificacion = doc.data();
+
+      if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
+        bandera++;
+        cartelCarga.remove();
+
+        let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
+
+        let cardsConNotificacionesProgramadas = `
+        <div class="modal-hijo-con-notificaciones">
+          <h3>${cardDeNotificacion.fecha}</h3>
+          <p> a las 14hs</p>
+          <button id= ${botonEliminarNotificacionID}>X</button>
+        </div>
+      `;
+  
+      contenedor.innerHTML += cardsConNotificacionesProgramadas;
+      }
+    })
+
+
+    querySnapshot3.forEach((doc) => {
+
+      const cardDeNotificacion = doc.data();
+
+      if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
+        bandera++;
+        cartelCarga.remove();
+
+        let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
+
+        
+
+        let cardsConNotificacionesProgramadas = `
+        <div class="modal-hijo-con-notificaciones">
+          <h3>${cardDeNotificacion.fecha}</h3>
+          <p> a las 21hs</p>
+          <button id= ${botonEliminarNotificacionID}>X</button>
+        </div>
+      `;
+      contenedor.innerHTML += cardsConNotificacionesProgramadas;
+      }
+
+    })
+
+    if (bandera === 0){
+      let noTieneNotificaciones = `
+      <div class="modal-hijo-con-notificaciones">
+        <h3>No hay notificaciones programadas</h3>
+      </div>
+    `;
+    contenedor.innerHTML = noTieneNotificaciones;
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+async function obtenerIDDelDocumentoAEliminarDeLasNotificaciones (nombreColeccion, idDeLaCardSeleccionada){
+
+  let contenedor = document.getElementById(`notificacionesExistentes-${idDeLaCardSeleccionada}`);
+
+
+  let cartelCarga = document.createElement("p");
+  contenedor.innerHTML = "";
+  cartelCarga.innerText = "En proceso...";
+  contenedor.appendChild(cartelCarga);
+
+
+
+  const querySnapshot = await getDocs(collection(db, nombreColeccion));
+  let documentoID
+  let nombreColeccionFinal
+
+  // Iterar sobre las tareas y agregarlas al array y al contenedor
+  querySnapshot.forEach((doc) => {
+    const cardDeNotificacion = doc.data();
+
+    if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
+      // Obtener el ID del documento
+      documentoID = doc.id;
+      nombreColeccionFinal = nombreColeccion;
+    }
+  });
+
+      cartelCarga.remove();
+      return [documentoID , nombreColeccionFinal];
+}
+
+
+
+
+
+export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones, agregarNuevoCampoADoc };
 
 

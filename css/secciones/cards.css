@@ -67,13 +67,7 @@
   }
   
   
-  .fondo_input_editable{
-    background-color: white;
-    border: solid 1px black;
-    border-radius: 10px;
-    padding-left: 2vw;
-    padding-right: 2vw;
-  }
+
   
   .section_finalizadas div{
     /* background-color: rgba(0, 188, 0, 0.606); */
@@ -94,10 +88,10 @@
     border: 2px rgb(255, 0, 0) solid;
     box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.9);
   }
-  
-  
 
 
+
+  
 
   /* MEDIA QUERYS */
   @media screen and (max-width: 524px) {
@@ -124,7 +118,7 @@
     .cards{
       min-height: 10vh;
     }
-  }
+}
   /* FIN SECTION_CARDS*/
   
   
