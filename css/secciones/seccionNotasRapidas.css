@@ -32,6 +32,7 @@
     border-radius: 8px;
     width: 15vw;
     padding: 0.5vw;
+    background-color: rgba(255, 255, 255, 0.767);
 }
 
 
@@ -45,6 +46,7 @@
     min-height: 10vh;
     overflow: hidden;
     padding: 1vw;
+    background-color: rgba(255, 255, 255, 0.767);
 }
 
 
@@ -69,9 +71,9 @@
    @media screen and (max-width: 524px) {
 
     .seccion-notas-rapidas{
-        margin: 3vw;
+        margin: auto;
         align-items: center;
-        width: 45%;
+        width: 65%;
     }
 
     .img-gancho-nota-rapida{
