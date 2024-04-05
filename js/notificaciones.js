@@ -50,9 +50,15 @@ function obtenerToken(){
         console.log ("TOKEN OK →     ", currentToken)
       } else {
         // Show permission request UI
-        console.log('No registration token available. Request permission to generate one.');
+        console.log('No se pudo obtener el token');
       }
     }).catch((err) => {
+      Swal.fire({
+        title: "Hubo un error al obtener tu token para notificaciones. Por favor actualizá la página",
+        timer: 8000,
+        showConfirmButton: false,
+        icon: "error"
+      });
       console.log('An error occurred while retrieving token. ', err);
     });
 }

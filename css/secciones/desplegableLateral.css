@@ -13,13 +13,13 @@
   }
   
   .offcanvas-header  h5{
-    font-size: 1.5vw;
+    font-size: 1vw;
   }
   
   .nav-item{
     display: flex;
     gap: 1vw;
-    font-size: 2vw;
+    font-size: 1.5vw;
     margin-bottom: 2vh;
   }
   
@@ -62,7 +62,7 @@
   }
 
   .img-qr{
-    width: 55%;
+    width: 45%;
   }
 
 

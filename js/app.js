@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 
 // Array para ir guardando las cards ↓
 let unaCard = [];
+let notasRapidas = [];
 
 
 
@@ -103,6 +104,7 @@ botonMenuSecciones.innerText = `Sección:    ${muestraSeccionPantalla.toUpperCas
 
 
 // Variables para definir que se muestra en pantalla con los botones del menú superior ↓
+let menuSuperior = document.getElementById("filtro_id_menu")
 let mostrarTodas = document.getElementById("id_todas");
 let mostrarPendientes = document.getElementById("id_pendientes");
 let mostrarFinalizadas = document.getElementById("id_finalizadas");
@@ -170,21 +172,20 @@ let nombreDeColeccion = "";
 // Variables del menú desplegable ↓
 let navbar_general = document.getElementById("navbar_general");
 let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
+let botonRecargarPagina = document.getElementById("button_recargar")
 let salir_navbar =  document.getElementById("navbar_salir");
 let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre");
 let boton_eliminar_cuenta = document.getElementById("button_eliminar_cuenta");
 let boton_notas_rapidas = document.getElementById("button_notas_rapidas");
-let boton_QR = document.getElementById("button_qr");
-let modalParaQR = document.getElementById("exampleModalQR");
 let usuarioConSesionIniciada = null;
 
 
 
 // Eventos del menú desplegable
+botonRecargarPagina.addEventListener("click", ()=> {location.reload()});
 boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 boton_notas_rapidas.addEventListener("click", modalNotasRapidas);
-boton_QR.addEventListener("click", insertarQR);
 salir_navbar.addEventListener("click", salir);
 
 
@@ -2321,32 +2322,14 @@ function actualizarCards() {
 
 
 function modalNotasRapidas () {
-  console.log("Notas rápidas")
+  
+  botonMenuSecciones.classList.add("aplicar-display-none");
+  menuSuperior.classList.add("aplicar-display-none");
+  canceladasCards.classList.add("aplicar-display-none");
+  finalizadasCards.classList.add("aplicar-display-none");
+  pendientesCards.classList.add("aplicar-display-none");
+  botonMas.classList.add("aplicar-display-none");
+
 }
 
 
-
-
-
-
-function insertarQR () {
-
-  console.log ("QR");
-  let htmlParaQR = `
-  <div class="modal-dialog modal-fullscreen-sm-down">
-  <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body div-qr">
-      <img class="img-qr" src="img/QR-notitas.png" alt="QR">
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    </div>
-  </div>
-</div>
-  `
-
-  modalParaQR.innerHTML = htmlParaQR;
-}
