@@ -174,13 +174,17 @@ let salir_navbar =  document.getElementById("navbar_salir");
 let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre");
 let boton_eliminar_cuenta = document.getElementById("button_eliminar_cuenta");
 let boton_notas_rapidas = document.getElementById("button_notas_rapidas");
+let boton_QR = document.getElementById("button_qr");
+let modalParaQR = document.getElementById("exampleModalQR");
 let usuarioConSesionIniciada = null;
+
 
 
 // Eventos del menú desplegable
 boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
 boton_notas_rapidas.addEventListener("click", modalNotasRapidas);
+boton_QR.addEventListener("click", insertarQR);
 salir_navbar.addEventListener("click", salir);
 
 
@@ -2315,6 +2319,34 @@ function actualizarCards() {
 
 
 
+
 function modalNotasRapidas () {
   console.log("Notas rápidas")
+}
+
+
+
+
+
+
+function insertarQR () {
+
+  console.log ("QR");
+  let htmlParaQR = `
+  <div class="modal-dialog modal-fullscreen-sm-down">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body div-qr">
+      <img class="img-qr" src="img/QR-notitas.png" alt="QR">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
+  `
+
+  modalParaQR.innerHTML = htmlParaQR;
 }

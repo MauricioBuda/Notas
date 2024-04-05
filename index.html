@@ -80,12 +80,16 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
-              <img src="/img/person.svg" alt="icono-persona">
-              <a id="button_cambiar_nombre" class="nav-link active" aria-current="page" href="#">Cambiar nombre</a>
-            </li>
-            <li class="nav-item">
               <img src="/img/pencil-square.svg" alt="icono-lapiz">
               <a id="button_notas_rapidas" class="nav-link active" aria-current="page" href="#">Notas rápidas</a>
+            </li>
+            <li class="nav-item">
+              <img src="/img/share.svg" alt="icono-share">
+              <a id="button_qr" class="nav-link active" aria-current="page" href="#">Compartir página</a>
+            </li>
+            <li class="nav-item">
+              <img src="/img/person.svg" alt="icono-persona">
+              <a id="button_cambiar_nombre" class="nav-link active" aria-current="page" href="#">Cambiar nombre</a>
             </li>
             <li class="nav-item">
               <img src="/img/trash.svg" alt="icono-persona">
@@ -116,7 +120,15 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
   <!-- FIN SECCIÓN DE MENÚ DESPLEGABLE LATERAL, Y TAMBIÉN DE SECCIONES-->
 
 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalQR">
+  Launch demo modal
+</button>
 
+<!-- Modal  con QR-->
+<div class="modal fade" id="exampleModalQR" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+</div>
 
 
 
@@ -214,6 +226,7 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
 
 
 
+
   <!-- INICIO FORMULARIO TAREA -->
   <section id="section_formulario_id" class="section_formulario oculto">
     <h2 class="h2_nuevaTarea">NUEVA TAREA</h2>
@@ -306,6 +319,9 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
 
 
 
+
+
+
   <!-- INICIO MODAL DE CARGA -->
   <div id="modalCarga" class="modal_carga">
     <div class="modal-contenido">
@@ -313,7 +329,6 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
     </div>
   </div>
   <!-- FIN MODAL DE CARGA -->
-
 
 
 
@@ -326,15 +341,19 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="cardEnModal_class" id="cardEnModal">
-
+              <!-- CARD GRANDE DESDE JS -->
           </div>
         <div id="modal_footerID" class="modal-footer">
-            <!-- BOTONES -->
+            <!-- BOTONES DE CARD GRANDE, DESDE JS -->
         </div>
       </div>
     </div>
   </div>
   <!-- FIN MODAL TAREA PANTALLA GRANDE-->
+
+
+
+
 
 
 <!-- INICIO REGISTRO WORKER -->
