@@ -189,6 +189,10 @@ boton_notas_rapidas.addEventListener("click", modalNotasRapidas);
 salir_navbar.addEventListener("click", salir);
 
 
+// Notas rápidas ↓
+let cardNotaRapida = document.getElementById("seccion-notas-rapidas");
+
+
 
 
 // TERMINO DE DECLARAR VARIABLES Y ASIGNAR EVENTOS ↑
@@ -322,6 +326,7 @@ async function salir (){
       Swal.fire({
         title: "Sesión cerrada",
         timer: 1000,
+        showConfirmButton: false,
         icon: "success"
       });
     }
@@ -2329,6 +2334,9 @@ function modalNotasRapidas () {
   finalizadasCards.classList.add("aplicar-display-none");
   pendientesCards.classList.add("aplicar-display-none");
   botonMas.classList.add("aplicar-display-none");
+
+
+  cardNotaRapida.classList.remove("aplicar-display-none")
 
 }
 

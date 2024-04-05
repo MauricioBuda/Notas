@@ -25,7 +25,7 @@
     width: 85vw;
   }
 
-  .cards_modal > p, .cards_modal > div, h1{
+  .cards_modal > p, .cards_modal > div, .h3_modal{
     width: 100%;
     min-height: 8vh;
     border-radius: 10px;

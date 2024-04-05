@@ -1,0 +1,96 @@
+.seccion-notas-rapidas{
+    margin: 1vw;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    justify-content: space-around;
+    align-items: center;
+    width: 25%;
+    height: 40vh;
+    background-image: repeating-linear-gradient(90deg, rgba(201,201,201, 0.91) 0px, rgba(201,201,201, 0.91) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(201,201,201, 0.91) 0px, rgba(201,201,201, 0.91) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(201,201,201, 0.43) 0px, rgba(201,201,201, 0.43) 1px,transparent 1px, transparent 12px),repeating-linear-gradient(90deg, rgba(201,201,201, 0.43) 0px, rgba(201,201,201, 0.43) 1px,transparent 1px, transparent 12px),linear-gradient(90deg, rgba(255,255,255, 0),rgba(255,255,255, 0));
+    box-shadow: 4px 4px 15px 5px rgba(0, 0, 0, 0.5);
+}
+
+
+.h1-notas-rapidas{
+    text-align: center;
+    margin-top: -10vh;
+}
+
+.img-gancho-nota-rapida{
+    position: relative;
+    width: 4vw;
+    bottom: 10%;
+    left: 50%;
+}
+
+
+
+.input-titulo-notas-rapidas{
+    text-align: center;
+    font-size: 1.2vw;
+    border-radius: 8px;
+    width: 15vw;
+    padding: 0.5vw;
+}
+
+
+
+.input-detalle-notas-rapidas{
+    text-align: center;
+    font-size: 1vw;
+    border-radius: 10px;
+    width: 15vw;
+    height: auto;
+    min-height: 10vh;
+    overflow: hidden;
+    padding: 1vw;
+}
+
+
+.divs-notas-rapidas{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 1.2vw;
+}
+
+
+
+
+
+
+
+
+
+   /* MEDIA QUERYS */
+   @media screen and (max-width: 524px) {
+
+    .seccion-notas-rapidas{
+        margin: 3vw;
+        align-items: center;
+        width: 45%;
+    }
+
+    .img-gancho-nota-rapida{
+        position: relative;
+        width: 8vw;
+    }
+
+    .input-titulo-notas-rapidas{
+        font-size: 4vw;
+        width: 35vw;
+    }
+    
+    .input-detalle-notas-rapidas{
+        font-size: 3.5vw;
+        width: 35vw;
+    }
+
+    .divs-notas-rapidas{
+        font-size: 4.2vw;
+    }
+
+   }

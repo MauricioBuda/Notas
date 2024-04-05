@@ -103,6 +103,10 @@
       margin: 0.3rem;
       border-radius:10px;
     }
+
+    .cards h3{ 
+      font-size: 2.1vw;
+    }
   
     .p_detalle{
       max-width: 10vw;
