@@ -76,6 +76,10 @@
         width: 65%;
     }
 
+    .h1-notas-rapidas{
+        margin-top: -8vh;
+    }
+
     .img-gancho-nota-rapida{
         position: relative;
         width: 8vw;
