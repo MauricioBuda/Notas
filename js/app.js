@@ -192,6 +192,8 @@ salir_navbar.addEventListener("click", salir);
 // Notas rápidas ↓
 let cardNotaRapida = document.getElementById("seccion-notas-rapidas");
 let tituloNotaRapidaInput = document.getElementById("input-titulo-notas-rapidas");
+let agregarNotaRapida = document.getElementById("btn-add-nota-rapida");
+agregarNotaRapida.addEventListener("click", desplegarFormularioNotaRapida)
 
 
 
@@ -2336,13 +2338,19 @@ function modalNotasRapidas () {
   pendientesCards.classList.add("aplicar-display-none");
   botonMas.classList.add("aplicar-display-none");
 
+  agregarNotaRapida.classList.remove("aplicar-display-none")
 
-  cardNotaRapida.classList.remove("aplicar-display-none");
 
-  setTimeout(() => {
-  tituloNotaRapidaInput.focus();
-  }, 1000);
+
 
 }
 
+
+function desplegarFormularioNotaRapida() {
+  cardNotaRapida.classList.toggle("aplicar-display-none");
+
+  setTimeout(() => {
+  tituloNotaRapidaInput.focus();
+  }, 800);
+}
 
