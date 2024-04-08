@@ -30,9 +30,6 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
   <!-- INICIO SECCIÓN DE MENÚ DESPLEGABLE LATERAL // Y TAMBIÉN EL MENÚ DE SECCIONES -->
   <nav id="navbar_general" class="  aplicar-display-none navbar fixed-top">
 
-
-
-
     <!-- INICIO MENÚ DE SECCIONES -->
     <div class="dropdown">
 
@@ -86,7 +83,7 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
             </li>
             <li class="nav-item">
               <img src="/img/pencil-square.svg" alt="icono-lapiz">
-              <a id="button_notas_rapidas" class="nav-link active" aria-current="page" href="#">Notas rápidas</a>
+              <a id="button_notas_rapidas" data-bs-dismiss="offcanvas"  class="nav-link active" aria-current="page" href="#">Notas rápidas</a>
             </li>
             <li class="nav-item">
               <img src="/img/share.svg" alt="icono-share">
@@ -97,10 +94,10 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
               <a id="button_cambiar_nombre" class="nav-link active" aria-current="page" href="#">Cambiar nombre</a>
             </li>
             <li class="nav-item">
-              <img src="/img/trash.svg" alt="icono-persona">
+              <img src="/img/trash.svg" alt="icono-trash">
               <a id="button_eliminar_cuenta" class="nav-link active" aria-current="page" href="#">Eliminar cuenta</a>
             </li>
-            <li id="navbar_salir" class="nav-item">
+            <li id="navbar_salir" data-bs-dismiss="offcanvas" class="nav-item">
               <img src="/img/box-arrow-left.svg" alt="icono-salir">
               <a class="nav-link" href="#">Salir</a>
             </li>
@@ -267,12 +264,13 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
     <h1 class="h1-notas-rapidas">Nueva nota rápida:</h1>
     <div class="divs-notas-rapidas" id="div-titulo-notas-rapidas">
       <label for="titulo">Título</label>
-      <input class="input-titulo-notas-rapidas" type="text" name="titulo-tarea-rapida">
+      <input class="input-titulo-notas-rapidas" id="input-titulo-notas-rapidas" type="text" name="titulo-tarea-rapida">
     </div>
     <div class="divs-notas-rapidas" id="div-detalle-notas-rapidas">
       <label for="detalle">Detalle</label>
       <textarea class="input-detalle-notas-rapidas" name="input-detalle-notas-rapidas" id="input-detalle-notas-rapidas" cols="30" rows="1"></textarea>
     </div>
+    <button class="btn-guardar-nota-rapida" id="btn-guardar-nota-rapida">GUARDAR</button>
   </section>
   <!-- FIN FORMULARIO NUEVA NOTA RÁPIDA -->
 

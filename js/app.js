@@ -191,6 +191,7 @@ salir_navbar.addEventListener("click", salir);
 
 // Notas rápidas ↓
 let cardNotaRapida = document.getElementById("seccion-notas-rapidas");
+let tituloNotaRapidaInput = document.getElementById("input-titulo-notas-rapidas");
 
 
 
@@ -2336,7 +2337,11 @@ function modalNotasRapidas () {
   botonMas.classList.add("aplicar-display-none");
 
 
-  cardNotaRapida.classList.remove("aplicar-display-none")
+  cardNotaRapida.classList.remove("aplicar-display-none");
+
+  setTimeout(() => {
+  tituloNotaRapidaInput.focus();
+  }, 1000);
 
 }
 
