@@ -54,8 +54,8 @@ function obtenerToken(){
       }
     }).catch((err) => {
       Swal.fire({
-        title: "Hubo un error al obtener tu token para notificaciones. Por favor actualizá la página",
-        timer: 5000,
+        title: "Hubo un error al obtener tu token para notificaciones. Por favor, revisar que los permisos de notificación estén habilitados, y luego actualizar la página",
+        timer: 8000,
         showConfirmButton: false,
         icon: "error"
       });
@@ -63,6 +63,7 @@ function obtenerToken(){
     });
 }
 
+        title: "Hubo un error al obtener tu token para notificaciones. Por favor, revisar que los permisos de notificación estén habilitados, y luego actualizar la página",
 
 
 
