@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 
 // Array para ir guardando las cards ↓
 let unaCard = [];
-let notasRapidas = [];
+let notasRapidasArray = [];
 
 
 
@@ -192,8 +192,14 @@ salir_navbar.addEventListener("click", salir);
 // Notas rápidas ↓
 let cardNotaRapida = document.getElementById("seccion-notas-rapidas");
 let tituloNotaRapidaInput = document.getElementById("input-titulo-notas-rapidas");
-let agregarNotaRapida = document.getElementById("btn-add-nota-rapida");
-agregarNotaRapida.addEventListener("click", desplegarFormularioNotaRapida)
+let detalleNotaRapidaInput = document.getElementById("input-detalle-notas-rapidas");
+let desplegarFormularioDeNotaRapida = document.getElementById("btn-add-nota-rapida");
+let botonAgregarGuardarNotaRapida = document.getElementById("btn-guardar-nota-rapida");
+let botonCancelarNotaRapida = document.getElementById("btn-cancelar-nota-rapida");
+
+desplegarFormularioDeNotaRapida.addEventListener("click", desplegarFormularioNotaRapida)
+botonAgregarGuardarNotaRapida.addEventListener("click", guardarNuevaNotaRapida)
+botonCancelarNotaRapida.addEventListener("click", desplegarFormularioNotaRapida)
 
 
 
@@ -662,12 +668,33 @@ class Tarjetas {
     this.ultimaEdicion = ultimaEdicion;
     this.estado = estado;
     this.quiereNotificacion = quiereNotificacion;
-    this.id = null; // Inicializamos el ID como nulo
+    this.id = null;
   }
   asignarId(id) {
     this.id = id;
   }
 }
+
+
+
+
+
+
+// Clase para generar notas rápidas
+class NotasRapidas {
+  constructor( notaRapidaBandera, titulo, detalle, fechaCreacion, fechaCreacionConFormato) {
+    this.notaRapidaBandera = notaRapidaBandera;
+    this.titulo = titulo;
+    this.detalle = detalle;
+    this.fechaCreacion = fechaCreacion;
+    this.fechaCreacionConFormato = fechaCreacionConFormato;
+    this.id = null;
+  }
+  asignarId(id) {
+    this.id = id;
+  }
+}
+
 
 
 
@@ -1324,6 +1351,9 @@ function asignarEventosSegunDondeHagaClick() {
       }
   });
 }
+
+
+
 
 
 
@@ -2329,6 +2359,12 @@ function actualizarCards() {
 
 
 
+
+
+
+
+
+// Función para ir a la sección de notas rápidas
 function modalNotasRapidas () {
   
   botonMenuSecciones.classList.add("aplicar-display-none");
@@ -2338,7 +2374,7 @@ function modalNotasRapidas () {
   pendientesCards.classList.add("aplicar-display-none");
   botonMas.classList.add("aplicar-display-none");
 
-  agregarNotaRapida.classList.remove("aplicar-display-none")
+  desplegarFormularioDeNotaRapida.classList.remove("aplicar-display-none")
 
 
 
@@ -2346,6 +2382,14 @@ function modalNotasRapidas () {
 }
 
 
+
+
+
+
+
+
+
+// Función para formulario de nueva nota rápida
 function desplegarFormularioNotaRapida() {
   cardNotaRapida.classList.toggle("aplicar-display-none");
 
@@ -2354,3 +2398,85 @@ function desplegarFormularioNotaRapida() {
   }, 800);
 }
 
+
+
+
+
+
+
+// Recoger datos de la neuva nota rápida para guardarlos
+// Función para agarrar los datos que ingresa el usuario cuando agrega una tarea, y guardarlos en la DB
+async function guardarNuevaNotaRapida(event) {
+  mostrarCarga();
+  event.preventDefault();
+  let fechaCreacion = new Date();
+  let formatoFechaCreacion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
+  let titulo = tituloNotaRapidaInput.value;
+  let detalle = detalleNotaRapidaInput.value;
+  let fechaCreacionConFormato = fechaCreacion.toLocaleTimeString('es-AR', formatoFechaCreacion);
+  let notaRapidaBandera = true;
+
+
+
+  if (!titulo || !detalle ) {
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Se deben completar todos los campos",
+                showConfirmButton: false,
+                timer: 1000,
+              });
+              ocultarCarga();
+              return;
+  }  else {
+            let nuevaNotaRapida = new NotasRapidas(notaRapidaBandera, titulo, detalle, fechaCreacion, fechaCreacionConFormato);
+            notasRapidasArray.push(nuevaNotaRapida);
+
+            try {
+              let docRef = await addDoc(collection(db, nombreDeColeccion), {
+                notaRapidaBandera: nuevaNotaRapida.notaRapidaBandera,
+                titulo: nuevaNotaRapida.titulo,
+                detalle: nuevaNotaRapida.detalle,
+                fechaCreacion: nuevaNotaRapida.fechaCreacion,
+                fechaCreacionConFormato: nuevaNotaRapida.fechaCreacionConFormato,
+              });
+
+              // Asignar el ID generado por Firestore a la tarjeta
+              nuevaNotaRapida.asignarId(docRef.id);
+
+
+
+                    // agregarCardAlContenedor(nuevaCard);
+
+
+
+                  Swal.fire({
+                      title: "Nota rápida agregada!",
+                      timer: 1200,
+                      showConfirmButton: false,
+                      icon: "success"
+                  });
+
+                  tituloNotaRapidaInput.value = "";
+                  detalleNotaRapidaInput.value = "";
+
+
+
+
+            } catch (error) {
+              console.error("Error al agregar la tarea a Firestore", error);
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error al cargar",
+                showConfirmButton: false,
+                timer: 1000,
+                footer: "Por favor actualizar página"
+              });
+              ocultarCarga();
+            }
+            ocultarCarga();
+
+          }
+      ocultarCarga();
+}

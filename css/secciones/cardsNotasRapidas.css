@@ -1,10 +1,10 @@
-.seccion-notas-rapidas{
+.seccion-cards-notas-rapidas{
     margin: 1vw;
     margin-top: 10vh;
     display: flex;
     flex-direction: column;
     border-radius: 20px;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
     width: 25%;
     height: 45vh;
@@ -12,58 +12,28 @@
     box-shadow: 4px 4px 15px 5px rgba(0, 0, 0, 0.5);
 }
 
-.img-add-nota-rapida{
-    position: absolute;
-    width: 5vw;
-    top: 2%;
-    left: 2%;
-}
-
-.img-add-nota-rapida:hover{
-    filter: drop-shadow(1px 1px 5px rgba(0, 0, 0, 0.799));
-}
 
 
-.h1-notas-rapidas{
+.h1-card-notas-rapidas{
+    background-color: rgba(137, 43, 226, 0.088);
+    border-radius: 8px;
     text-align: center;
-    margin-top: -10vh;
+    margin-top: -15vh;
     font-size: 2vw;
 }
 
-.img-gancho-nota-rapida{
-    position: relative;
-    width: 4vw;
-    bottom: 10%;
-    left: 50%;
-}
 
-
-
-.input-titulo-notas-rapidas{
-    text-align: center;
-    font-size: 1.2vw;
+.p-card-detalle-nota-rapida{
+    background-color: rgba(137, 43, 226, 0.088);
     border-radius: 8px;
-    width: 20vw;
-    background-color: rgba(255, 255, 255, 0.767);
-}
-
-
-
-.input-detalle-notas-rapidas{
-    text-align: center;
     font-size: 1vw;
-    border-radius: 10px;
-    width: 20vw;
-    height: auto;
-    min-height: 10vh;
-    overflow: hidden;
-    padding: 1vw;
-    margin-bottom: 2vh;
-    background-color: rgba(255, 255, 255, 0.767);
+    display: flex;
+    text-align: center;
+    margin: 0 1rem 0 1rem;
 }
 
 
-.divs-notas-rapidas{
+.divs-cards-notas-rapidas{
     text-align: center;
     display: flex;
     justify-content: center;
@@ -72,35 +42,41 @@
     font-size: 1.2vw;
 }
 
-.btn-guardar-nota-rapida{
+.btn-editar-nota-rapida{
     padding: 0.5vw;
     font-size: 1vw;
     background-color: rgba(0, 128, 0, 0.397);
     border-radius: 8px;
 }
 
-.btn-guardar-nota-rapida:hover{
+.btn-editar-nota-rapida:hover{
     background-color: rgba(0, 128, 0, 0.489);
     text-shadow: 1px 1px 5px black;
 }
 
-.btn-cancelar-nota-rapida{
+.btn-eliminar-nota-rapida{
     padding: 0.5vw;
     font-size: 1vw;
     background-color: rgba(255, 0, 0, 0.368);
     border-radius: 8px;
 }
 
-.btn-cancelar-nota-rapida:hover{
+.btn-eliminar-nota-rapida:hover{
     background-color: rgba(255, 0, 0, 0.492);
     text-shadow: 1px 1px 5px black;
 }
 
-.btn-cancelar-guardar-notas-rapidas{
+.btn-eliminar-editar-notas-rapidas{
     gap: 1vw;
     display: flex;
     flex-direction: row;
 }
+
+
+
+
+
+
 
 
 
