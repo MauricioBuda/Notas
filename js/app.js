@@ -2488,7 +2488,7 @@ function renderizarNotaRapida(nota){
 
   let nuevaCardNotaRapida = `
   <div class="div-cards-notas-rapidas " id="cards-notas-rapidas">
-      <img class="img-gancho-card-nota-rapida" src="../img/pin-angle-fill.svg" alt="img-chincheta">
+      <img class="img-gancho-card-nota-rapida" src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%20fill='currentColor'%20class='bi%20bi-pin-angle-fill'%20viewBox='0%200%2016%2016'%3e%3cpath%20d='M9.828.722a.5.5%200%200%201%20.354.146l4.95%204.95a.5.5%200%200%201%200%20.707c-.48.48-1.072.588-1.503.588-.177%200-.335-.018-.46-.039l-3.134%203.134a6%206%200%200%201%20.16%201.013c.046.702-.032%201.687-.72%202.375a.5.5%200%200%201-.707%200l-2.829-2.828-3.182%203.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5%200%200%201%200-.707c.688-.688%201.673-.767%202.375-.72a6%206%200%200%201%201.013.16l3.134-3.133a3%203%200%200%201-.04-.461c0-.43.108-1.022.589-1.503a.5.5%200%200%201%20.353-.146'/%3e%3c/svg%3e" alt="img-chincheta">
         <h1 class="h1-card-notas-rapidas" id="${tituloCardNotaRapidaID}">
             ${nota.titulo}
         </h1>
