@@ -1,4 +1,11 @@
 .seccion-cards-notas-rapidas{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+.div-cards-notas-rapidas{
     margin: 1vw;
     margin-top: 10vh;
     display: flex;
@@ -30,6 +37,8 @@
     margin-top: -15vh;
     padding: 1rem;
     font-size: 2vw;
+    overflow-wrap: anywhere;
+    text-wrap: wrap;
 }
 
 
@@ -97,11 +106,8 @@
    /* MEDIA QUERYS */
    @media screen and (max-width: 524px) {
 
-    .img-add-nota-rapida{
-        width: 12vw;
-    }
 
-    .seccion-cards-notas-rapidas{
+    .div-cards-notas-rapidas{
         margin: auto;
         margin-top: 6vh;
         align-items: center;

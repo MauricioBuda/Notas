@@ -1,5 +1,5 @@
 .seccion-notas-rapidas{
-    margin: 1vw;
+    margin: auto;
     margin-top: 10vh;
     display: flex;
     flex-direction: column;
@@ -9,7 +9,7 @@
     width: 25%;
     height: 45vh;
     background-image: repeating-linear-gradient(90deg, rgba(201,201,201, 0.91) 0px, rgba(201,201,201, 0.91) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(201,201,201, 0.91) 0px, rgba(201,201,201, 0.91) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(201,201,201, 0.43) 0px, rgba(201,201,201, 0.43) 1px,transparent 1px, transparent 12px),repeating-linear-gradient(90deg, rgba(201,201,201, 0.43) 0px, rgba(201,201,201, 0.43) 1px,transparent 1px, transparent 12px),linear-gradient(90deg, rgba(255,255,255, 0),rgba(255,255,255, 0));
-    box-shadow: 4px 4px 15px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 4px 4px 15px 20px rgba(0, 0, 0, 0.5);
 }
 
 .img-add-nota-rapida{

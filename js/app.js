@@ -196,8 +196,6 @@ let detalleNotaRapidaInput = document.getElementById("input-detalle-notas-rapida
 let desplegarFormularioDeNotaRapida = document.getElementById("btn-add-nota-rapida");
 let botonAgregarGuardarNotaRapida = document.getElementById("btn-guardar-nota-rapida");
 let botonCancelarNotaRapida = document.getElementById("btn-cancelar-nota-rapida");
-let tituloNotaRapidaIngresado = document.getElementById("h1-card-detalle-nota-rapida");
-let detalleNotaRapidaIngresado = document.getElementById("p-card-detalle-nota-rapida");
 let seccionParaRenderizarNotas = document.getElementById("seccion-cards-notas-rapidas");
 
 desplegarFormularioDeNotaRapida.addEventListener("click", desplegarFormularioNotaRapida)
@@ -2369,6 +2367,7 @@ function actualizarCards() {
 
 // Función para ir a la sección de notas rápidas
 function modalNotasRapidas () {
+
   
   botonMenuSecciones.classList.add("aplicar-display-none");
   menuSuperior.classList.add("aplicar-display-none");
@@ -2486,8 +2485,9 @@ function renderizarNotaRapida(nota){
   let botonEditarCardNotaRapidaID = `botonEditarNotaRapida-${nota.id}`;
   let botonEliminarCardNotaRapidaID = `botonEliminarNotaRapida-${nota.id}`;
 
+
   let nuevaCardNotaRapida = `
-  <section class="seccion-cards-notas-rapidas " id="cards-notas-rapidas">
+  <div class="div-cards-notas-rapidas " id="cards-notas-rapidas">
       <img class="img-gancho-card-nota-rapida" src="img/pin-angle-fill.svg" alt="img-chincheta">
         <h1 class="h1-card-notas-rapidas" id="${tituloCardNotaRapidaID}">
             ${nota.titulo}
@@ -2499,10 +2499,10 @@ function renderizarNotaRapida(nota){
         <button class="btn-editar-nota-rapida" id="${botonEditarCardNotaRapidaID}">EDITAR</button>
         <button class="btn-eliminar-nota-rapida" id="${botonEliminarCardNotaRapidaID}">ELIMIMNAR</button>
       </div>
-</section>
+</div>
   `
 
-  seccionParaRenderizarNotas.innerHTML = nuevaCardNotaRapida;
+  seccionParaRenderizarNotas.innerHTML += nuevaCardNotaRapida;
 }
 
 
@@ -2511,9 +2511,10 @@ function renderizarNotaRapida(nota){
 
 // Función para obtener las NOTAS RÁPIDAS desde Firestore
 async function obtenerNotassDesdeFirestore() {
+  mostrarCarga();
   // Limpiar el array de cards antes de obtener las nuevas desde Firestore
-  actualizarCards();
   notasRapidasArray = [];
+  seccionParaRenderizarNotas.innerHTML = "";
 
   // Obtener todas las tareas desde Firestore
   const querySnapshot = await getDocs(collection(db, nombreDeColeccion));
@@ -2523,16 +2524,17 @@ async function obtenerNotassDesdeFirestore() {
     const tarjetaFirestore = doc.data();
 
     if (tarjetaFirestore.notaRapidaBandera) {
-
-      console.log("acá")
+      const tarjetaNotaFirestore = doc.data();
+      notasRapidasArray.push(tarjetaNotaFirestore);
     }
   });
 
   // Ordenar las tarjetas cronológicamente
-  // unaCard.sort((b, a) => new Date(a.fechaParaOrdenarlas) - new Date(b.fechaParaOrdenarlas));
-
+  notasRapidasArray.sort((b, a) => new Date(a.fechaCreacion) - new Date(b.Creacion));
+  
   // Iterar sobre las tarjetas ordenadas y agregarlas al contenedor
-  // unaCard.forEach(tarjeta => {
-  //   agregarCardAlContenedor(tarjeta);
-  // });
+  notasRapidasArray.forEach(nota => {
+    renderizarNotaRapida(nota);
+  });
+  ocultarCarga();
 }
