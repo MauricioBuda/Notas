@@ -196,6 +196,9 @@ let detalleNotaRapidaInput = document.getElementById("input-detalle-notas-rapida
 let desplegarFormularioDeNotaRapida = document.getElementById("btn-add-nota-rapida");
 let botonAgregarGuardarNotaRapida = document.getElementById("btn-guardar-nota-rapida");
 let botonCancelarNotaRapida = document.getElementById("btn-cancelar-nota-rapida");
+let tituloNotaRapidaIngresado = document.getElementById("h1-card-detalle-nota-rapida");
+let detalleNotaRapidaIngresado = document.getElementById("p-card-detalle-nota-rapida");
+let seccionParaRenderizarNotas = document.getElementById("seccion-cards-notas-rapidas");
 
 desplegarFormularioDeNotaRapida.addEventListener("click", desplegarFormularioNotaRapida)
 botonAgregarGuardarNotaRapida.addEventListener("click", guardarNuevaNotaRapida)
@@ -2374,11 +2377,8 @@ function modalNotasRapidas () {
   pendientesCards.classList.add("aplicar-display-none");
   botonMas.classList.add("aplicar-display-none");
 
-  desplegarFormularioDeNotaRapida.classList.remove("aplicar-display-none")
-
-
-
-
+  desplegarFormularioDeNotaRapida.classList.remove("aplicar-display-none");
+  obtenerNotassDesdeFirestore();
 }
 
 
@@ -2405,7 +2405,6 @@ function desplegarFormularioNotaRapida() {
 
 
 // Recoger datos de la neuva nota rápida para guardarlos
-// Función para agarrar los datos que ingresa el usuario cuando agrega una tarea, y guardarlos en la DB
 async function guardarNuevaNotaRapida(event) {
   mostrarCarga();
   event.preventDefault();
@@ -2446,10 +2445,6 @@ async function guardarNuevaNotaRapida(event) {
 
 
 
-                    // agregarCardAlContenedor(nuevaCard);
-
-
-
                   Swal.fire({
                       title: "Nota rápida agregada!",
                       timer: 1200,
@@ -2461,7 +2456,7 @@ async function guardarNuevaNotaRapida(event) {
                   detalleNotaRapidaInput.value = "";
 
 
-
+                  renderizarNotaRapida(nuevaNotaRapida);
 
             } catch (error) {
               console.error("Error al agregar la tarea a Firestore", error);
@@ -2479,4 +2474,65 @@ async function guardarNuevaNotaRapida(event) {
 
           }
       ocultarCarga();
+}
+
+
+
+
+
+function renderizarNotaRapida(nota){
+  let tituloCardNotaRapidaID = `tituloNotaRapida-${nota.id}`;
+  let detalleCardNotaRapidaID = `detalleNotaRapida-${nota.id}`;
+  let botonEditarCardNotaRapidaID = `botonEditarNotaRapida-${nota.id}`;
+  let botonEliminarCardNotaRapidaID = `botonEliminarNotaRapida-${nota.id}`;
+
+  let nuevaCardNotaRapida = `
+  <section class="seccion-cards-notas-rapidas " id="cards-notas-rapidas">
+      <img class="img-gancho-card-nota-rapida" src="img/pin-angle-fill.svg" alt="img-chincheta">
+        <h1 class="h1-card-notas-rapidas" id="${tituloCardNotaRapidaID}">
+            ${nota.titulo}
+        </h1>
+          <p class="p-card-detalle-nota-rapida" id="${detalleCardNotaRapidaID}">
+          ${nota.detalle}
+          </p>
+      <div class="btn-eliminar-editar-notas-rapidas">
+        <button class="btn-editar-nota-rapida" id="${botonEditarCardNotaRapidaID}">EDITAR</button>
+        <button class="btn-eliminar-nota-rapida" id="${botonEliminarCardNotaRapidaID}">ELIMIMNAR</button>
+      </div>
+</section>
+  `
+
+  seccionParaRenderizarNotas.innerHTML = nuevaCardNotaRapida;
+}
+
+
+
+
+
+// Función para obtener las NOTAS RÁPIDAS desde Firestore
+async function obtenerNotassDesdeFirestore() {
+  // Limpiar el array de cards antes de obtener las nuevas desde Firestore
+  actualizarCards();
+  notasRapidasArray = [];
+
+  // Obtener todas las tareas desde Firestore
+  const querySnapshot = await getDocs(collection(db, nombreDeColeccion));
+
+  // Iterar sobre las tareas y agregarlas al array y al contenedor
+  querySnapshot.forEach((doc) => {
+    const tarjetaFirestore = doc.data();
+
+    if (tarjetaFirestore.notaRapidaBandera) {
+
+      console.log("acá")
+    }
+  });
+
+  // Ordenar las tarjetas cronológicamente
+  // unaCard.sort((b, a) => new Date(a.fechaParaOrdenarlas) - new Date(b.fechaParaOrdenarlas));
+
+  // Iterar sobre las tarjetas ordenadas y agregarlas al contenedor
+  // unaCard.forEach(tarjeta => {
+  //   agregarCardAlContenedor(tarjeta);
+  // });
 }

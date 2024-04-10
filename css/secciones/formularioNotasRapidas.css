@@ -17,7 +17,6 @@
     width: 5vw;
     top: 2%;
     left: 2%;
-
 }
 
 .img-add-nota-rapida:hover{
@@ -141,7 +140,6 @@
     }
 
     .img-gancho-nota-rapida{
-        position: relative;
         width: 8vw;
     }
 
@@ -158,6 +156,7 @@
     .divs-notas-rapidas{
         font-size: 4.2vw;
     }
+    
 
     .btn-guardar-nota-rapida{
         padding: 1vw;
