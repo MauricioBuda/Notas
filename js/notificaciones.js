@@ -63,7 +63,7 @@ function obtenerToken(){
     });
 }
 
-        title: "Hubo un error al obtener tu token para notificaciones. Por favor, revisar que los permisos de notificación estén habilitados, y luego actualizar la página",
+
 
 
 

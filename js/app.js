@@ -1,6 +1,6 @@
 // Imports ↓
 import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
-import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones, agregarNuevoCampoADoc } from './firestoreConfig';
+import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore, agregarNuevoCampoADoc } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
 import { llamarProgramarNotificacion, obtenerToken, requestPermission } from './notificaciones';
 import Swal from 'sweetalert2';
@@ -1863,17 +1863,38 @@ function cerrarModalConNotificacionesExistentes(id){
 
 // Función para eliminar una notificación a una tarea pendiente existente
 async function eliminarNotificaconExistente(id){
-    let tarea = unaCard.find((t) => t.id === id);
 
-    let idParaEliminar08hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones08hs", tarea.id);
-    let idParaEliminar14hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones14hs", tarea.id);
-    let idParaEliminar21hs = await obtenerIDDelDocumentoAEliminarDeLasNotificaciones("notificaciones21hs", tarea.id);
+  let botonXparaEliminar = document.getElementById(`eliminarNoti-${id}`)
 
-    let idQueSeDebeEliminar = idParaEliminar08hs[0]?idParaEliminar08hs[0]:idParaEliminar14hs[0]?idParaEliminar14hs[0]:idParaEliminar21hs[0]?idParaEliminar21hs[0]:null;
-    let coleccionDelDocumentoAEliminar = idParaEliminar08hs[1]?idParaEliminar08hs[1]:idParaEliminar14hs[1]?idParaEliminar14hs[1]:idParaEliminar21hs[1]?idParaEliminar21hs[1]:null;
+    const querySnapshot1 = await getDocs(collection(db, "notificaciones08hs"));
+    const querySnapshot2 = await getDocs(collection(db, "notificaciones14hs"));
+    const querySnapshot3 = await getDocs(collection(db, "notificaciones21hs"));
 
+    let idDeNotificacionParaEliminar
+    let coleccionDeNotificacionParaEliminar
 
-  if (idQueSeDebeEliminar) {
+    querySnapshot1.forEach((doc) => {
+      if (id === doc.id) {
+        idDeNotificacionParaEliminar = id;
+        coleccionDeNotificacionParaEliminar = "notificaciones08hs";
+      }
+    })
+
+    querySnapshot2.forEach((doc) => {
+      if (id === doc.id) {
+        idDeNotificacionParaEliminar = id;
+        coleccionDeNotificacionParaEliminar = "notificaciones14hs";
+      }
+    })
+
+    querySnapshot3.forEach((doc) => {
+      if (id === doc.id) {
+        idDeNotificacionParaEliminar = id;
+        coleccionDeNotificacionParaEliminar = "notificaciones21hs";
+      }
+    })
+
+  if (idDeNotificacionParaEliminar) {
     Swal.fire({
       title: "¿Eliminar notificación programada?",
       icon: "warning",
@@ -1884,10 +1905,9 @@ async function eliminarNotificaconExistente(id){
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        mostrarCarga();
-        deleteDoc(doc(db, coleccionDelDocumentoAEliminar, idQueSeDebeEliminar));
+        deleteDoc(doc(db, coleccionDeNotificacionParaEliminar, idDeNotificacionParaEliminar));
         Swal.fire({
-          title: "Tarea eliminada!",
+          title: "Notificación eliminada!",
           timer: 1000,
           showConfirmButton: false,
           icon: "success"
@@ -1895,14 +1915,14 @@ async function eliminarNotificaconExistente(id){
       }
 
       setTimeout(() => {
-        cerrarModalConNotificacionesExistentes(tarea.id);
-        mostrarSiTieneNotificaciones(tarea.id);
+        cerrarModalConNotificacionesExistentes(botonXparaEliminar.dataset.id);
+        mostrarSiTieneNotificaciones(botonXparaEliminar.dataset.id);
       }, 300);
 
     }); 
   } else {
     Swal.fire({
-      title: "Ocurrió algún error",
+      title: "Ocurrió algún error, actualice la página por favor",
       timer: 1200,
       showConfirmButton: false,
       icon: "error"

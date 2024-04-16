@@ -189,14 +189,13 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
         bandera++;
         cartelCarga.remove();
         
-        let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
-
+        let botonEliminarNotificacionID = `eliminarNoti-${doc.id}`;
         
         let cardsConNotificacionesProgramadas = `
         <div class="modal-hijo-con-notificaciones">
           <h3>${cardDeNotificacion.fecha}</h3>
           <p> a las 08hs</p>
-          <button id= ${botonEliminarNotificacionID}>X</button>
+          <button data-id=${idDeLaCardSeleccionada} id= ${botonEliminarNotificacionID}>X</button>
         </div>
       `;
   
@@ -213,13 +212,13 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
         bandera++;
         cartelCarga.remove();
 
-        let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
+        let botonEliminarNotificacionID = `eliminarNoti-${doc.id}`;
 
         let cardsConNotificacionesProgramadas = `
         <div class="modal-hijo-con-notificaciones">
           <h3>${cardDeNotificacion.fecha}</h3>
           <p> a las 14hs</p>
-          <button id= ${botonEliminarNotificacionID}>X</button>
+          <button data-id=${idDeLaCardSeleccionada} id= ${botonEliminarNotificacionID}>X</button>
         </div>
       `;
   
@@ -236,7 +235,7 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
         bandera++;
         cartelCarga.remove();
 
-        let botonEliminarNotificacionID = `eliminarNoti-${idDeLaCardSeleccionada}`;
+        let botonEliminarNotificacionID = `eliminarNoti-${doc.id}`;
 
         
 
@@ -244,7 +243,7 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
         <div class="modal-hijo-con-notificaciones">
           <h3>${cardDeNotificacion.fecha}</h3>
           <p> a las 21hs</p>
-          <button id= ${botonEliminarNotificacionID}>X</button>
+          <button data-id=${idDeLaCardSeleccionada} id= ${botonEliminarNotificacionID}>X</button>
         </div>
       `;
       contenedor.innerHTML += cardsConNotificacionesProgramadas;
@@ -273,41 +272,8 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
 
 
 
-async function obtenerIDDelDocumentoAEliminarDeLasNotificaciones (nombreColeccion, idDeLaCardSeleccionada){
-
-  let contenedor = document.getElementById(`notificacionesExistentes-${idDeLaCardSeleccionada}`);
 
 
-  let cartelCarga = document.createElement("p");
-  contenedor.innerHTML = "";
-  cartelCarga.innerText = "En proceso...";
-  contenedor.appendChild(cartelCarga);
-
-
-
-  const querySnapshot = await getDocs(collection(db, nombreColeccion));
-  let documentoID
-  let nombreColeccionFinal
-
-  // Iterar sobre las tareas y agregarlas al array y al contenedor
-  querySnapshot.forEach((doc) => {
-    const cardDeNotificacion = doc.data();
-
-    if (idDeLaCardSeleccionada === cardDeNotificacion.idDeLaCardEnFirestore) {
-      // Obtener el ID del documento
-      documentoID = doc.id;
-      nombreColeccionFinal = nombreColeccion;
-    }
-  });
-
-      cartelCarga.remove();
-      return [documentoID , nombreColeccionFinal];
-}
-
-
-
-
-
-export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore, obtenerIDDelDocumentoAEliminarDeLasNotificaciones, agregarNuevoCampoADoc };
+export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore, agregarNuevoCampoADoc };
 
 
