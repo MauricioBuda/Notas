@@ -1866,9 +1866,17 @@ async function eliminarNotificaconExistente(id){
 
   let botonXparaEliminar = document.getElementById(`eliminarNoti-${id}`)
 
+  let contenedor = document.getElementById(`notificacionesExistentes-${botonXparaEliminar.dataset.id}`);
+  let cartelCarga = document.createElement("p");
+  cartelCarga.innerText = "En proceso...";
+  contenedor.innerHTML = "";
+  contenedor.appendChild(cartelCarga);
+
     const querySnapshot1 = await getDocs(collection(db, "notificaciones08hs"));
     const querySnapshot2 = await getDocs(collection(db, "notificaciones14hs"));
     const querySnapshot3 = await getDocs(collection(db, "notificaciones21hs"));
+
+
 
     let idDeNotificacionParaEliminar
     let coleccionDeNotificacionParaEliminar
@@ -1912,6 +1920,7 @@ async function eliminarNotificaconExistente(id){
           showConfirmButton: false,
           icon: "success"
         });
+        cartelCarga.remove();
       }
 
       setTimeout(() => {
