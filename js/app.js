@@ -2484,7 +2484,9 @@ async function guardarNuevaNotaRapida(event) {
                   detalleNotaRapidaInput.value = "";
 
 
-                  renderizarNotaRapida(nuevaNotaRapida);
+                  // renderizarNotaRapida(nuevaNotaRapida);
+                  obtenerNotassDesdeFirestore();
+                  desplegarFormularioNotaRapida()
 
             } catch (error) {
               console.error("Error al agregar la tarea a Firestore", error);
@@ -2509,6 +2511,8 @@ async function guardarNuevaNotaRapida(event) {
 
 
 function renderizarNotaRapida(nota){
+
+  
   let tituloCardNotaRapidaID = `tituloNotaRapida-${nota.id}`;
   let detalleCardNotaRapidaID = `detalleNotaRapida-${nota.id}`;
   let botonEditarCardNotaRapidaID = `botonEditarNotaRapida-${nota.id}`;
