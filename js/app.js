@@ -2432,7 +2432,7 @@ function desplegarFormularioNotaRapida() {
 
 
 
-// Recoger datos de la neuva nota rápida para guardarlos
+// Recoger datos de la nueva nota rápida para guardarlos
 async function guardarNuevaNotaRapida(event) {
   mostrarCarga();
   event.preventDefault();
@@ -2556,14 +2556,17 @@ async function obtenerNotassDesdeFirestore() {
   querySnapshot.forEach((doc) => {
     const tarjetaFirestore = doc.data();
 
+
     if (tarjetaFirestore.notaRapidaBandera) {
       const tarjetaNotaFirestore = doc.data();
+      console.log(doc.id)
       notasRapidasArray.push(tarjetaNotaFirestore);
     }
   });
 
   // Ordenar las tarjetas cronológicamente
-  notasRapidasArray.sort((b, a) => new Date(a.fechaCreacion) - new Date(b.Creacion));
+  console.log(notasRapidasArray)
+  notasRapidasArray.sort((b, a) => a.fechaCreacion - b.fechaCreacion);
   
   // Iterar sobre las tarjetas ordenadas y agregarlas al contenedor
   notasRapidasArray.forEach(nota => {
