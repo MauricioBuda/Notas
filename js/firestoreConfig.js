@@ -263,17 +263,6 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
 export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore, agregarNuevoCampoADoc };
 
 
