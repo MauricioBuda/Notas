@@ -2697,8 +2697,10 @@ async function eliminarNotaRapida (id) {
         icon: "success"
       });
       ocultarCarga();
-
-        obtenerNotasDesdeFirestore();
+      setTimeout(() => {
+      obtenerNotasDesdeFirestore();
+        
+      }, 1000);
 
     }
   }); 
