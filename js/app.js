@@ -1,5 +1,5 @@
 // Imports ↓
-import { addDoc, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
+import { addDoc, collection, getDocs, getDoc, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
 import { db, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, auth, eliminarCuenta, obtenerColeccionDeFirestore, agregarNuevoCampoADoc } from './firestoreConfig';
 import { updateProfile } from 'firebase/auth';
 import { llamarProgramarNotificacion, obtenerToken, requestPermission } from './notificaciones';
@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 
 // Array para ir guardando las cards ↓
 let unaCard = [];
+let notasRapidasArray = [];
 
 
 
@@ -103,6 +104,7 @@ botonMenuSecciones.innerText = `Sección:    ${muestraSeccionPantalla.toUpperCas
 
 
 // Variables para definir que se muestra en pantalla con los botones del menú superior ↓
+let menuSuperior = document.getElementById("filtro_id_menu")
 let mostrarTodas = document.getElementById("id_todas");
 let mostrarPendientes = document.getElementById("id_pendientes");
 let mostrarFinalizadas = document.getElementById("id_finalizadas");
@@ -170,16 +172,36 @@ let nombreDeColeccion = "";
 // Variables del menú desplegable ↓
 let navbar_general = document.getElementById("navbar_general");
 let nombreUsuarioIniciado = document.getElementById("offcanvasNavbarLabel");
+let botonRecargarPagina = document.getElementById("button_recargar");
 let salir_navbar =  document.getElementById("navbar_salir");
 let boton_cambiar_nombre = document.getElementById("button_cambiar_nombre");
 let boton_eliminar_cuenta = document.getElementById("button_eliminar_cuenta");
+let boton_notas_rapidas = document.getElementById("button_notas_rapidas");
+let boton_qr = document.getElementById("button_qr");
 let usuarioConSesionIniciada = null;
 
 
+
 // Eventos del menú desplegable
+botonRecargarPagina.addEventListener("click", ()=> {location.reload()});
 boton_eliminar_cuenta.addEventListener("click", elimnarLaCuenta);
-salir_navbar.addEventListener("click", salir);
 boton_cambiar_nombre.addEventListener("click", cambiarNombre);
+boton_notas_rapidas.addEventListener("click", modalNotasRapidas);
+salir_navbar.addEventListener("click", salir);
+
+
+// Notas rápidas ↓
+let cardNotaRapida = document.getElementById("seccion-notas-rapidas");
+let tituloNotaRapidaInput = document.getElementById("input-titulo-notas-rapidas");
+let detalleNotaRapidaInput = document.getElementById("input-detalle-notas-rapidas");
+let desplegarFormularioDeNotaRapida = document.getElementById("btn-add-nota-rapida");
+let botonAgregarGuardarNotaRapida = document.getElementById("btn-guardar-nota-rapida");
+let botonCancelarNotaRapida = document.getElementById("btn-cancelar-nota-rapida");
+let seccionParaRenderizarNotas = document.getElementById("seccion-cards-notas-rapidas");
+
+desplegarFormularioDeNotaRapida.addEventListener("click", desplegarFormularioNotaRapida)
+botonAgregarGuardarNotaRapida.addEventListener("click", guardarNuevaNotaRapida)
+botonCancelarNotaRapida.addEventListener("click", desplegarFormularioNotaRapida)
 
 
 
@@ -315,6 +337,7 @@ async function salir (){
       Swal.fire({
         title: "Sesión cerrada",
         timer: 1000,
+        showConfirmButton: false,
         icon: "success"
       });
     }
@@ -527,12 +550,21 @@ function mostrarModalRegistro(){
 
 // Función para cambiar el nombre de la cuenta
 async function cambiarNombre(){
+
+
     let nombreParaEditar = document.getElementById("offcanvasNavbarLabel");
     let verSiGuardoOEditoNombre = boton_cambiar_nombre.textContent === "Cambiar nombre";
     let nuevoNombre = "";
 
+    
     // Si entra al IF es porque apretó "cambiar nombre"
     if(verSiGuardoOEditoNombre){
+
+      botonRecargarPagina.classList.add("letra-clarita");
+      salir_navbar.classList.add("letra-clarita");
+      boton_eliminar_cuenta.classList.add("letra-clarita");
+      boton_notas_rapidas.classList.add("letra-clarita");
+      boton_qr.classList.add("letra-clarita");
 
       // Habilito edición, pongo ahí el cursor; y cambio el texto del botón a GUARDAR
       nombreParaEditar.contentEditable = true;
@@ -577,6 +609,14 @@ async function cambiarNombre(){
   boton_cambiar_nombre.classList.add("guardar_red");
  } else {
   // Si entra acá es porque ya puso guardar
+
+  botonRecargarPagina.classList.remove("letra-clarita");
+  salir_navbar.classList.remove("letra-clarita");
+  boton_eliminar_cuenta.classList.remove("letra-clarita");
+  boton_notas_rapidas.classList.remove("letra-clarita");
+  boton_qr.classList.remove("letra-clarita");
+
+
   let nombreNuevoIngresado = nombreParaEditar.textContent.trim();
   nuevoNombre = nombreNuevoIngresado;
   nombreParaEditar.textContent = nuevoNombre;
@@ -647,12 +687,33 @@ class Tarjetas {
     this.ultimaEdicion = ultimaEdicion;
     this.estado = estado;
     this.quiereNotificacion = quiereNotificacion;
-    this.id = null; // Inicializamos el ID como nulo
+    this.id = null;
   }
   asignarId(id) {
     this.id = id;
   }
 }
+
+
+
+
+
+
+// Clase para generar notas rápidas
+class NotasRapidas {
+  constructor( notaRapidaBandera, titulo, detalle, fechaCreacion, fechaCreacionConFormato) {
+    this.notaRapidaBandera = notaRapidaBandera;
+    this.titulo = titulo;
+    this.detalle = detalle;
+    this.fechaCreacion = fechaCreacion;
+    this.fechaCreacionConFormato = fechaCreacionConFormato;
+    this.id = null;
+  }
+  asignarId(id) {
+    this.id = id;
+  }
+}
+
 
 
 
@@ -1263,13 +1324,13 @@ function asignarEventosSegunDondeHagaClick() {
         // Extraer el ID de la tarea de la identificación del botón
         cancelarTarea(event.target.id.split("-")[1]);
       }
-      
+
       // Verificar si el clic ocurrió en un botón de opciones
       else if (event.target.id.startsWith("opciones-")) {
         // Extraer el ID de la tarea de la identificación del botón
         masOpciones(event.target.id.split("-")[1]);
       }
-      
+
       // Verificar si el clic ocurrió en un botón de eliminar
       else if (event.target.id.startsWith("eliminar-")) {
         // Extraer el ID de la tarea de la identificación del botón
@@ -1281,34 +1342,45 @@ function asignarEventosSegunDondeHagaClick() {
         // Extraer el ID de la tarea de la identificación del botón
         mostrarSiTieneNotificaciones(event.target.id.split("-")[1]);
       }
-      
+
       // Verificar si el clic ocurrió en un botón de agregar notificación a card existente
       else if (event.target.id.startsWith("agregarNoti-")) {
         // Extraer el ID de la tarea de la identificación del botón
         agregarNotificacionACardExistente(event.target.id.split("-")[1]);
       }
-      
+
       // Verificar si el clic ocurrió en un botón cerrar el modal para ver notificaciones existentes
       else if (event.target.id.startsWith("salirDeModalNoti-")) {
         // Extraer el ID de la tarea de la identificación del botón
         cerrarModalConNotificacionesExistentes(event.target.id.split("-")[1]);
       }
 
-                  
       // Verificar si el clic ocurrió en un botón eliminar notificación existente
       else if (event.target.id.startsWith("eliminarNoti-")) {
         // Extraer el ID de la tarea de la identificación del botón
         eliminarNotificaconExistente(event.target.id.split("-")[1]);
       }
 
-
       // Verificar si el clic ocurrió en un botón agregar notificación a card existente
       else if (event.target.id.startsWith("agregarNotificacionEnCardExistente-")) {
         // Extraer el ID de la tarea de la identificación del botón
         confirmarNotificacionAgregadaACardExistente(event.target.id.split("-")[1]);
       }
+
+      else if (event.target.id.startsWith("botonEditarNotaRapida-")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        editarNotaRapida(event.target.id.split("-")[1]);
+      } 
+
+      else if (event.target.id.startsWith("botonEliminarNotaRapida")) {
+        // Extraer el ID de la tarea de la identificación del botón
+        eliminarNotaRapida(event.target.id.split("-")[1]);
+      } 
   });
 }
+
+
+
 
 
 
@@ -2340,3 +2412,303 @@ function actualizarCards() {
   canceladasCards.innerHTML = "";
 }
 
+
+
+
+
+
+
+
+
+// Función para ir a la sección de notas rápidas
+function modalNotasRapidas () {
+
+  
+  botonMenuSecciones.classList.add("aplicar-display-none");
+  menuSuperior.classList.add("aplicar-display-none");
+  canceladasCards.classList.add("aplicar-display-none");
+  finalizadasCards.classList.add("aplicar-display-none");
+  pendientesCards.classList.add("aplicar-display-none");
+  botonMas.classList.add("aplicar-display-none");
+
+  desplegarFormularioDeNotaRapida.classList.remove("aplicar-display-none");
+  obtenerNotasDesdeFirestore();
+}
+
+
+
+
+
+
+
+
+
+// Función para formulario de nueva nota rápida
+function desplegarFormularioNotaRapida() {
+  cardNotaRapida.classList.toggle("aplicar-display-none");
+
+  setTimeout(() => {
+  tituloNotaRapidaInput.focus();
+  }, 800);
+}
+
+
+
+
+
+
+
+// Recoger datos de la nueva nota rápida para guardarlos
+async function guardarNuevaNotaRapida(event) {
+  mostrarCarga();
+  event.preventDefault();
+  let fechaCreacion = new Date();
+  let formatoFechaCreacion = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
+  let titulo = tituloNotaRapidaInput.value;
+  let detalle = detalleNotaRapidaInput.value;
+  let fechaCreacionConFormato = fechaCreacion.toLocaleTimeString('es-AR', formatoFechaCreacion);
+  let notaRapidaBandera = true;
+
+
+
+  if (!titulo || !detalle ) {
+              Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Se deben completar todos los campos",
+                showConfirmButton: false,
+                timer: 1000,
+              });
+              ocultarCarga();
+              return;
+  }  else {
+            let nuevaNotaRapida = new NotasRapidas(notaRapidaBandera, titulo, detalle, fechaCreacion, fechaCreacionConFormato);
+            notasRapidasArray.push(nuevaNotaRapida);
+
+            try {
+              let docRef = await addDoc(collection(db, nombreDeColeccion), {
+                notaRapidaBandera: nuevaNotaRapida.notaRapidaBandera,
+                titulo: nuevaNotaRapida.titulo,
+                detalle: nuevaNotaRapida.detalle,
+                fechaCreacion: nuevaNotaRapida.fechaCreacion,
+                fechaCreacionConFormato: nuevaNotaRapida.fechaCreacionConFormato,
+              });
+
+              // Asignar el ID generado por Firestore a la tarjeta
+              nuevaNotaRapida.asignarId(docRef.id);
+
+
+
+                  Swal.fire({
+                      title: "Nota rápida agregada!",
+                      timer: 1200,
+                      showConfirmButton: false,
+                      icon: "success"
+                  });
+
+                  tituloNotaRapidaInput.value = "";
+                  detalleNotaRapidaInput.value = "";
+
+                  obtenerNotasDesdeFirestore();
+                  desplegarFormularioNotaRapida()
+
+            } catch (error) {
+              console.error("Error al agregar la tarea a Firestore", error);
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error al cargar",
+                showConfirmButton: false,
+                timer: 1000,
+                footer: "Por favor actualizar página"
+              });
+              ocultarCarga();
+            }
+            ocultarCarga();
+
+          }
+      ocultarCarga();
+}
+
+
+
+
+
+function renderizarNotaRapida(nota){
+  // console.log(tarea.id)
+  let tarea = notasRapidasArray.find((t) => t.id === nota.id);
+  
+  let tituloCardNotaRapidaID = `tituloNotaRapida-${tarea.id}`;
+  let detalleCardNotaRapidaID = `detalleNotaRapida-${tarea.id}`;
+  let botonEditarCardNotaRapidaID = `botonEditarNotaRapida-${tarea.id}`;
+  let botonEliminarCardNotaRapidaID = `botonEliminarNotaRapida-${tarea.id}`;
+
+
+  let nuevaCardNotaRapida = `
+  <div class="div-cards-notas-rapidas " id="cards-notas-rapidas">
+      <img class="img-gancho-card-nota-rapida" src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%20fill='currentColor'%20class='bi%20bi-pin-angle-fill'%20viewBox='0%200%2016%2016'%3e%3cpath%20d='M9.828.722a.5.5%200%200%201%20.354.146l4.95%204.95a.5.5%200%200%201%200%20.707c-.48.48-1.072.588-1.503.588-.177%200-.335-.018-.46-.039l-3.134%203.134a6%206%200%200%201%20.16%201.013c.046.702-.032%201.687-.72%202.375a.5.5%200%200%201-.707%200l-2.829-2.828-3.182%203.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5%200%200%201%200-.707c.688-.688%201.673-.767%202.375-.72a6%206%200%200%201%201.013.16l3.134-3.133a3%203%200%200%201-.04-.461c0-.43.108-1.022.589-1.503a.5.5%200%200%201%20.353-.146'/%3e%3c/svg%3e" alt="img-chincheta">
+        <h1 class="h1-card-notas-rapidas" id="${tituloCardNotaRapidaID}">
+            ${tarea.titulo}
+        </h1>
+          <p class="p-card-detalle-nota-rapida" id="${detalleCardNotaRapidaID}">
+          ${tarea.detalle}
+          </p>
+      <div class="btn-eliminar-editar-notas-rapidas">
+        <button class="btn-editar-nota-rapida" id="${botonEditarCardNotaRapidaID}">EDITAR</button>
+        <button class="btn-eliminar-nota-rapida" id="${botonEliminarCardNotaRapidaID}">ELIMIMNAR</button>
+      </div>
+</div>
+  `
+
+  seccionParaRenderizarNotas.innerHTML += nuevaCardNotaRapida;
+}
+
+
+
+
+
+// Función para obtener las NOTAS RÁPIDAS desde Firestore
+async function obtenerNotasDesdeFirestore() {
+  mostrarCarga();
+  // Limpiar el array de cards antes de obtener las nuevas desde Firestore
+  notasRapidasArray = [];
+  seccionParaRenderizarNotas.innerHTML = "";
+
+  // Obtener todas las tareas desde Firestore
+  const querySnapshot = await getDocs(collection(db, nombreDeColeccion));
+
+  // Iterar sobre las tareas y agregarlas al array y al contenedor
+  querySnapshot.forEach((doc) => {
+    const tarjetaFirestore = doc.data();
+
+
+    if (tarjetaFirestore.notaRapidaBandera) {
+      const tarjetaNotaFirestore = doc.data();
+      tarjetaNotaFirestore.id = doc.id;
+      notasRapidasArray.push(tarjetaNotaFirestore);
+    }
+  });
+
+  // Ordenar las tarjetas cronológicamente
+  notasRapidasArray.sort((b, a) => a.fechaCreacion - b.fechaCreacion);
+  
+  // Iterar sobre las tarjetas ordenadas y agregarlas al contenedor
+  notasRapidasArray.forEach(nota => {
+    renderizarNotaRapida(nota);
+  });
+  ocultarCarga();
+}
+
+
+
+
+
+
+// Función para editar una nota rápida
+async function editarNotaRapida (id) {
+
+  let tareaRef = doc(db, nombreDeColeccion, id);
+
+  let inputH1ParaEditar = document.getElementById(`tituloNotaRapida-${id}`);
+  let inputDetalleParaEditar = document.getElementById(`detalleNotaRapida-${id}`);
+
+  let botonEditarNota = document.getElementById(`botonEditarNotaRapida-${id}`);
+  let botonEliminarNota = document.getElementById(`botonEliminarNotaRapida-${id}`);
+
+  let verSiGuardoOEdito = botonEditarNota.textContent === "EDITAR";
+
+  if(verSiGuardoOEdito){
+    // Si entra acá es porque puso EDITAR
+
+    inputH1ParaEditar.contentEditable = true;
+    inputDetalleParaEditar.contentEditable = true;
+
+    inputH1ParaEditar.classList.add("editando-inputs");
+    inputDetalleParaEditar.classList.add("editando-inputs");
+
+    botonEditarNota.textContent = "GUARDAR";
+
+  } else {
+    mostrarCarga();
+    // Si entra acá es porque puso GUARDAR
+    let nuevoTitulo = inputH1ParaEditar.textContent.trim();
+    let nuevoDetalle = inputDetalleParaEditar.textContent.trim();
+
+    inputH1ParaEditar.contentEditable = false;
+    inputDetalleParaEditar.contentEditable = false;
+
+    inputH1ParaEditar.classList.remove("editando-inputs");
+    inputDetalleParaEditar.classList.remove("editando-inputs");
+
+    botonEditarNota.textContent = "EDITAR";
+
+        // Realizar la actualización en Firestore
+        try {
+          await updateDoc(tareaRef, {
+            titulo: nuevoTitulo,
+            detalle: nuevoDetalle,
+          });
+          Swal.fire({
+            title: "Nota modificada!",
+            timer: 800,
+            showConfirmButton: false,
+            icon: "success"
+          });
+          ocultarCarga();
+        } catch (error) {
+          Swal.fire({
+            title: "Ocurrió un error. Revise su conexión",
+            timer: 1200,
+            showConfirmButton: false,
+            icon: "error"
+          });
+          console.error("Error al actualizar el documento en Firestore", error);
+          ocultarCarga();
+        }
+  }
+}
+
+
+
+
+
+
+// Función para eliminar nota rápida
+async function eliminarNotaRapida (id) {
+
+ if (id) {
+  Swal.fire({
+    title: "Se eliminará de manera permanente",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Eliminar",
+    cancelButtonText: 'Cancelar',
+    footer: "NO SE PUEDE RECUPERAR"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      mostrarCarga();
+      deleteDoc(doc(db, nombreDeColeccion, id));
+      Swal.fire({
+        title: "Nota rápida eliminada!",
+        timer: 1200,
+        showConfirmButton: false,
+        icon: "success"
+      });
+      ocultarCarga();
+
+        obtenerNotasDesdeFirestore();
+
+    }
+  }); 
+ } else {
+  Swal.fire({
+    title: "Nota inexistente o modificada. Actualice página",
+    timer: 1500,
+    showConfirmButton: false,
+    icon: "error"
+  });
+  ocultarCarga();
+ }
+}

@@ -263,6 +263,12 @@ async function obtenerColeccionDeFirestore (notificaciones08, notificaciones14, 
   }
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> rama-notas-rapidas
 export { auth, registrarUsuario, iniciarSesion, recuperarClave, cerrarSesion, db , eliminarCuenta, obtenerColeccionDeFirestore, agregarNuevoCampoADoc };
 
 

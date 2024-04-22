@@ -1,0 +1,158 @@
+.seccion-cards-notas-rapidas{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+.div-cards-notas-rapidas{
+    margin: 1vw;
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 25%;
+    height: 45vh;
+    background-image: repeating-linear-gradient(90deg, rgba(201,201,201, 0.91) 0px, rgba(201,201,201, 0.91) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(201,201,201, 0.91) 0px, rgba(201,201,201, 0.91) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(201,201,201, 0.43) 0px, rgba(201,201,201, 0.43) 1px,transparent 1px, transparent 12px),repeating-linear-gradient(90deg, rgba(201,201,201, 0.43) 0px, rgba(201,201,201, 0.43) 1px,transparent 1px, transparent 12px),linear-gradient(90deg, rgba(255,255,255, 0),rgba(255,255,255, 0));
+    box-shadow: 4px 4px 15px 5px rgba(0, 0, 0, 0.5);
+}
+
+.img-gancho-card-nota-rapida{
+    position: relative;
+    width: 4vw;
+    bottom: 22%;
+    left: 50%;
+}
+
+
+
+.h1-card-notas-rapidas{
+    min-width: 50%;
+    min-height: 5vh;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+    text-align: center;
+    margin-top: -15vh;
+    padding: 1rem;
+    font-size: 2vw;
+    overflow-wrap: anywhere;
+    text-wrap: wrap;
+}
+
+
+.p-card-detalle-nota-rapida{
+    display: flex;
+    overflow-wrap: anywhere;
+    text-wrap: wrap;
+    min-height: 10vh;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+    min-width: 80%;
+    font-size: 1vw;
+    text-align: center;
+    margin: 0 1rem 0 1rem;
+    padding: 1rem;
+}
+
+
+
+.btn-editar-nota-rapida{
+    min-width: 7vw;
+    padding: 0.5vw;
+    font-size: 1vw;
+    background-color: rgba(0, 128, 0, 0.397);
+    border-radius: 8px;
+}
+
+.btn-editar-nota-rapida:hover{
+    background-color: rgba(0, 128, 0, 0.489);
+    text-shadow: 1px 1px 5px black;
+}
+
+.btn-eliminar-nota-rapida{
+    padding: 0.5vw;
+    font-size: 1vw;
+    background-color: rgba(255, 0, 0, 0.368);
+    border-radius: 8px;
+}
+
+.btn-eliminar-nota-rapida:hover{
+    background-color: rgba(255, 0, 0, 0.492);
+    text-shadow: 1px 1px 5px black;
+}
+
+.btn-eliminar-editar-notas-rapidas{
+    gap: 1vw;
+    display: flex;
+    flex-direction: row;
+}
+
+.editando-inputs{
+    background-color: rgba(229, 229, 229, 0.44);
+    border: solid 1px black;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /* MEDIA QUERYS */
+   @media screen and (max-width: 524px) {
+
+
+    .div-cards-notas-rapidas{
+        margin: auto;
+        margin-top: 6vh;
+        align-items: center;
+        width: 65%;
+    }
+
+    .h1-card-notas-rapidas{
+        font-size: 6vw;
+        margin-top: -8vh;
+    }
+
+    .p-card-detalle-nota-rapida{
+        font-size: 3vw;
+    }
+
+    .img-gancho-nota-rapida{
+        position: relative;
+        width: 8vw;
+    }
+
+    .divs-cards-notas-rapidas{
+        font-size: 4.2vw;
+    }
+
+    .btn-editar-nota-rapida{
+        padding: 1vw;
+        font-size: 4vw;
+        width: 25vw;
+    }
+
+    .btn-eliminar-nota-rapida{
+        padding: 1vw;
+        font-size: 4vw;
+    }
+
+    .img-gancho-card-nota-rapida{
+        width: 8vw;
+        bottom: 16%;
+        left: 50%;
+    }
+    
+   }

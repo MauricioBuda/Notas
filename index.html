@@ -30,9 +30,6 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
   <!-- INICIO SECCIÓN DE MENÚ DESPLEGABLE LATERAL // Y TAMBIÉN EL MENÚ DE SECCIONES -->
   <nav id="navbar_general" class="  aplicar-display-none navbar fixed-top">
 
-
-
-
     <!-- INICIO MENÚ DE SECCIONES -->
     <div class="dropdown">
 
@@ -61,6 +58,7 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
     </div>
     <!-- FIN MENÚ DE SECCIONES -->
 
+
     <p class="p-seccion" id="p-secciones">  </p>
 
 
@@ -80,36 +78,85 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
+              <img src="/img/house.svg" alt="icono-home">
+              <a id="button_recargar" class="nav-link active" aria-current="page" href="#">Página principal</a>
+            </li>
+            <li class="nav-item">
+              <img src="/img/pencil-square.svg" alt="icono-lapiz">
+              <a id="button_notas_rapidas" data-bs-dismiss="offcanvas"  class="nav-link active" aria-current="page" href="#">Notas rápidas</a>
+              <span class="d-inline-block span-info-notas" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Para guardar datos fijos que necesitamos tener a mano. Una dirección, un CBU, un alias, una clave, etc">
+                <button class="btn-info-notas btn btn-primary" type="button" disabled>
+                  ? 
+                </button>
+              </span>
+            </li>
+            <li class="nav-item">
+              <img src="/img/share.svg" alt="icono-share">
+              <a data-bs-toggle="modal" data-bs-target="#exampleModalQR" id="button_qr" class="nav-link active" aria-current="page" href="#">Compartir página </a>
+            </li>
+            <li class="nav-item">
               <img src="/img/person.svg" alt="icono-persona">
               <a id="button_cambiar_nombre" class="nav-link active" aria-current="page" href="#">Cambiar nombre</a>
             </li>
             <li class="nav-item">
-              <img src="/img/trash.svg" alt="icono-persona">
+              <img src="/img/trash.svg" alt="icono-trash">
               <a id="button_eliminar_cuenta" class="nav-link active" aria-current="page" href="#">Eliminar cuenta</a>
             </li>
-            <li id="navbar_salir" class="nav-item">
+            <li  data-bs-dismiss="offcanvas" class="nav-item">
               <img src="/img/box-arrow-left.svg" alt="icono-salir">
-              <a class="nav-link" href="#">Salir</a>
+              <a id="navbar_salir" class="nav-link" href="#">Salir</a>
             </li>
             <!-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </li> -->
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li> -->
           </ul>
         </div>
       </div>
     </div>
   </nav>
   <!-- FIN SECCIÓN DE MENÚ DESPLEGABLE LATERAL, Y TAMBIÉN DE SECCIONES-->
+
+
+
+
+
+
+
+
+
+<!-- INICIO DE MODAL CON QR-->
+<div id="div-para-modal-qr">
+  <div class="modal fade" id="exampleModalQR" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body div-qr">
+          <img class="img-qr" src="img/QR-notitas.png" alt="QR">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN DE MODAL CON QR-->
+
+
+
+
 
 
 
@@ -151,6 +198,8 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
 
 
 
+
+
     <!-- SECCIÓN REGISTRAR NUEVO USUARIO -->
     <div id="modalRegistro" class=" modal_registro aplicar-display-none">
       <div class="collapse collapse-horizontal modal_registro_2" id="collapseWidthExample">
@@ -186,6 +235,9 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
 
 
 
+
+
+
   <!-- INICIO MENÚ SUPERIOR -->
   <main id="id_menu" class="menu aplicar-display-none">
     <button id="botonMas_id" class="botonMas_class btn btn-primary" type="button">+</button>
@@ -210,6 +262,50 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
 
 
 
+  <!-- INICIO FORMULARIO NUEVA NOTA RÁPIDA -->
+  <button id="btn-add-nota-rapida" class="btn-add-nota-rapida aplicar-display-none">
+    <img  class="img-add-nota-rapida " src="img/file-earmark-plus.svg" alt="img-add-nota">
+  </button>
+  <section class="seccion-notas-rapidas aplicar-display-none" id="seccion-notas-rapidas">
+    <img class="img-gancho-nota-rapida" src="img/pin-angle-fill.svg" alt="img-chincheta">
+    <h1 class="h1-notas-rapidas">Nueva nota rápida:</h1>
+    <div class="divs-notas-rapidas" id="div-titulo-notas-rapidas">
+      <label for="titulo">Título</label>
+      <input class="input-titulo-notas-rapidas" id="input-titulo-notas-rapidas" type="text" name="titulo-tarea-rapida">
+    </div>
+    <div class="divs-notas-rapidas" id="div-detalle-notas-rapidas">
+      <label for="detalle">Detalle</label>
+      <textarea class="input-detalle-notas-rapidas" name="input-detalle-notas-rapidas" id="input-detalle-notas-rapidas" cols="30" rows="1"></textarea>
+    </div>
+    <div class="btn-cancelar-guardar-notas-rapidas">
+      <button class="btn-guardar-nota-rapida" id="btn-guardar-nota-rapida">GUARDAR</button>
+      <button class="btn-cancelar-nota-rapida" id="btn-cancelar-nota-rapida">CANCELAR</button>
+    </div>
+  </section>
+  <!-- FIN FORMULARIO NUEVA NOTA RÁPIDA -->
+
+
+
+<!-- INICIO CARDS NOTAS RÁPIDAS -->
+<section class="seccion-cards-notas-rapidas" id="seccion-cards-notas-rapidas">
+  
+</section>
+<!-- FIN CARDS NOTAS RÁPIDAS -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <!-- INICIO FORMULARIO TAREA -->
   <section id="section_formulario_id" class="section_formulario oculto">
     <h2 class="h2_nuevaTarea">NUEVA TAREA</h2>
@@ -217,7 +313,9 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
       <input placeholder="Título " class="recuadros_formulario" type="text" id="tareaTitulo"
         name="tareaTitulo" >
 
-      <textarea class="recuadros_formulario recuadros_formulario_detalle" name="tareaDetalle" id="tareaDetalle" cols="30" rows="10" placeholder="Detalles"></textarea>
+      <textarea class="recuadros_formulario recuadros_formulario_detalle" name="tareaDetalle" id="tareaDetalle" cols="30" rows="10" placeholder="Detalles">
+        
+      </textarea>
 
       <select class="recuadros_formulario" id="secciones-id" name="secciones" >
         <option class="opcion-formulario-select" selected disabled value="">Ingrese la sección</option>
@@ -247,8 +345,7 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
       </div>
 
       
-      
-
+    
       <div class="btn-notificacion">      
         <button><img id="aceptar-noti" class="icono-aceptar" src="./img/check-circle.svg" alt="icon-acept"></button>
         <button><img id="rechazar-noti" class="icono-cancelar" src="./img/x-circle.svg" alt="icon-cancel"></button>
@@ -302,6 +399,9 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
 
 
 
+
+
+
   <!-- INICIO MODAL DE CARGA -->
   <div id="modalCarga" class="modal_carga">
     <div class="modal-contenido">
@@ -309,7 +409,6 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
     </div>
   </div>
   <!-- FIN MODAL DE CARGA -->
-
 
 
 
@@ -322,15 +421,19 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="cardEnModal_class" id="cardEnModal">
-
+              <!-- CARD GRANDE DESDE JS -->
           </div>
         <div id="modal_footerID" class="modal-footer">
-            <!-- BOTONES -->
+            <!-- BOTONES DE CARD GRANDE, DESDE JS -->
         </div>
       </div>
     </div>
   </div>
   <!-- FIN MODAL TAREA PANTALLA GRANDE-->
+
+
+
+
 
 
 <!-- INICIO REGISTRO WORKER -->

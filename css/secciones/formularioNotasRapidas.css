@@ -1,0 +1,171 @@
+.seccion-notas-rapidas{
+    margin: auto;
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    justify-content: space-around;
+    align-items: center;
+    width: 25%;
+    height: 45vh;
+    background-image: repeating-linear-gradient(90deg, rgba(201,201,201, 0.91) 0px, rgba(201,201,201, 0.91) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(201,201,201, 0.91) 0px, rgba(201,201,201, 0.91) 1px,transparent 1px, transparent 96px),repeating-linear-gradient(0deg, rgba(201,201,201, 0.43) 0px, rgba(201,201,201, 0.43) 1px,transparent 1px, transparent 12px),repeating-linear-gradient(90deg, rgba(201,201,201, 0.43) 0px, rgba(201,201,201, 0.43) 1px,transparent 1px, transparent 12px),linear-gradient(90deg, rgba(255,255,255, 0),rgba(255,255,255, 0));
+    box-shadow: 4px 4px 15px 20px rgba(0, 0, 0, 0.5);
+}
+
+.img-add-nota-rapida{
+    position: absolute;
+    width: 5vw;
+    top: 2%;
+    left: 2%;
+}
+
+.img-add-nota-rapida:hover{
+    filter: drop-shadow(1px 1px 5px rgba(0, 0, 0, 0.799));
+}
+
+.btn-add-nota-rapida{
+    width: 5vw;
+}
+
+
+.h1-notas-rapidas{
+    text-align: center;
+    margin-top: -10vh;
+    font-size: 2vw;
+}
+
+.img-gancho-nota-rapida{
+    position: relative;
+    width: 4vw;
+    bottom: 10%;
+    left: 50%;
+}
+
+
+
+.input-titulo-notas-rapidas{
+    text-align: center;
+    font-size: 1.2vw;
+    border-radius: 8px;
+    width: 20vw;
+    background-color: rgba(255, 255, 255, 0.767);
+}
+
+
+
+.input-detalle-notas-rapidas{
+    text-align: center;
+    font-size: 1vw;
+    border-radius: 10px;
+    width: 20vw;
+    height: auto;
+    min-height: 10vh;
+    overflow: hidden;
+    padding: 1vw;
+    margin-bottom: 2vh;
+    background-color: rgba(255, 255, 255, 0.767);
+}
+
+
+.divs-notas-rapidas{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 1.2vw;
+}
+
+.btn-guardar-nota-rapida{
+    padding: 0.5vw;
+    font-size: 1vw;
+    background-color: rgba(0, 128, 0, 0.397);
+    border-radius: 8px;
+}
+
+.btn-guardar-nota-rapida:hover{
+    background-color: rgba(0, 128, 0, 0.489);
+    text-shadow: 1px 1px 5px black;
+}
+
+.btn-cancelar-nota-rapida{
+    padding: 0.5vw;
+    font-size: 1vw;
+    background-color: rgba(255, 0, 0, 0.368);
+    border-radius: 8px;
+}
+
+.btn-cancelar-nota-rapida:hover{
+    background-color: rgba(255, 0, 0, 0.492);
+    text-shadow: 1px 1px 5px black;
+}
+
+.btn-cancelar-guardar-notas-rapidas{
+    gap: 1vw;
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /* MEDIA QUERYS */
+   @media screen and (max-width: 524px) {
+
+    .img-add-nota-rapida{
+        width: 12vw;
+    }
+
+    .seccion-notas-rapidas{
+        margin: auto;
+        margin-top: 6vh;
+        align-items: center;
+        width: 65%;
+    }
+
+    .h1-notas-rapidas{
+        font-size: 6vw;
+        margin-top: -8vh;
+    }
+
+    .img-gancho-nota-rapida{
+        width: 8vw;
+    }
+
+    .input-titulo-notas-rapidas{
+        font-size: 4vw;
+        width: 60vw;
+    }
+    
+    .input-detalle-notas-rapidas{
+        font-size: 3.5vw;
+        width: 60vw;
+    }
+
+    .divs-notas-rapidas{
+        font-size: 4.2vw;
+    }
+    
+
+    .btn-guardar-nota-rapida{
+        padding: 1vw;
+        font-size: 4vw;
+    }
+
+    .btn-cancelar-nota-rapida{
+        padding: 1vw;
+        font-size: 4vw;
+    }
+    
+   }
