@@ -48,6 +48,13 @@
     -webkit-text-stroke: 0px #00000063;
     color: rgb(164, 0, 0)!important;
     font-weight: 700;
+    background-color: rgba(255, 0, 0, 0.087);
+    border-radius: 10px;
+    padding: 0 1vw 0 1vw;
+  }
+
+  .letra-clarita{
+    color: rgba(0, 0, 0, 0.289)!important;
   }
   
 
@@ -65,6 +72,19 @@
     width: 40%;
   }
 
+  .btn-info-notas{
+    color: black!important;
+    background-color: white!important;
+    border-radius: 50%;
+  }
+
+  .span-info-notas{
+    margin-left: auto;
+  }
+
+  .popover-body{
+    font-size: 1vw;
+  }
 
 
 
@@ -111,6 +131,10 @@
     .img-qr{
       width: 100%;
       margin-top: 12vh;
+    }
+
+    .popover-body{
+      font-size: 3vw;
     }
   }
   /* FIN DESPLEGABLE LATERAL */

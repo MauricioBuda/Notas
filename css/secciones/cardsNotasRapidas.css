@@ -90,6 +90,11 @@
     flex-direction: row;
 }
 
+.editando-inputs{
+    background-color: rgba(229, 229, 229, 0.44);
+    border: solid 1px black;
+}
+
 
 
 

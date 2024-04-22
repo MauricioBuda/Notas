@@ -84,6 +84,11 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
             <li class="nav-item">
               <img src="/img/pencil-square.svg" alt="icono-lapiz">
               <a id="button_notas_rapidas" data-bs-dismiss="offcanvas"  class="nav-link active" aria-current="page" href="#">Notas rápidas</a>
+              <span class="d-inline-block span-info-notas" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Para guardar datos fijos que necesitamos tener a mano. Una dirección, un CBU, un alias, una clave, etc">
+                <button class="btn-info-notas btn btn-primary" type="button" disabled>
+                  ? 
+                </button>
+              </span>
             </li>
             <li class="nav-item">
               <img src="/img/share.svg" alt="icono-share">
@@ -97,9 +102,9 @@ integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2
               <img src="/img/trash.svg" alt="icono-trash">
               <a id="button_eliminar_cuenta" class="nav-link active" aria-current="page" href="#">Eliminar cuenta</a>
             </li>
-            <li id="navbar_salir" data-bs-dismiss="offcanvas" class="nav-item">
+            <li  data-bs-dismiss="offcanvas" class="nav-item">
               <img src="/img/box-arrow-left.svg" alt="icono-salir">
-              <a class="nav-link" href="#">Salir</a>
+              <a id="navbar_salir" class="nav-link" href="#">Salir</a>
             </li>
             <!-- <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
