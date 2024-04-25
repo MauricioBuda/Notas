@@ -2423,7 +2423,11 @@ function actualizarCards() {
 // Función para ir a la sección de notas rápidas
 function modalNotasRapidas () {
 
-  
+  let fondoHTML = document.getElementsByTagName("html")[0];
+  let fondoBODY = document.getElementsByTagName("body")[0];
+
+  fondoHTML.classList.add("fondo-html");
+  fondoBODY.classList.add("fondo-html");
   botonMenuSecciones.classList.add("aplicar-display-none");
   menuSuperior.classList.add("aplicar-display-none");
   canceladasCards.classList.add("aplicar-display-none");
