@@ -15,8 +15,10 @@
             . Crear tareas, las cuales se vinculan a una colección de Firestore privada para cada usuario.
             . Modificar, cancelar, finalizar, eliminar o resaltar (según urgencia) esas tareas.
             . Filtrar las tareas según su estado.
+            . Filtrar tareas según su tipo.
+            . Programar notificaciones push.
             
 - [Instalación](#instalación): Para su instalación utilizamos npm, Vite, Firebase, GitHub
-- [Tecnologías Utilizadas](#tecnologías-utilizadas): HTML, CSS, JS, REACT, GIT, GITHUB, VERCEL, NPM, SweetAlert2, Firestore, Firebase Auth
+- [Tecnologías Utilizadas](#tecnologías-utilizadas): HTML, CSS, JS, REACT, GIT, GITHUB, VERCEL, NPM, SweetAlert2, Firestore, Firebase Auth, Cloud Functions
 - [Contacto](#contacto):  mauricio.ariel.buda@gmail.com
 
