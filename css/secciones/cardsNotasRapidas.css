@@ -1,3 +1,7 @@
+.fondo-html{
+    background-image: radial-gradient(circle at 32% 72%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 8%,transparent 8%, transparent 92%),radial-gradient(circle at 61% 40%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 8%,transparent 8%, transparent 92%),radial-gradient(circle at 64% 48%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 6%,transparent 6%, transparent 94%),radial-gradient(circle at 37% 25%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 6%,transparent 6%, transparent 94%),radial-gradient(circle at 43% 50%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 6%,transparent 6%, transparent 94%),radial-gradient(circle at 80% 92%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 6%,transparent 6%, transparent 94%),radial-gradient(circle at 9% 7%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 6%,transparent 6%, transparent 94%),radial-gradient(circle at 12% 82%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 4%,transparent 4%, transparent 96%),radial-gradient(circle at 71% 65%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 4%,transparent 4%, transparent 96%),radial-gradient(circle at 7% 10%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 4%,transparent 4%, transparent 96%),radial-gradient(circle at 50% 25%, rgba(255,255,255, 0.2) 0%, rgba(255,255,255, 0.2) 4%,transparent 4%, transparent 96%),linear-gradient(90deg, rgba(46,139,242, 0.11),rgba(106,43,159, 0.12));
+}
+
 .seccion-cards-notas-rapidas{
     display: flex;
     flex-wrap: wrap;
