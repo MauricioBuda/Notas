@@ -1763,6 +1763,7 @@ function agregarNotificacionACardExistente (id) {
           orientation: 'bottom',
           autoclose: true,
           todayHighlight: true,
+          language: 'es'
       });
     });
 

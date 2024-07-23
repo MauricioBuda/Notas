@@ -20,38 +20,53 @@
   
   .botonMas_class {
     min-width: 5vw;
+    min-height: 5vw;
     width: auto;
-    background-color: rgb(0, 255, 0, 0.6);
+    background-color: rgba(0, 128, 0, 0.882);
     display: flex;
-    font-size: 3vw;
+    font-size: 3vw!important;
     text-align: center;
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 8px;
+    border-radius: 50%;
+    filter: drop-shadow(1px 1px 5px rgba(0, 0, 0, 0.306))
+    drop-shadow(1px 1px 8px rgba(0, 0, 0, 0.357))
+    drop-shadow(1px 1px 10px rgba(0, 0, 0, 0.401))
+    drop-shadow(1px 1px 15px rgba(0, 0, 0, 0.288));
   }
+
+
   
   .botonMas_class:hover {
-    color: black;
-    background-color: rgb(0, 255, 0) !important;
+    background-color: rgba(0, 128, 0, 0.882)!important;
+    filter: drop-shadow(1px 1px 5px yellow)
+    drop-shadow(1px 1px 8px yellow)
+    drop-shadow(1px 1px 10px yellow)
+    drop-shadow(1px 1px 15px yellow);
   }
   
   .boton_x {
+    margin-top: 4vh;
     min-width: 5vw;
+    min-height: 5vw;
     width: auto;
-    background-color: rgb(255, 0, 0, 0.6);
+    background-color: rgb(255, 0, 0);
     display: flex;
-    font-size: 3vw;
+    font-size: 3vw!important;
     text-align: center;
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 8px;
+    border-radius: 50%;
   }
   
   .boton_x:hover {
-    color: black;
-    background-color: rgb(255, 0, 0) !important;
+    /* color: black; */
+    background-color: rgb(165, 0, 0)!important;
+    filter: drop-shadow(1px 1px 5px #d5cf01)
+    drop-shadow(1px 1px 8px #d5cf01)
+    drop-shadow(1px 1px 10px #d5cf01);
   }
   
   .btn-primary:hover {
